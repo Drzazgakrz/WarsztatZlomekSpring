@@ -3,7 +3,7 @@ package pl.warsztat.zlomek.service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import org.springframework.stereotype.Repository;
-import pl.warsztat.zlomek.exceptions.UserNotFoundException;
+import pl.warsztat.zlomek.exceptions.ResourcesNotFoundException;
 import pl.warsztat.zlomek.model.db.Account;
 
 import javax.persistence.EntityManager;
@@ -33,18 +33,12 @@ public  abstract class AccountRepository <Type extends Account>{
         String token = "";
         try {
             Algorithm algorithm = Algorithm.HMAC256("secret");
-            token = JWT.create()
-                    .withIssuer(user.getEmail() + (new Date()).getTime())
-                    .sign(algorithm);
-            while (this.findByToken(token) != null) {
-                algorithm = Algorithm.HMAC256("secret");
+            do{
                 token = JWT.create()
                         .withIssuer(user.getEmail() + (new Date()).getTime())
                         .sign(algorithm);
-            }
-        }catch (UserNotFoundException e){
-
-        }
+            }while (findByToken(token)!=null);
+        }catch (ResourcesNotFoundException e){}
         return token;
     }
 }

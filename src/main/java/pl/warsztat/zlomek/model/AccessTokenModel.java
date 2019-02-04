@@ -1,14 +1,14 @@
-package pl.warsztat.zlomek.model.response;
+package pl.warsztat.zlomek.model;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class AccessTokenResponse {
+public class AccessTokenModel {
     protected String accessToken;
 
-    public AccessTokenResponse(String accessToken) {
+    public AccessTokenModel(String accessToken) {
         this.accessToken = accessToken;
     }
 }

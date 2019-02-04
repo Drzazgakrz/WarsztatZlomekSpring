@@ -2,7 +2,7 @@ package pl.warsztat.zlomek.service;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
-import pl.warsztat.zlomek.exceptions.UserNotFoundException;
+import pl.warsztat.zlomek.exceptions.ResourcesNotFoundException;
 import pl.warsztat.zlomek.model.db.*;
 
 import javax.persistence.TypedQuery;
@@ -22,9 +22,8 @@ public class ClientRepository extends AccountRepository<Client>{
                 return client;
         }catch (Exception e){
             e.printStackTrace();
-
         }
-        throw new UserNotFoundException("Brak klienta o podanych danych");
+        throw new ResourcesNotFoundException("Brak klienta o podanych danych");
     }
 
     public Client findClientByUsername(String username){
@@ -35,7 +34,7 @@ public class ClientRepository extends AccountRepository<Client>{
             return getClient.getSingleResult();
         }catch (Exception e){
             e.printStackTrace();
-            throw new UserNotFoundException("Brak klienta o podanym adresie e-mail");
+            throw new ResourcesNotFoundException("Brak klienta o podanym adresie e-mail");
         }
     }
 
@@ -53,7 +52,7 @@ public class ClientRepository extends AccountRepository<Client>{
             }
         }catch (Exception e){
         }
-        throw new UserNotFoundException("Klient o podanym tokenie nie istnieje bądź token wygasł");
+        throw new ResourcesNotFoundException("Klient o podanym tokenie nie istnieje bądź token wygasł");
     }
 
     @Override
@@ -83,7 +82,7 @@ public class ClientRepository extends AccountRepository<Client>{
             query.setParameter("id", id);
             return query.getSingleResult();
         }catch (Exception e){
-            throw new UserNotFoundException("Taki klient nie istnieje");
+            throw new ResourcesNotFoundException("Taki klient nie istnieje");
         }
     }
 }
