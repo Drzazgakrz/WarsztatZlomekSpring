@@ -1,0 +1,66 @@
+package pl.warsztat.zlomek.model.db;
+
+import lombok.*;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Objects;
+
+@Entity
+@Table(name = "visit_has_services")
+@NoArgsConstructor
+@Getter
+@Setter
+public class VisitsHasServices extends VisitPosition implements Serializable {
+    @EmbeddedId
+    private VisitsHasServicesId id;
+
+    @ManyToOne
+    @JoinColumn(name = "service_id")
+    private Service service;
+
+    @ManyToOne
+    @JoinColumn(name = "visit_id")
+    private Visit visit;
+
+    @Embeddable
+    @Getter
+    @Setter
+    private static class VisitsHasServicesId implements Serializable {
+        @Column(name = "service_pk")
+        private long serviceId;
+
+        @Column(name = "visit_pk")
+        private long visitId;
+
+        public VisitsHasServicesId(long serviceId, long visitId) {
+            this.serviceId = serviceId;
+            this.visitId = visitId;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            VisitsHasServicesId that = (VisitsHasServicesId) o;
+            return serviceId == that.serviceId &&
+                    visitId == that.visitId;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(serviceId, visitId);
+        }
+
+        public VisitsHasServicesId() {
+        }
+    }
+
+    public VisitsHasServices(Service service, Visit visit, int count, BigDecimal price) {
+        super(price, count);
+        this.id = new VisitsHasServicesId(service.getId(), visit.getId());
+        this.service = service;
+        this.visit = visit;
+    }
+}
