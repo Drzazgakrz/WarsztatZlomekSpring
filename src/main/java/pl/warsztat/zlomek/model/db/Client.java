@@ -3,6 +3,7 @@ package pl.warsztat.zlomek.model.db;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import pl.warsztat.zlomek.model.request.ClientForm;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -63,7 +64,7 @@ public class Client extends Account implements Serializable {
     private Set<CompaniesHasEmployees> companies;
 
     @OneToMany(
-            fetch = FetchType.LAZY,
+            fetch = FetchType.EAGER,
             mappedBy = "owner"
     )
     private Set<CarsHasOwners> cars;
@@ -97,6 +98,21 @@ public class Client extends Account implements Serializable {
     public Object[] checkCar(Car car, Client client){
         return cars.stream().filter(clientCar-> (clientCar.getOwner().getEmail().equals(client.getEmail()) &&
                 clientCar.getStatus()!= OwnershipStatus.FORMER_OWNER)).toArray();
+    }
+
+    public Client(ClientForm form){
+        super(form.getEmail(), form.getFirstName(), form.getLastName(), form.getPassword(), LocalDateTime.now(),
+                LocalDateTime.now());
+        this.aptNum = form.getAptNum();
+        this.buildNum = form.getBuildNum();
+        this.cityName = form.getCityName();
+        this.phoneNumber = form.getPhoneNumber();
+        this. streetName = form.getStreetName();
+        this.zipCode = form.getZipCode();
+        this.cars = new HashSet<>();
+        this.companies = new HashSet<>();
+        this.accessToken = new HashSet<>();
+        this.status = ClientStatus.ACTIVE;
     }
 
     @Override

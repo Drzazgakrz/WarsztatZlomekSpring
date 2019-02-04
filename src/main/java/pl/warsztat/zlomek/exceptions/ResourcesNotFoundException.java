@@ -7,10 +7,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserNotFoundException extends RuntimeException {
+public class ResourcesNotFoundException extends RuntimeException {
     private String reason;
 
-    public UserNotFoundException(String reason) {
+    public ResourcesNotFoundException(String reason) {
         this.reason = reason;
     }
 }

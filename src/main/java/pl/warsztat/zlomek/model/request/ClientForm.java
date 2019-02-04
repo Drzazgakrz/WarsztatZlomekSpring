@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class RegisterModel {
+public class ClientForm {
     protected String firstName;
     protected String lastName;
     protected String email;
@@ -17,6 +17,6 @@ public class RegisterModel {
     protected String buildNum;
     protected String aptNum;
     protected String zipCode;
-    protected String password;
-    protected String confirmPassword;
+    private String password;
+    private String confirmPassword;
 }
