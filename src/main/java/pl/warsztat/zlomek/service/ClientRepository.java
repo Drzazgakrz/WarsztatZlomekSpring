@@ -1,6 +1,6 @@
 package pl.warsztat.zlomek.service;
 
-import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 import pl.warsztat.zlomek.exceptions.UserNotFoundException;
 import pl.warsztat.zlomek.model.db.*;
@@ -15,14 +15,16 @@ public class ClientRepository extends AccountRepository<Client>{
     public Client signIn(String username, String password){
         try {
             TypedQuery<Client> getClient = em.createQuery("SELECT client FROM Client client "+
-                    "WHERE client.email = :username and client.password = :password",Client.class);
+                    "WHERE client.email = :username",Client.class);
             getClient.setParameter("username", username);
-            getClient.setParameter("password", new SCryptPasswordEncoder().encode(password));
-            return getClient.getSingleResult();
+            Client client = getClient.getSingleResult();
+            if(new BCryptPasswordEncoder().matches(password, client.getPassword()))
+                return client;
         }catch (Exception e){
             e.printStackTrace();
-            throw new UserNotFoundException("Brak klienta o podanych danych");
+
         }
+        throw new UserNotFoundException("Brak klienta o podanych danych");
     }
 
     public Client findClientByUsername(String username){

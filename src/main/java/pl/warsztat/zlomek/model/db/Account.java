@@ -3,7 +3,7 @@ package pl.warsztat.zlomek.model.db;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -28,7 +28,7 @@ public abstract class Account implements Serializable {
     protected String lastName;
 
     @NotNull
-    @Size(max=140, min = 140)
+    @Size(max=60, min = 60)
     protected String password;
 
     @Column(unique = true)
@@ -45,7 +45,7 @@ public abstract class Account implements Serializable {
         this.email = email;
         this.firstName = firstname;
         this.lastName = lastName;
-        this.password = new SCryptPasswordEncoder().encode(password);
+        this.password = new BCryptPasswordEncoder().encode(password);
         this.lastLoggedIn = lastLoggedIn;
         this.createdAt = createdAt;
     }
