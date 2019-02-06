@@ -1,17 +1,19 @@
 package pl.warsztat.zlomek.model.request;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.bind.annotation.RequestParam;
-import pl.warsztat.zlomek.model.db.Car;
+import pl.warsztat.zlomek.model.db.Client;
 
 @Getter
 @Setter
-public class CarData {
-    protected String carBrandName;
-    protected String model;
-    protected int prodYear;
-    protected String vinNumber;
+@NoArgsConstructor
+public class CarData extends Car {
     protected String accessToken;
-    protected String registrationNumber;
+
+    public CarData(pl.warsztat.zlomek.model.db.Car car, String accessToken, Client client) {
+        super(car, client);
+        this.accessToken = accessToken;
+    }
 }

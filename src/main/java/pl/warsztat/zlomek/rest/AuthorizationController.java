@@ -11,16 +11,16 @@ import pl.warsztat.zlomek.model.db.Client;
 import pl.warsztat.zlomek.model.request.ClientForm;
 import pl.warsztat.zlomek.model.request.SignInRequest;
 import pl.warsztat.zlomek.model.AccessTokenModel;
-import pl.warsztat.zlomek.service.ClientRepository;
+import pl.warsztat.zlomek.data.ClientRepository;
 
 @RestController
 @RequestMapping(path = "/authorization")
-public class Authorization {
+public class AuthorizationController {
     private ClientRepository clientRepository;
 
     private Logger log;
     @Autowired
-    public Authorization(ClientRepository clientRepository, Logger log){
+    public AuthorizationController(ClientRepository clientRepository, Logger log){
         this.clientRepository = clientRepository;
         this.log = log;
     }
@@ -40,6 +40,7 @@ public class Authorization {
             return client;
         }
     }
+
     @RequestMapping(method = RequestMethod.POST, path = "/signIn")
     public AccessTokenModel signIn(@RequestBody SignInRequest request){
         Client client = clientRepository.signIn(request.getEmail(), request.getPassword());

@@ -1,4 +1,4 @@
-package pl.warsztat.zlomek.service;
+package pl.warsztat.zlomek.data;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

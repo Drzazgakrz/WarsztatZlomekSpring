@@ -7,11 +7,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import pl.warsztat.zlomek.configuration.SpringConfiguration;
-import pl.warsztat.zlomek.model.db.Client;
-import pl.warsztat.zlomek.rest.Authorization;
-import pl.warsztat.zlomek.service.ClientRepository;
+import pl.warsztat.zlomek.rest.AuthorizationController;
+import pl.warsztat.zlomek.data.ClientRepository;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -19,15 +17,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = SpringConfiguration.class)
 @NoArgsConstructor
-public class AuthorizationTest {
+public class AuthorizationControllerTest {
     @Autowired
     public ClientRepository clientRepository;
     @Autowired
-    public Authorization authorization;
+    public AuthorizationController authorizationController;
 
     @Test
     public void positiveRegistrationTest() throws Exception{
-        MockMvc mockMvc = standaloneSetup(authorization).build();
+        MockMvc mockMvc = standaloneSetup(authorizationController).build();
         mockMvc.perform(post("/authorization").contentType(MediaType.APPLICATION_JSON).content(
                 "{\n" +
                         "\t\"firstName\":\"Krzysztof\",\n" +

@@ -1,4 +1,4 @@
-package pl.warsztat.zlomek.service;
+package pl.warsztat.zlomek.data;
 
 import org.springframework.stereotype.Repository;
 import pl.warsztat.zlomek.exceptions.ResourcesNotFoundException;
@@ -22,7 +22,16 @@ public class CarRepository {
             query.setParameter("vin", vin);
             return query.getSingleResult();
         }catch (Exception e){}
-        throw new ResourcesNotFoundException();
+        throw new ResourcesNotFoundException("Brak samochodu o podanym numerze vin");
+    }
+
+    public Car getCarById(long id){
+        try{
+            TypedQuery<Car> query = em.createQuery("SELECT car from Car car WHERE car.id=:id", Car.class);
+            query.setParameter("id", id);
+            return query.getSingleResult();
+        }catch (Exception e){}
+        throw new ResourcesNotFoundException("Brak samochodu o podanym id");
     }
 
     public void persistCar(Car car){

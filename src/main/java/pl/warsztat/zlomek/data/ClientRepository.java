@@ -1,4 +1,4 @@
-package pl.warsztat.zlomek.service;
+package pl.warsztat.zlomek.data;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;

@@ -6,6 +6,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import javax.validation.constraints.*;
 @lombok.AllArgsConstructor
 @lombok.Setter
@@ -31,11 +33,13 @@ public class Overview implements Serializable {
     @Column(name = "overview_last_day")
     private LocalDate overviewLastDay;
 
-    public Overview(LocalDateTime date, Car car){
-        this.overviewDate = date;
+    public Overview(Date date, Car car){
+        this.overviewDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         this.car = car;
     }
     public void addTerminateOverview(int years){
         this.overviewLastDay = overviewDate.plusYears(years).toLocalDate();
     }
+
+
 }

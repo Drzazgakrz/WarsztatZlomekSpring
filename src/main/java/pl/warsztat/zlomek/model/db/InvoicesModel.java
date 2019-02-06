@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-public abstract class InvoicesModel {
+public class InvoicesModel {
 
     protected int discount;
 
