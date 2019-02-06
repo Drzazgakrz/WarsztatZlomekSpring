@@ -1,27 +1,31 @@
-package pl.warsztat.zlomek.model.response;
+package pl.warsztat.zlomek.model.request;
 
-import pl.warsztat.zlomek.model.db.Car;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import pl.warsztat.zlomek.model.db.CarsHasOwners;
 import pl.warsztat.zlomek.model.db.Client;
 import pl.warsztat.zlomek.model.db.OwnershipStatus;
-import pl.warsztat.zlomek.model.request.CarData;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Getter
+@Setter
+@NoArgsConstructor
+public class Car {
+    protected String carBrandName;
+    protected String model;
+    protected int prodYear;
+    protected String vinNumber;
+    protected String registrationNumber;
 
-public class CarResponse extends CarData {
-    private long carId;
-
-    public CarResponse(Car car, String accessToken, Client client){
-        super(car, accessToken, client);
-        this.carId = car.getId();
+    public Car(pl.warsztat.zlomek.model.db.Car car, Client client){
         this.carBrandName = car.getBrand().getBrandName();
         this.model = car.getModel();
         this.vinNumber = car.getVin();
         List<CarsHasOwners> carsHasOwners = car.getOwners().stream().filter((cho)->
-                cho.getStatus().equals(OwnershipStatus.CURRENT_OWNER)||cho.getStatus().equals(OwnershipStatus.COOWNER))
-                .collect(Collectors.toList());
+                cho.getOwner().equals(client)).collect(Collectors.toList());
         this.registrationNumber = carsHasOwners.get(0).getRegistrationNumber();
     }
 }

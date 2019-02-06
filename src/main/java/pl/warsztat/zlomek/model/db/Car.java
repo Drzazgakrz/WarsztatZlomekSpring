@@ -79,4 +79,7 @@ public class Car implements Serializable {
         return Objects.equals(vin, car.vin);
 
     }
+    public void addVisit(Visit visit){
+        this.visits.add(visit);
+    }
 }

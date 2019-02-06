@@ -1,7 +1,7 @@
-package pl.warsztat.zlomek.rest;
+package pl.warsztat.zlomek.data;
 
 import org.springframework.stereotype.Repository;
-import pl.warsztat.zlomek.model.db.CarsHasOwners;
+import pl.warsztat.zlomek.model.db.Visit;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -9,12 +9,12 @@ import javax.transaction.Transactional;
 
 @Repository
 @Transactional
-public class CarsHasOwnersRepository {
+public class VisitRepository {
 
     @PersistenceContext
     private EntityManager em;
 
-    public void insertOwnership(CarsHasOwners carsHasOwners){
-        em.persist(carsHasOwners);
+    public void saveVisit(Visit visit){
+        em.persist(visit);
     }
 }
