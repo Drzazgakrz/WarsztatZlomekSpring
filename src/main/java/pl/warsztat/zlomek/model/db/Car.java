@@ -82,4 +82,8 @@ public class Car implements Serializable {
     public void addVisit(Visit visit){
         this.visits.add(visit);
     }
+
+    public void addCompany(CompaniesHasCars chc){
+        this.companiesCars.add(chc);
+    }
 }

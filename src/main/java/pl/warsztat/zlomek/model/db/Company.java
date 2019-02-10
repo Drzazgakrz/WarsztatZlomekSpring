@@ -43,13 +43,12 @@ public class Company extends CompanyModel implements Serializable {
     public CompaniesHasCars addCar(Car car){
         CompaniesHasCars companiesHasCars = new CompaniesHasCars(car, this);
         this.cars.add(companiesHasCars);
-        car.getCompaniesCars().add(companiesHasCars);
+        car.addCompany(companiesHasCars);
         return companiesHasCars;
     }
 
     public CompaniesHasEmployees addClientToCompany(Client client){
         CompaniesHasEmployees companiesHasEmployees = new CompaniesHasEmployees(client, this);
-        client.getCompanies().add(companiesHasEmployees);
         this.getEmployees().add(companiesHasEmployees);
         return companiesHasEmployees;
     }

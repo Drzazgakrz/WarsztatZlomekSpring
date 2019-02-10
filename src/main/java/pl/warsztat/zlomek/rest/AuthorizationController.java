@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import pl.warsztat.zlomek.exceptions.FieldsNotCorrect;
-import pl.warsztat.zlomek.exceptions.UserExistException;
+import pl.warsztat.zlomek.exceptions.ResourcesExistException;
 import pl.warsztat.zlomek.exceptions.ResourcesNotFoundException;
 import pl.warsztat.zlomek.model.db.Client;
 import pl.warsztat.zlomek.model.request.ClientForm;
@@ -30,7 +30,7 @@ public class AuthorizationController {
     public Client registerClient(@RequestBody ClientForm model){
         try {
             clientRepository.findClientByUsername(model.getEmail());
-            throw new UserExistException("Użytkownik o podanym adresie e-mail istnieje");
+            throw new ResourcesExistException("Użytkownik o podanym adresie e-mail istnieje");
         }catch (ResourcesNotFoundException e){
             if(!model.getConfirmPassword().equals(model.getPassword())){
                 throw new FieldsNotCorrect(new String[]{"Hasła się nie zgadzają"});

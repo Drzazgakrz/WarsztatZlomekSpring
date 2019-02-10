@@ -130,4 +130,8 @@ public class Client extends Account implements Serializable {
                 Objects.equals(companies, client.companies) &&
                 Objects.equals(cars, client.cars);
     }
+
+    public void addCompany(CompaniesHasEmployees che){
+        this.companies.add(che);
+    }
 }

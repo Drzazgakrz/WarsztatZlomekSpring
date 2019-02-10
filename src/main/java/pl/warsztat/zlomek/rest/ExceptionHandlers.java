@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import pl.warsztat.zlomek.exceptions.CouldNotAuthorizeException;
 import pl.warsztat.zlomek.exceptions.FieldsNotCorrect;
-import pl.warsztat.zlomek.exceptions.UserExistException;
+import pl.warsztat.zlomek.exceptions.ResourcesExistException;
 import pl.warsztat.zlomek.exceptions.ResourcesNotFoundException;
 import pl.warsztat.zlomek.model.Error;
 
@@ -28,10 +28,10 @@ public class ExceptionHandlers {
         return new Error(e.getReason());
     }
 
-    @ExceptionHandler(UserExistException.class)
+    @ExceptionHandler(ResourcesExistException.class)
     @ResponseStatus(code = HttpStatus.FORBIDDEN)
     @ResponseBody
-    public Error userExistHandler(UserExistException e){
+    public Error userExistHandler(ResourcesExistException e){
         return new Error(e.getReason());
     }
 

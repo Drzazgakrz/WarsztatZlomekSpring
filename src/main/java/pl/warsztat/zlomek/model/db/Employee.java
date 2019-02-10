@@ -37,4 +37,8 @@ public class Employee extends Account implements Serializable {
     private Set<EmployeeToken> accessToken;
 
     private AccountType role;
+
+    public void addVisit(Visit visit){
+        this.visits.add(visit);
+    }
 }
