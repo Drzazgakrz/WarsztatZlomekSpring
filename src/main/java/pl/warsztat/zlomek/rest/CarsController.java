@@ -1,8 +1,9 @@
 package pl.warsztat.zlomek.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import pl.warsztat.zlomek.data.*;
+import pl.warsztat.zlomek.model.request.AddCarToCompanyModel;
 import pl.warsztat.zlomek.service.CarService;
 import pl.warsztat.zlomek.exceptions.ResourcesNotFoundException;
 import pl.warsztat.zlomek.model.AccessTokenModel;
@@ -10,10 +11,7 @@ import pl.warsztat.zlomek.model.db.*;
 import pl.warsztat.zlomek.model.request.CarData;
 import pl.warsztat.zlomek.model.response.CarResponse;
 import pl.warsztat.zlomek.model.response.ClientCarsResponse;
-import pl.warsztat.zlomek.data.CarBrandRepository;
-import pl.warsztat.zlomek.data.CarRepository;
-import pl.warsztat.zlomek.data.CarsHasOwnersRepository;
-import pl.warsztat.zlomek.data.ClientRepository;
+import pl.warsztat.zlomek.service.CompanyService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,15 +26,23 @@ public class CarsController {
     private CarsHasOwnersRepository carsHasOwnersRepository;
     private ClientRepository clientRepository;
     private CarService carService;
+    private CompaniesRepository companiesRepository;
+    private CompaniesHasCarsRepository companiesHasCarsRepository;
+    private CompanyService companyService;
 
     @Autowired
     public CarsController(CarBrandRepository carBrandRepository, CarRepository carRepository, CarService carService,
-                          CarsHasOwnersRepository carsHasOwnersRepository, ClientRepository clientRepository){
+                          CarsHasOwnersRepository carsHasOwnersRepository, ClientRepository clientRepository,
+                          CompaniesRepository companiesRepository, CompaniesHasCarsRepository companiesHasCarsRepository,
+                          CompanyService companyService){
         this.carRepository = carRepository;
         this.carBrandRepository = carBrandRepository;
         this.carsHasOwnersRepository = carsHasOwnersRepository;
         this.clientRepository = clientRepository;
         this.carService = carService;
+        this.companiesRepository = companiesRepository;
+        this.companiesHasCarsRepository = companiesHasCarsRepository;
+        this.companyService = companyService;
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -70,21 +76,32 @@ public class CarsController {
     public ClientCarsResponse getClientsCars(@RequestHeader String accessToken){
         Client client = clientRepository.findByToken(accessToken);
         List<pl.warsztat.zlomek.model.request.Car> cars = new ArrayList<>();
-        client.getCars().forEach(carsHasOwners -> cars.add(new pl.warsztat.zlomek.model.request.Car(carsHasOwners.getCar(), client)));
+        client.getCars().forEach(carsHasOwners ->
+                cars.add(new pl.warsztat.zlomek.model.request.Car(carsHasOwners.getCar(), client)));
         return new ClientCarsResponse(cars, accessToken);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, path = "/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public AccessTokenModel removeCar(@PathVariable long id, @RequestHeader String accessToken){
         Client client = clientRepository.findByToken(accessToken);
         Car car = carService.getClientCar(client, id);
-        List<CarsHasOwners> cars = client.getCars().stream().filter(cho->cho.getCar().equals(car)).collect(Collectors.toList());
+        List<CarsHasOwners> cars = client.getCars().stream().filter(cho->
+                cho.getCar().equals(car)).collect(Collectors.toList());
         if(cars.size()==0){
-            throw new ResourcesNotFoundException("Klient nie posiada takiego samochodu");
+            throw new ResourcesNotFoundException("Klient nie posiada takiego samochodu", accessToken);
         }
         cars.get(0).setStatus(OwnershipStatus.FORMER_OWNER);
         carsHasOwnersRepository.updateOwnership(cars.get(0));
         return new AccessTokenModel(accessToken);
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, path = "/addCarToCompany")
+    public AccessTokenModel addCarToCompany(@RequestBody AddCarToCompanyModel addCarToCompanyModel){
+        Client client = clientRepository.findByToken(addCarToCompanyModel.getAccessToken());
+        Car car = carService.getClientCar(client, addCarToCompanyModel.getCarId());
+        Company company = companyService.getClientCompany(client, addCarToCompanyModel.getCompanyId());
+        CompaniesHasCars chc = company.addCar(car);
+        this.companiesHasCarsRepository.saveCompaniesCarsRelationship(chc);
+        return new AccessTokenModel(addCarToCompanyModel.getAccessToken());
     }
 }

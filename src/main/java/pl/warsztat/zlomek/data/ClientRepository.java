@@ -58,10 +58,9 @@ public class ClientRepository extends AccountRepository<Client>{
     @Override
     public String generateToken(Client account) {
         String token = createToken(account);
-        Client client = (Client) account;
-        ClientToken clientToken = new ClientToken(token, LocalDateTime.now().plusMinutes(20), client);
+        ClientToken clientToken = new ClientToken(token, LocalDateTime.now().plusMinutes(20), account);
         em.persist(clientToken);
-        client.getAccessToken().add(clientToken);
+        account.getAccessToken().add(clientToken);
         update(account);
         return token;
     }
