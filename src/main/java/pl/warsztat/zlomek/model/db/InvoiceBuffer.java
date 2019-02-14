@@ -20,12 +20,6 @@ public class InvoiceBuffer extends InvoicesModel implements Serializable {
     @Column(name = "ststus")
     private InvoiceBufferStatus invoiceBufferStatus;
 
-
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "company_data_buffer_id")
-    private CompanyDataBuffer companyDataBuffer;
-
     @OneToMany(mappedBy = "invoiceBuffer")
     private Set<InvoiceBufferPosition> invoiceBufferPositions;
 
@@ -37,12 +31,12 @@ public class InvoiceBuffer extends InvoicesModel implements Serializable {
     @OneToOne
     private Visit visit;
 
-    public InvoiceBuffer(int discount, MethodOfPayment methodOfPayment,
-                         CompanyDataBuffer companyData, CarServiceData carServiceData, LocalDate paymentDate, Visit visit){
+    public InvoiceBuffer(int discount, MethodOfPayment methodOfPayment, CompanyData companyData,
+                         CarServiceData carServiceData, LocalDate paymentDate, Visit visit){
         super(discount, methodOfPayment, carServiceData, LocalDate.now(), paymentDate);
         invoiceBufferPositions = new HashSet<>();
-        this.companyDataBuffer = companyData;
         this.carServiceData = carServiceData;
         this.visit = visit;
+        this.companyData = companyData;
     }
 }

@@ -1,9 +1,11 @@
 package pl.warsztat.zlomek.rest;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.warsztat.zlomek.data.*;
 import pl.warsztat.zlomek.model.request.AddCarToCompanyModel;
+import pl.warsztat.zlomek.model.request.AddCoownerRequest;
 import pl.warsztat.zlomek.service.CarService;
 import pl.warsztat.zlomek.exceptions.ResourcesNotFoundException;
 import pl.warsztat.zlomek.model.AccessTokenModel;
@@ -14,8 +16,10 @@ import pl.warsztat.zlomek.model.response.ClientCarsResponse;
 import pl.warsztat.zlomek.service.CompanyService;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping(path = "/car")
@@ -29,12 +33,13 @@ public class CarsController {
     private CompaniesRepository companiesRepository;
     private CompaniesHasCarsRepository companiesHasCarsRepository;
     private CompanyService companyService;
+    private Logger log;
 
     @Autowired
     public CarsController(CarBrandRepository carBrandRepository, CarRepository carRepository, CarService carService,
                           CarsHasOwnersRepository carsHasOwnersRepository, ClientRepository clientRepository,
                           CompaniesRepository companiesRepository, CompaniesHasCarsRepository companiesHasCarsRepository,
-                          CompanyService companyService){
+                          CompanyService companyService, Logger log){
         this.carRepository = carRepository;
         this.carBrandRepository = carBrandRepository;
         this.carsHasOwnersRepository = carsHasOwnersRepository;
@@ -43,6 +48,7 @@ public class CarsController {
         this.companiesRepository = companiesRepository;
         this.companiesHasCarsRepository = companiesHasCarsRepository;
         this.companyService = companyService;
+        this.log = log;
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -60,8 +66,7 @@ public class CarsController {
                 .filter((carsHasOwners -> carsHasOwners.getStatus().equals(OwnershipStatus.CURRENT_OWNER) ||
                                 carsHasOwners.getStatus().equals(OwnershipStatus.COOWNER))).collect(Collectors.toList());
         OwnershipStatus status = currentOwners.size()!= 0 ? OwnershipStatus.NOT_VERIFIED_OWNER:OwnershipStatus.CURRENT_OWNER;
-        CarsHasOwners cho = car.addCarOwner(client, status, carData.getRegistrationNumber());
-        carsHasOwnersRepository.insertOwnership(cho);
+        carService.addOwnership(car, client, status, carData.getRegistrationNumber());
         carRepository.updateCar(car);
         return new CarResponse(car, carData.getAccessToken(), client);
     }
@@ -69,7 +74,7 @@ public class CarsController {
     @RequestMapping(method = RequestMethod.GET, path = "/{id}")
     public CarResponse getCar(@PathVariable long id, @RequestHeader String accessToken){
         Client client = clientRepository.findByToken(accessToken);
-        return new CarResponse(carService.getClientCar(client, id), accessToken, client);
+        return new CarResponse(carService.getClientCar(client, id).getCar(), accessToken, client);
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -84,24 +89,44 @@ public class CarsController {
     @RequestMapping(method = RequestMethod.DELETE, path = "/{id}")
     public AccessTokenModel removeCar(@PathVariable long id, @RequestHeader String accessToken){
         Client client = clientRepository.findByToken(accessToken);
-        Car car = carService.getClientCar(client, id);
-        List<CarsHasOwners> cars = client.getCars().stream().filter(cho->
-                cho.getCar().equals(car)).collect(Collectors.toList());
-        if(cars.size()==0){
+        Car car = carService.getClientCar(client, id).getCar();
+        CarsHasOwners cho = client.getCars().stream().filter(ownership->
+                ownership.getCar().equals(car)).findAny().orElse(null);
+        if(cho == null){
             throw new ResourcesNotFoundException("Klient nie posiada takiego samochodu", accessToken);
         }
-        cars.get(0).setStatus(OwnershipStatus.FORMER_OWNER);
-        carsHasOwnersRepository.updateOwnership(cars.get(0));
+        cho.setStatus(OwnershipStatus.FORMER_OWNER);
+        carsHasOwnersRepository.updateOwnership(cho);
         return new AccessTokenModel(accessToken);
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/addCarToCompany")
     public AccessTokenModel addCarToCompany(@RequestBody AddCarToCompanyModel addCarToCompanyModel){
         Client client = clientRepository.findByToken(addCarToCompanyModel.getAccessToken());
-        Car car = carService.getClientCar(client, addCarToCompanyModel.getCarId());
+        Car car = carService.getClientCar(client, addCarToCompanyModel.getCarId()).getCar();
         Company company = companyService.getClientCompany(client, addCarToCompanyModel.getCompanyId());
         CompaniesHasCars chc = company.addCar(car);
+        car.addCompany(chc);
+        this.carRepository.updateCar(car);
         this.companiesHasCarsRepository.saveCompaniesCarsRelationship(chc);
         return new AccessTokenModel(addCarToCompanyModel.getAccessToken());
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, path = "/addCoowner")
+    public AccessTokenModel addCoowner(@RequestBody AddCoownerRequest request){
+        Client client = this.clientRepository.findByToken(request.getAccessToken());
+        CarsHasOwners cho = carService.getClientCar(client, request.getCarId());
+        if(cho == null)
+            throw new ResourcesNotFoundException("Samochód nie należy do tego klienta");
+        cho.setStatus(OwnershipStatus.COOWNER);
+        this.carsHasOwnersRepository.updateOwnership(cho);
+        Arrays.stream(request.getNewCoowners()).forEach(username->{
+            try {
+                Client coowner = this.clientRepository.findClientByUsername(username);
+                this.carService.addOwnership(cho.getCar(), coowner, OwnershipStatus.COOWNER, cho.getRegistrationNumber());
+            }catch (Exception e){}
+        });
+        this.carRepository.updateCar(cho.getCar());
+        return new AccessTokenModel(request.getAccessToken());
     }
 }

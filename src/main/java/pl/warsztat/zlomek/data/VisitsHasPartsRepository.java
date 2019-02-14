@@ -1,7 +1,7 @@
 package pl.warsztat.zlomek.data;
 
 import org.springframework.stereotype.Repository;
-import pl.warsztat.zlomek.model.db.Overview;
+import pl.warsztat.zlomek.model.db.VisitsParts;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -9,16 +9,12 @@ import javax.transaction.Transactional;
 
 @Repository
 @Transactional
-public class OverviewRepository {
+public class VisitsHasPartsRepository {
 
     @PersistenceContext
     private EntityManager em;
 
-    public void saveOverview(Overview overview){
-        em.persist(overview);
-    }
-
-    public void updateOverview(Overview overview){
-        em.merge(overview);
+    public void persist(VisitsParts vp){
+        em.persist(vp);
     }
 }

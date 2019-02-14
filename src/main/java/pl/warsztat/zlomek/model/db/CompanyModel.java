@@ -12,7 +12,7 @@ public abstract class CompanyModel {
 
     @NotNull
     @Size(min = 13,max=13)
-    @Column(name = "NIP")
+    @Column(name = "NIP", unique = true)
     @Pattern(regexp = "[0-9]{3}+-+[0-9]{3}+-+[0-9]{2}+-+[0-9]{2}")
     protected String nip;
 

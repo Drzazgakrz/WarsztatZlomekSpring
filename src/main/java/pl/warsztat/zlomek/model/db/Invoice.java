@@ -16,10 +16,6 @@ public class Invoice extends InvoicesModel implements Serializable {
     @GeneratedValue(strategy =GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne
-    @JoinColumn(name = "company_data_id")
-    private CompanyData companyData;
-
     //@NotNull
     @OneToMany (mappedBy = "invoice")
     private Set<InvoicePosition> invoicePositions;

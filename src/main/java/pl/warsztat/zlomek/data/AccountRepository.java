@@ -2,13 +2,18 @@ package pl.warsztat.zlomek.data;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Repository;
+import pl.warsztat.zlomek.exceptions.ResourcesExistException;
 import pl.warsztat.zlomek.exceptions.ResourcesNotFoundException;
 import pl.warsztat.zlomek.model.db.Account;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
+import org.hibernate.exception.ConstraintViolationException;
 import java.util.Date;
 
 @Repository
@@ -26,7 +31,11 @@ public  abstract class AccountRepository <Type extends Account>{
     }
 
     public void insert(Type account) {
-        em.persist(account);
+        try {
+            em.persist(account);
+        }catch (Exception e){
+            throw new ResourcesExistException("Konto o podanym emailu już istnieje");
+        }
     }
 
     protected String createToken(Type user){

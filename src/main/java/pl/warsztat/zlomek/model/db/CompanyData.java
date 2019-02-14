@@ -29,10 +29,4 @@ public class CompanyData extends CompanyModel implements Serializable {
                 company.getBuildingNum(), company.getAptNum(), company.getZipCode());
         this.invoices = new HashSet<>();
     }
-
-    public CompanyData(CompanyDataBuffer buffer){
-        super(buffer.getNip(), buffer.getCompanyName(), buffer.getCityName(), buffer.getStreetName(),
-                buffer.getBuildingNum(), buffer.getAptNum(), buffer.getZipCode());
-        this.invoices = new HashSet<>();
-    }
 }
