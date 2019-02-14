@@ -14,7 +14,8 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import javax.sql.DataSource;
 
 @Configuration
-@ComponentScan({"pl.warsztat.zlomek.data", "pl.warsztat.zlomek.rest", "pl.warsztat.zlomek.model.db"})
+@ComponentScan({"pl.warsztat.zlomek.data", "pl.warsztat.zlomek.rest", "pl.warsztat.zlomek.model.db",
+        "pl.warsztat.zlomek.service"})
 public class SpringConfiguration {
     @Bean
     public LocalEntityManagerFactoryBean localContainerManagerFactoryBean(){

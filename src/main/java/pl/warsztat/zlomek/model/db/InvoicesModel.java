@@ -42,6 +42,10 @@ public class InvoicesModel {
     @Column(precision = 20, scale = 2, name = "gross_value")
     protected BigDecimal grossValue;
 
+    @ManyToOne
+    @JoinColumn(name = "company_data_id")
+    protected CompanyData companyData;
+
     public InvoicesModel(int discount, MethodOfPayment methodOfPayment, CarServiceData carServiceData,
                          LocalDate dayOfIssue, LocalDate paymentDate) {
         this.discount = discount;

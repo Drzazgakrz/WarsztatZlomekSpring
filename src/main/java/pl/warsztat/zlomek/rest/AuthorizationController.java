@@ -28,17 +28,13 @@ public class AuthorizationController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public Client registerClient(@RequestBody ClientForm model){
-        try {
             clientRepository.findClientByUsername(model.getEmail());
-            throw new ResourcesExistException("Użytkownik o podanym adresie e-mail istnieje");
-        }catch (ResourcesNotFoundException e){
             if(!model.getConfirmPassword().equals(model.getPassword())){
                 throw new FieldsNotCorrect(new String[]{"Hasła się nie zgadzają"});
             }
             Client client = new Client(model);
             clientRepository.insert(client);
             return client;
-        }
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/signIn")

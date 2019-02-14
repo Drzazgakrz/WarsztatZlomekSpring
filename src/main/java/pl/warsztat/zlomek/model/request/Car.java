@@ -27,5 +27,14 @@ public class Car {
         List<CarsHasOwners> carsHasOwners = car.getOwners().stream().filter((cho)->
                 cho.getOwner().equals(client)).collect(Collectors.toList());
         this.registrationNumber = carsHasOwners.get(0).getRegistrationNumber();
+        this.prodYear = car.getProdYear();
+    }
+
+    public Car(pl.warsztat.zlomek.model.db.Car car){
+        this.carBrandName = car.getBrand().getBrandName();
+        this.model = car.getModel();
+        this.vinNumber = car.getVin();
+        this.registrationNumber = null;
+        this.prodYear = car.getProdYear();
     }
 }

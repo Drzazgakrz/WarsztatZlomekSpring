@@ -7,6 +7,7 @@ import pl.warsztat.zlomek.model.db.VisitStatus;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -21,10 +22,21 @@ public class VisitRepository {
 
     public Visit getVisitById(long visitId){
         try {
-            TypedQuery<Visit> query = em.createQuery("SELECT visit FROM Visit visit WHERE visit.id = :id AND " +
-                            "visit.status=:newVisit", Visit.class);
+            TypedQuery<Visit> query = em.createQuery("SELECT visit FROM Visit visit WHERE visit.id = :id ",
+                    Visit.class);
             query.setParameter("id", visitId);
-            query.setParameter("newVisit", VisitStatus.NEW);
+            return query.getSingleResult();
+        }catch (NoResultException e){
+            throw new ResourcesNotFoundException("Brak wizyty spełniającej podane kryteria");
+        }
+    }
+
+    public Visit getVisitById(long visitId, VisitStatus visitStatus){
+        try {
+            TypedQuery<Visit> query = em.createQuery("SELECT visit FROM Visit visit WHERE visit.id = :id " +
+                    "AND visit.status=:visitStatus", Visit.class);
+            query.setParameter("id", visitId);
+            query.setParameter("visitStatus", visitStatus);
             return query.getSingleResult();
         }catch (NoResultException e){
             throw new ResourcesNotFoundException("Brak wizyty spełniającej podane kryteria");
@@ -33,5 +45,16 @@ public class VisitRepository {
 
     public void updateVisit(Visit visit){
         em.merge(visit);
+    }
+
+    public List<Visit> getVisitByStatus(VisitStatus status){
+        try {
+            TypedQuery<Visit> query = em.createQuery("SELECT visit FROM Visit visit WHERE visit.status = :status",
+                    Visit.class);
+            query.setParameter("status", status);
+            return query.getResultList();
+        }catch (Exception e){
+            return null;
+        }
     }
 }

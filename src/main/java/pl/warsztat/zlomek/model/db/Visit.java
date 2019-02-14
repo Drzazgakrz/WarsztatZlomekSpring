@@ -73,4 +73,11 @@ public class Visit {
         this.status = VisitStatus.NEW;
     }
 
+    public void addService(VisitsHasServices vhs){
+        this.services.add(vhs);
+    }
+
+    public void addCarPart(VisitsParts vp){
+        this.parts.add(vp);
+    }
 }

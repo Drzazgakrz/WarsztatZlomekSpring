@@ -1,6 +1,7 @@
 package pl.warsztat.zlomek.data;
 
 import org.springframework.stereotype.Repository;
+import pl.warsztat.zlomek.exceptions.ResourcesExistException;
 import pl.warsztat.zlomek.exceptions.ResourcesNotFoundException;
 import pl.warsztat.zlomek.model.db.Company;
 
@@ -16,7 +17,11 @@ public class CompaniesRepository {
     private EntityManager em;
 
     public void createCompany(Company company) {
-        em.persist(company);
+        try {
+            em.persist(company);
+        }catch (Exception e){
+            throw new ResourcesExistException("Firma o podanej nazwie lub numerze nip istnieje");
+        }
     }
 
     public Company getCompanyByNip(String nip) {

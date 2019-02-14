@@ -70,6 +70,9 @@ public class ClientsController {
         }else {
             CompaniesHasEmployees che = company.addClientToCompany(client);
             client.addCompany(che);
+            company.getEmployees().add(che);
+            this.companiesRepository.updateCompany(company);
+            this.clientRepository.update(client);
             this.companiesHasEmployeesRepository.persist(che);
         }
         return new AccessTokenModel(request.getAccessToken());
