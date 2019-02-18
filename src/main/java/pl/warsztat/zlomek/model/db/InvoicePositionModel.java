@@ -9,6 +9,7 @@ import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Getter
 @Setter
@@ -43,4 +44,15 @@ public class InvoicePositionModel {
 
     @NotNull
     protected int count;
+
+    public InvoicePositionModel(VisitPosition position, String unitOfMeasure, String itemName, int tax){
+        this.count = position.getCount();
+        this.vat = tax;
+        this.itemName = itemName;
+        this.unitOfMeasure = unitOfMeasure;
+        this.grossPrice = position.getSinglePrice().multiply(new BigDecimal(count));
+        BigDecimal multiplier = new BigDecimal(100).divide(new BigDecimal(100+tax),2, RoundingMode.CEILING);
+        this.netPrice = grossPrice.multiply(multiplier);
+        this.valueOfVat = grossPrice.subtract(netPrice);
+    }
 }

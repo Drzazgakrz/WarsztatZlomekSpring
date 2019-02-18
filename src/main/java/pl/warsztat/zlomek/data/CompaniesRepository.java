@@ -45,6 +45,16 @@ public class CompaniesRepository {
         return null;
     }
 
+    public Company getCompanyName(String name){
+        try {
+            TypedQuery<Company> query = em.createQuery("SELECT company FROM Company company " +
+                    "WHERE company.companyName=:name", Company.class);
+            query.setParameter("name", name);
+            return query.getSingleResult();
+        }catch (Exception e){}
+        return null;
+    }
+
     public void updateCompany(Company company){
         em.merge(company);
     }

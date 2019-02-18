@@ -1,4 +1,4 @@
-package pl.warsztat.zlomek.rest;
+package pl.warsztat.zlomek.controllers.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

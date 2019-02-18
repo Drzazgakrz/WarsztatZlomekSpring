@@ -1,4 +1,4 @@
-package pl.warsztat.zlomek.rest;
+package pl.warsztat.zlomek.controllers.rest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.TransactionSystemException;

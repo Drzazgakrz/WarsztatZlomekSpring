@@ -57,7 +57,14 @@ public class VisitService {
             visit.addService(vhs);
             service.addVisit(vhs);
             this.visitRepository.updateVisit(visit);
-            this.visitsHasServicesRepository.save(vhs);
+            try{
+                this.visitsHasServicesRepository.save(vhs);
+            }catch(Exception e){
+                VisitsHasServices visitsHasServices = visit.getServices().stream().filter(part->
+                        part.getService().equals(vhs.getService())).findAny().get();
+                visitsHasServices.setCount(vhs.getCount());
+                this.visitsHasServicesRepository.update(visitsHasServices);
+            }
         });
     }
 
@@ -70,7 +77,14 @@ public class VisitService {
             visit.addCarPart(vp);
             carPart.addVisit(vp);
             this.visitRepository.updateVisit(visit);
-            this.visitsHasPartsRepository.persist(vp);
+            try{
+                this.visitsHasPartsRepository.persist(vp);
+            }catch(Exception e){
+                VisitsParts visitsParts = visit.getParts().stream().filter(part->
+                        part.getPart().equals(vp.getPart())).findAny().get();
+                visitsParts.setCount(carPartModel.getCount());
+                this.visitsHasPartsRepository.update(visitsParts);
+            }
         });
     }
 }
