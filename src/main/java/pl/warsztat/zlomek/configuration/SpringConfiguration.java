@@ -12,20 +12,13 @@ import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.thymeleaf.spring5.SpringTemplateEngine;
-import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
-import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 import javax.sql.DataSource;
 
 @Configuration
 @ComponentScan({"pl.warsztat.zlomek.data", "pl.warsztat.zlomek.controllers.rest", "pl.warsztat.zlomek.model.db",
-        "pl.warsztat.zlomek.service","pl.warsztat.zlomek.controllers.web"})
+        "pl.warsztat.zlomek.service","pl.warsztat.zlomek.controllers.web", "pl.warsztat.zlomek.configuration"})
 public class SpringConfiguration implements WebMvcConfigurer {
 
 
@@ -45,7 +38,7 @@ public class SpringConfiguration implements WebMvcConfigurer {
     public DataSource dataSource(){
         DriverManagerDataSource ds = new DriverManagerDataSource();
         ds.setDriverClassName("com.mysql.jdbc.Driver");
-        ds.setUrl("jdbc:mysql://localhost:3306/warsztat_zlomek");
+        ds.setUrl("jdbc:mysql://localhost:3306/warsztat_zlomek?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
         ds.setUsername("root");
         ds.setPassword("");
         return ds;

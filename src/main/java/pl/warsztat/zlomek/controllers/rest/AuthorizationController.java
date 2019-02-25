@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import pl.warsztat.zlomek.data.EmployeeRepository;
 import pl.warsztat.zlomek.exceptions.FieldsNotCorrect;
 import pl.warsztat.zlomek.exceptions.ResourcesExistException;
 import pl.warsztat.zlomek.exceptions.ResourcesNotFoundException;
@@ -14,15 +15,17 @@ import pl.warsztat.zlomek.model.AccessTokenModel;
 import pl.warsztat.zlomek.data.ClientRepository;
 
 @RestController
-@RequestMapping(path = "/authorization")
+@RequestMapping(path = "/rest/authorization")
 public class AuthorizationController {
     private ClientRepository clientRepository;
+    private EmployeeRepository employeeRepository;
 
     private Logger log;
     @Autowired
-    public AuthorizationController(ClientRepository clientRepository, Logger log){
+    public AuthorizationController(ClientRepository clientRepository, Logger log, EmployeeRepository employeeRepository){
         this.clientRepository = clientRepository;
         this.log = log;
+        this.employeeRepository = employeeRepository;
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -41,5 +44,10 @@ public class AuthorizationController {
     public AccessTokenModel signIn(@RequestBody SignInRequest request){
         Client client = clientRepository.signIn(request.getEmail(), request.getPassword());
         return new AccessTokenModel(clientRepository.generateToken(client));
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path = "checkToken")
+    public void checkToken(@RequestBody AccessTokenModel model){
+        this.employeeRepository.findByToken(model.getAccessToken());
     }
 }

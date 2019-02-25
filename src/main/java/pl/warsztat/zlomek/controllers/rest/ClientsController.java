@@ -19,7 +19,7 @@ import pl.warsztat.zlomek.model.response.ClientDataResponse;
 import pl.warsztat.zlomek.data.ClientRepository;
 
 @RestController
-@RequestMapping(path = "/client")
+@RequestMapping(path = "/rest/client")
 public class ClientsController {
 
     private ClientRepository clientRepository;

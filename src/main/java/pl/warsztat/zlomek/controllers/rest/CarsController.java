@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RestController
-@RequestMapping(path = "/car")
+@RequestMapping(path = "/rest/car")
 public class CarsController {
 
     private CarBrandRepository carBrandRepository;

@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RestController
-@RequestMapping(path = "/visits")
+@RequestMapping(path = "/rest/visits")
 public class VisitsController {
 
     private CarRepository carRepository;

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/visitElements")
+@RequestMapping(path = "/rest/visitElements")
 public class VisitElementsController {
 
     private EmployeeRepository employeeRepository;

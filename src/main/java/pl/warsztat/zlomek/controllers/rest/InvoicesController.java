@@ -16,7 +16,7 @@ import pl.warsztat.zlomek.model.response.InvoiceResponse;
 import pl.warsztat.zlomek.service.InvoiceService;
 
 @RestController
-@RequestMapping(path = "/invoices")
+@RequestMapping(path = "/rest/invoices")
 public class InvoicesController {
 
     private InvoicesRepository invoicesRepository;

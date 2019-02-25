@@ -7,6 +7,7 @@ import pl.warsztat.zlomek.model.db.VisitStatus;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -49,12 +50,13 @@ public class VisitRepository {
 
     public List<Visit> getVisitByStatus(VisitStatus status){
         try {
-            TypedQuery<Visit> query = em.createQuery("SELECT visit FROM Visit visit WHERE visit.status = :status",
+            TypedQuery<Visit> query = em.createQuery("SELECT visit FROM Visit visit WHERE visit.status = :status" +
+                            " ORDER BY visit.visitDate DESC",
                     Visit.class);
             query.setParameter("status", status);
             return query.getResultList();
         }catch (Exception e){
-            return null;
+            return new ArrayList<>();
         }
     }
 }

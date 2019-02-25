@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: header">
+</head>
+<body>
+<nav th:replace="fragments :: menu"></nav>
+
+<div class="jumbotron">
+    <table>
+        <th:block th:each="visit : ${visits}">
+            <tr>
+                <td th:text="${visit.getCar().getBrand()}"></td>
+                <td th:text="${visit.getCar().getModel()}"></td>
+                <td th:text="${visit.getVisitDate()}"></td>
+                <td th:text="${visit.getEmployee().getFirstName()} ${visit.getEmployee().getLastName()}"></td>
+            </tr>
+        </th:block>
+    </table>
+</div>
+
+</body>
+</html>

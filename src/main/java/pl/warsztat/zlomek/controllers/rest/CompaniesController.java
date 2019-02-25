@@ -13,7 +13,7 @@ import pl.warsztat.zlomek.model.db.EmployeeToken;
 import pl.warsztat.zlomek.model.request.AddCompanyRequest;
 
 @RestController
-@RequestMapping(path = "/companies")
+@RequestMapping(path = "/rest/companies")
 public class CompaniesController {
 
     private EmployeeRepository employeeRepository;
