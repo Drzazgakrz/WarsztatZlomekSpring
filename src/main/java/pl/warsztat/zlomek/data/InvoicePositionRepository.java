@@ -1,7 +1,7 @@
 package pl.warsztat.zlomek.data;
 
 import org.springframework.stereotype.Repository;
-import pl.warsztat.zlomek.model.db.VisitsParts;
+import pl.warsztat.zlomek.model.db.InvoicePosition;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -9,16 +9,12 @@ import javax.transaction.Transactional;
 
 @Repository
 @Transactional
-public class VisitsHasPartsRepository {
+public class InvoicePositionRepository {
 
     @PersistenceContext
     private EntityManager em;
 
-    public void persist(VisitsParts vp){
-        em.persist(vp);
-    }
-
-    public void update(VisitsParts vp){
-        em.merge(vp);
+    public void persist(InvoicePosition invoicePosition){
+        em.persist(invoicePosition);
     }
 }

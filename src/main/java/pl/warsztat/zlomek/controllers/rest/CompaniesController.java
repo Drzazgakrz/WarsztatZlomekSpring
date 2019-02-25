@@ -1,4 +1,4 @@
-package pl.warsztat.zlomek.rest;
+package pl.warsztat.zlomek.controllers.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +13,7 @@ import pl.warsztat.zlomek.model.db.EmployeeToken;
 import pl.warsztat.zlomek.model.request.AddCompanyRequest;
 
 @RestController
-@RequestMapping(path = "/companies")
+@RequestMapping(path = "/rest/companies")
 public class CompaniesController {
 
     private EmployeeRepository employeeRepository;

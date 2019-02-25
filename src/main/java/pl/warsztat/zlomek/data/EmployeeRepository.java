@@ -1,5 +1,7 @@
 package pl.warsztat.zlomek.data;
 
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 import pl.warsztat.zlomek.exceptions.ResourcesNotFoundException;
@@ -17,6 +19,13 @@ public class EmployeeRepository extends AccountRepository<Employee>{
 
     @PersistenceContext
     private EntityManager em;
+
+    private Logger log;
+
+    @Autowired
+    public EmployeeRepository(Logger log){
+        this.log = log;
+    }
 
     @Override
     public String generateToken(Employee account) {

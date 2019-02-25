@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: header">
+
+</head>
+<body>
+    <div class="jumbotron login-panel" style="width: 40%; margin: auto;">
+        <form method="post" th:action="@{/login}">
+            <label for="username">E-mail</label>
+            <input type="email" id="username" name="username" class="form-control"/>
+            <label for="password">Hasło</label>
+            <input type="password" id="password" name="password" class="form-control"/>
+            <input th:name="${_csrf.parameterName}" type="hidden" th:value="${_csrf.token}">
+            <input type="submit" class="btn btn-success" id="signIn">
+        </form>
+    </div>
+</body>
+</html>

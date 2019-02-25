@@ -1,4 +1,4 @@
-package pl.warsztat.zlomek.rest;
+package pl.warsztat.zlomek.controllers.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -8,24 +8,27 @@ import pl.warsztat.zlomek.model.db.Employee;
 import pl.warsztat.zlomek.model.request.SignInRequest;
 import pl.warsztat.zlomek.model.response.VisitResponse;
 import pl.warsztat.zlomek.model.response.VisitsList;
+import pl.warsztat.zlomek.service.AuthorizationService;
 
 import java.util.ArrayList;
 
 @RestController
-@RequestMapping(path = "employee")
+@RequestMapping(path = "/rest/employee")
 public class EmployeeController {
 
     private EmployeeRepository employeeRepository;
+    private AuthorizationService authorizationService;
+
 
     @Autowired
-    public EmployeeController(EmployeeRepository employeeRepository){
+    public EmployeeController(EmployeeRepository employeeRepository, AuthorizationService authorizationService){
         this.employeeRepository = employeeRepository;
+        this.authorizationService = authorizationService;
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public AccessTokenModel signIn(@RequestBody SignInRequest signInRequest){
-        Employee employee = employeeRepository.signIn(signInRequest.getEmail(), signInRequest.getPassword());
-        return new AccessTokenModel(employeeRepository.generateToken(employee));
+        return new AccessTokenModel(authorizationService.signIn(signInRequest));
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/visits")

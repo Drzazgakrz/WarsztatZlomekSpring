@@ -18,7 +18,7 @@ public abstract class CompanyModel {
 
     @NotNull
     @Size(min = 2, max = 40)
-    @Column(name = "company_name", unique = true)
+    @Column(name = "company_name")
     protected String companyName;
 
     @NotNull

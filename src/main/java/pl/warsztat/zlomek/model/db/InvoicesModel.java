@@ -19,7 +19,7 @@ public class InvoicesModel {
     protected MethodOfPayment methodOfPayment;
 
 
-    //@NotNull
+    @NotNull
     @Column(name = "invoice_number")
     protected String invoiceNumber;
 
@@ -47,11 +47,15 @@ public class InvoicesModel {
     protected CompanyData companyData;
 
     public InvoicesModel(int discount, MethodOfPayment methodOfPayment, CarServiceData carServiceData,
-                         LocalDate dayOfIssue, LocalDate paymentDate) {
+                         LocalDate dayOfIssue, LocalDate paymentDate, CompanyData companyData, String invoiceNumber) {
         this.discount = discount;
         this.methodOfPayment = methodOfPayment;
         this.carServiceData = carServiceData;
         this.dayOfIssue = dayOfIssue;
         this.paymentDate = paymentDate;
+        this.companyData = companyData;
+        this.invoiceNumber = invoiceNumber;
+        this.netValue = new BigDecimal(0);
+        this.grossValue = new BigDecimal(0);
     }
 }

@@ -1,4 +1,4 @@
-package pl.warsztat.zlomek.rest;
+package pl.warsztat.zlomek.controllers.rest;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RestController
-@RequestMapping(path = "/car")
+@RequestMapping(path = "/rest/car")
 public class CarsController {
 
     private CarBrandRepository carBrandRepository;

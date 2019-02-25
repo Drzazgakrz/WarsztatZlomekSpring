@@ -2,11 +2,11 @@ package pl.warsztat.zlomek.model.db;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-@lombok.NoArgsConstructor
 @lombok.Getter
 @lombok.Setter
 @Entity
@@ -29,8 +29,7 @@ public class Invoice extends InvoicesModel implements Serializable {
 
     public Invoice(int discount, MethodOfPayment methodOfPayment,CompanyData companyData, CarServiceData carServiceData,
                    LocalDate paymentDate, String invoiceNumber){
-        super(discount, methodOfPayment, carServiceData, LocalDate.now(), paymentDate );
-        this.companyData = companyData;
+        super(discount, methodOfPayment, carServiceData, LocalDate.now(), paymentDate, companyData, invoiceNumber);
         this.corectionInvoice = null;
         this.carServiceData = carServiceData;
         this.invoicePositions = new HashSet<>();
@@ -38,12 +37,22 @@ public class Invoice extends InvoicesModel implements Serializable {
         this.invoiceNumber = invoiceNumber;
     }
 
-    public Invoice(InvoiceBuffer buffer, CompanyModel company, CarServiceData data){
-        super(buffer.getDiscount(), buffer.getMethodOfPayment(), data, LocalDate.now(), buffer.getPaymentDate());
+    public Invoice(InvoiceBuffer buffer, CarServiceData data){
+        super(buffer.getDiscount(), buffer.getMethodOfPayment(), data, LocalDate.now(), buffer.getPaymentDate(),
+                buffer.getCompanyData(), buffer.invoiceNumber);
         this.netValue = buffer.getNetValue();
         this.grossValue = buffer.getGrossValue();
-        companyData = (CompanyData) company;
         this.invoicePositions = new HashSet<>();
         this.visitFinished = buffer.getVisit().getVisitFinished();
+    }
+    public void add(InvoicePosition position){
+        this.invoicePositions.add(position);
+    }
+
+    public Invoice() {
+        this.dayOfIssue = LocalDate.now();
+        this.grossValue = new BigDecimal(0);
+        this.netValue = new BigDecimal(0);
+        this.invoicePositions = new HashSet<>();
     }
 }

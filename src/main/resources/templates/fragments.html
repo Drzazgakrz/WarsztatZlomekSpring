@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="header">
+    <meta charset="UTF-8">
+    <title>Warsztat Złomek - panel administracyjny</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}" type="text/css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"
+          type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" th:fragment="menu" id="menu">
+        <a id="index-href" type="submit" th:href="@{/index}">
+            <img th:src="@{/img/logo_dark1.jpg}" id="logo" alt="logo"/>
+        </a>
+    <ul class="navbar-nav" style="width: 100%;">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                Wizyty
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" th:href="@{/visits/in_progress}">Wizyty w toku</a>
+                <a class="dropdown-item" th:href="@{/visits/new}">Nowe wizyty</a>
+                <a class="dropdown-item" th:href="@{/visits/all}">Wszystkie wizyty</a>
+            </div>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                Faktury
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" th:href="@{/invoices/vat}">Lista faktur VAT</a>
+                <a class="dropdown-item" th:href="@{/invoices/pro_forma}">Lista faktur pro-forma</a>
+            </div>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                Klienci
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" th:href="@{/accounts/banUser}">Zablokuj</a>
+                <a class="dropdown-item" th:href="@{/accounts/addToCompany}">Dodaj do firmy</a>
+                <a class="dropdown-item" th:href="@{/accounts/removeFromCompany}">Usuń z firmy</a>
+            </div>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                Pracownicy
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" th:href="@{/employee/add}">Dodaj pracownika</a>
+                <a class="dropdown-item" th:href="@{/employee/remove}">Usuń pracownika</a>
+            </div>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                Samochody
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" th:href="@{/carBrand/add}">Dodaj markę</a>
+                <a class="dropdown-item" th:href="@{/carPart/add}">Dodaj część</a>
+            </div>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                Firmy
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" th:href="@{/companies/add}">Dodaj firmę</a>
+                <a class="dropdown-item" th:href="@{/companies/all}">Lista firm</a>
+                <a class="dropdown-item" th:href="@{/companies/carService}">Dodaj dane serwisu</a>
+            </div>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                Usługi
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" th:href="@{/service/add}">Dodaj</a>
+                <a class="dropdown-item" th:href="@{/service/edit}">Edytuj usługi i części</a>
+            </div>
+        </li>
+    </ul>
+
+    <ul class="navbar-nav">
+        <li class="nav-item active" style="width: 120px">
+            <a th:href="@{/logout}" class="nav-link">Wyloguj</a>
+        </li>
+    </ul>
+</nav>
+</body>
+</html>

@@ -17,4 +17,8 @@ public class VisitsHasServicesRepository {
     public void save(VisitsHasServices vhs){
         this.em.persist(vhs);
     }
+
+    public void update(VisitsHasServices vhs){
+        this.em.merge(vhs);
+    }
 }

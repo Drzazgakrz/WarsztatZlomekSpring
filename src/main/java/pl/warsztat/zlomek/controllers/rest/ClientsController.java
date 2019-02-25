@@ -1,4 +1,4 @@
-package pl.warsztat.zlomek.rest;
+package pl.warsztat.zlomek.controllers.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ import pl.warsztat.zlomek.model.response.ClientDataResponse;
 import pl.warsztat.zlomek.data.ClientRepository;
 
 @RestController
-@RequestMapping(path = "/client")
+@RequestMapping(path = "/rest/client")
 public class ClientsController {
 
     private ClientRepository clientRepository;
