@@ -71,13 +71,13 @@ public class CarsController {
         return new CarResponse(car, carData.getAccessToken(), client);
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/{id}")
-    public CarResponse getCar(@PathVariable long id, @RequestHeader String accessToken){
-        Client client = clientRepository.findByToken(accessToken);
-        return new CarResponse(carService.getClientCar(client, id).getCar(), accessToken, client);
+    @RequestMapping(method = RequestMethod.POST, path = "/{id}")
+    public CarResponse getCar(@PathVariable long id, @RequestBody AccessTokenModel accessToken){
+        Client client = clientRepository.findByToken(accessToken.getAccessToken());
+        return new CarResponse(carService.getClientCar(client, id).getCar(), accessToken.getAccessToken(), client);
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.POST, path = "/getClientsCars")
     public ClientCarsResponse getClientsCars(@RequestHeader String accessToken){
         Client client = clientRepository.findByToken(accessToken);
         List<pl.warsztat.zlomek.model.request.Car> cars = new ArrayList<>();
@@ -86,18 +86,18 @@ public class CarsController {
         return new ClientCarsResponse(cars, accessToken);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, path = "/{id}")
-    public AccessTokenModel removeCar(@PathVariable long id, @RequestHeader String accessToken){
-        Client client = clientRepository.findByToken(accessToken);
+    @RequestMapping(method = RequestMethod.PUT, path = "/{id}")
+    public AccessTokenModel removeCar(@PathVariable long id, @RequestBody AccessTokenModel accessToken){
+        Client client = clientRepository.findByToken(accessToken.getAccessToken());
         Car car = carService.getClientCar(client, id).getCar();
         CarsHasOwners cho = client.getCars().stream().filter(ownership->
                 ownership.getCar().equals(car)).findAny().orElse(null);
         if(cho == null){
-            throw new ResourcesNotFoundException("Klient nie posiada takiego samochodu", accessToken);
+            throw new ResourcesNotFoundException("Klient nie posiada takiego samochodu", accessToken.getAccessToken());
         }
         cho.setStatus(OwnershipStatus.FORMER_OWNER);
         carsHasOwnersRepository.updateOwnership(cho);
-        return new AccessTokenModel(accessToken);
+        return accessToken;
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/addCarToCompany")
@@ -112,7 +112,7 @@ public class CarsController {
         return new AccessTokenModel(addCarToCompanyModel.getAccessToken());
     }
 
-    @RequestMapping(method = RequestMethod.PUT, path = "/addCoowner")
+    @RequestMapping(method = RequestMethod.POST, path = "/addCoowner")
     public AccessTokenModel addCoowner(@RequestBody AddCoownerRequest request){
         Client client = this.clientRepository.findByToken(request.getAccessToken());
         CarsHasOwners cho = carService.getClientCar(client, request.getCarId());

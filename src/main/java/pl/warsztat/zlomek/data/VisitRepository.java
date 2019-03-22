@@ -59,4 +59,14 @@ public class VisitRepository {
             return new ArrayList<>();
         }
     }
+
+    public List<Visit> getAllVisits(){
+        try {
+            TypedQuery<Visit> query = em.createQuery("SELECT visit FROM Visit visit ORDER BY visit.visitDate DESC",
+                    Visit.class);
+            return query.getResultList();
+        }catch (Exception e){
+            return new ArrayList<>();
+        }
+    }
 }

@@ -87,4 +87,21 @@ public class VisitService {
             }
         });
     }
+
+    public String getTitleByStatus(VisitStatus status){
+        switch (status) {
+            case NEW:
+                return "Nowe wizyty";
+            case ACCEPTED:
+                return "Wizyty zaakceptowane";
+            case IN_PROGRESS:
+                return "Wizyty w trakcie wykonania";
+            case FOR_PICKUP:
+                return "Wizyty ukończone, samochód do odbioru";
+            case FINISHED:
+                return "Wizyty ukończone";
+            default:
+                throw new FieldsNotCorrect(new String[]{"status"});
+        }
+    }
 }

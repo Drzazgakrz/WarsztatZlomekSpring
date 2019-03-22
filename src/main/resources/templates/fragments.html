@@ -24,8 +24,8 @@
                 Wizyty
             </a>
             <div class="dropdown-menu">
-                <a class="dropdown-item" th:href="@{/visits/in_progress}">Wizyty w toku</a>
-                <a class="dropdown-item" th:href="@{/visits/new}">Nowe wizyty</a>
+                <a class="dropdown-item" th:href="@{/visits(visitStatus=in_progress)}">Wizyty w toku</a>
+                <a class="dropdown-item" th:href="@{/visits(visitStatus=new)}">Nowe wizyty</a>
                 <a class="dropdown-item" th:href="@{/visits/all}">Wszystkie wizyty</a>
             </div>
         </li>

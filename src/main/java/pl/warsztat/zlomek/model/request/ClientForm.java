@@ -19,4 +19,5 @@ public class ClientForm {
     protected String zipCode;
     private String password;
     private String confirmPassword;
+    private String accessToken;
 }

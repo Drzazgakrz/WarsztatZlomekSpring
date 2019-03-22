@@ -5,7 +5,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-@lombok.NoArgsConstructor
 @lombok.Getter
 @lombok.Setter
 @Entity
@@ -27,6 +26,10 @@ public class CompanyData extends CompanyModel implements Serializable {
     public CompanyData(Company company){
         super(company.getNip(), company.getCompanyName(), company.getCityName(), company.getStreetName(),
                 company.getBuildingNum(), company.getAptNum(), company.getZipCode());
+        this.invoices = new HashSet<>();
+    }
+
+    public CompanyData(){
         this.invoices = new HashSet<>();
     }
 }

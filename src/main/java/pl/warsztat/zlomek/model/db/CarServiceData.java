@@ -5,9 +5,8 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
-
-@NoArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -37,5 +36,10 @@ public class CarServiceData extends CompanyModel implements Serializable {
         this.buildingNum = buildingNum;
         this.aptNum = aptNum;
         this.zipCode = zipCode;
+    }
+
+    public CarServiceData(){
+        this.invoices = new HashSet<>();
+        this.invoicesBuffer = new HashSet<>();
     }
 }

@@ -11,7 +11,6 @@ import java.util.Set;
 @lombok.Getter
 @lombok.Setter
 @lombok.AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "companies")
 public class Company extends CompanyModel implements Serializable {
@@ -51,5 +50,10 @@ public class Company extends CompanyModel implements Serializable {
         CompaniesHasEmployees companiesHasEmployees = new CompaniesHasEmployees(client, this);
         this.getEmployees().add(companiesHasEmployees);
         return companiesHasEmployees;
+    }
+
+    public Company(){
+        this.cars = new HashSet<>();
+        this.employees = new HashSet<>();
     }
 }

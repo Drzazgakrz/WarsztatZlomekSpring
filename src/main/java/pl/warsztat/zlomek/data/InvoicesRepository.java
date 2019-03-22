@@ -12,6 +12,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -53,7 +55,14 @@ public class InvoicesRepository {
         }catch (NoResultException e){
             throw new ResourcesNotFoundException("Brak żądanej faktury");
         }
+    }
 
-
+    public List<Invoice> getInvoices(){
+        try {
+            TypedQuery<Invoice> query = em.createQuery("SELECT invoice FROM Invoice invoice", Invoice.class);
+            return query.getResultList();
+        }catch (NoResultException e){
+            return new ArrayList<>();
+        }
     }
 }
