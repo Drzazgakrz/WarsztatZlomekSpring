@@ -40,7 +40,7 @@ public class InvoicesController {
         return new InvoiceResponse(request.getAccessToken(), invoice);
     }
 
-    @RequestMapping(method = RequestMethod.PUT)
+    @RequestMapping(method = RequestMethod.POST, path = "edit")
     public InvoiceResponse addInvoice(@RequestBody EditInvoiceRequest request){
         this.employeeRepository.findByToken(request.getAccessToken());
         Invoice currentInvoice = this.invoicesRepository.getInvoiceById(request.getInvoiceId());

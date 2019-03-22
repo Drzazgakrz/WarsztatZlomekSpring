@@ -33,8 +33,8 @@ public class VisitElementsController {
         this.carPartsRepository = carPartsRepository;
         this.servicesRepository = servicesRepository;
     }
-    @RequestMapping(method = RequestMethod.GET)
-    public VisitElementsList getVisitElements(@RequestHeader("accessToken") AccessTokenModel accessToken){
+    @RequestMapping(method = RequestMethod.POST)
+    public VisitElementsList getVisitElements(@RequestBody AccessTokenModel accessToken){
         this.employeeRepository.findByToken(accessToken.getAccessToken());
         List<VisitElementsModel> carParts = new ArrayList<>();
         this.carPartsRepository.getCarParts().forEach(visitElement->{
@@ -67,7 +67,7 @@ public class VisitElementsController {
         return new AccessTokenModel(request.getAccessToken());
     }
 
-    @RequestMapping(method = RequestMethod.PUT, path = "service")
+    @RequestMapping(method = RequestMethod.POST, path = "/editService")
     public AccessTokenModel editService(@RequestBody EditService request){
         this.employeeRepository.findByToken(request.getAccessToken());
         Service service = this.servicesRepository.getServiceById(request.getId());
@@ -77,7 +77,7 @@ public class VisitElementsController {
         return new AccessTokenModel(request.getAccessToken());
     }
 
-    @RequestMapping(method = RequestMethod.PUT, path = "carPart")
+    @RequestMapping(method = RequestMethod.POST, path = "/editCarPart")
     public AccessTokenModel editCarPart(@RequestBody EditCarPart request){
         this.employeeRepository.findByToken(request.getAccessToken());
         CarPart carPart = this.carPartsRepository.getCarPartById(request.getId());

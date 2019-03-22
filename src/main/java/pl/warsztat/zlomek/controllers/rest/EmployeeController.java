@@ -31,11 +31,11 @@ public class EmployeeController {
         return new AccessTokenModel(authorizationService.signIn(signInRequest));
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/visits")
-    public VisitsList getEmployeesVisits(@RequestHeader String accessToken){
-        Employee employee = employeeRepository.findByToken(accessToken);
+    @RequestMapping(method = RequestMethod.POST, path = "/visits")
+    public VisitsList getEmployeesVisits(@RequestBody AccessTokenModel accessToken){
+        Employee employee = employeeRepository.findByToken(accessToken.getAccessToken());
         ArrayList<VisitResponse> visits = new ArrayList<>();
         employee.getVisits().forEach(visit -> visits.add(new VisitResponse(visit)));
-        return new VisitsList(accessToken, visits);
+        return new VisitsList(accessToken.getAccessToken(), visits);
     }
 }

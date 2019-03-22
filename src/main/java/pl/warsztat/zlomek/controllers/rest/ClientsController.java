@@ -36,13 +36,13 @@ public class ClientsController {
         this.companiesHasEmployeesRepository = cheRepository;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public ClientDataResponse getClientByToken(@RequestHeader(name = "accessToken") String accessToken){
-        return new ClientDataResponse(clientRepository.findByToken(accessToken), accessToken);
+    @RequestMapping(method = RequestMethod.POST)
+    public ClientDataResponse getClientByToken(@RequestBody AccessTokenModel accessToken){
+        return new ClientDataResponse(clientRepository.findByToken(accessToken.getAccessToken()), accessToken.getAccessToken());
     }
 
     @RequestMapping(method = RequestMethod.PUT)
-    public HttpStatus updateClientData(@RequestBody ClientForm clientForm){
+    public AccessTokenModel updateClientData(@RequestBody ClientForm clientForm){
         Client client = clientRepository.findClientByUsername(clientForm.getEmail());
         client.setAptNum(clientForm.getAptNum());
         client.setBuildNum(clientForm.getBuildNum());
@@ -53,7 +53,7 @@ public class ClientsController {
         client.setFirstName(clientForm.getFirstName());
         client.setLastName(clientForm.getLastName());
         this.clientRepository.update(client);
-        return HttpStatus.OK;
+        return new AccessTokenModel(clientForm.getAccessToken());
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/addToCompany")
@@ -78,7 +78,7 @@ public class ClientsController {
         return new AccessTokenModel(request.getAccessToken());
     }
 
-    @RequestMapping(method = RequestMethod.PUT, path = "/removeFromCompany")
+    @RequestMapping(method = RequestMethod.POST, path = "/removeFromCompany")
     public AccessTokenModel removeClientFromCompany(@RequestBody RemoveClientFromCompanyRequest request){
         Client client = this.clientRepository.findByToken(request.getAccessToken());
         Company company = this.companiesRepository.getCompanyId(request.getCompanyId());

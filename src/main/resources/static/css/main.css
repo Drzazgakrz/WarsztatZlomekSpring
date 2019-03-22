@@ -1,23 +1,34 @@
-#logo{
+#logo {
     width: 160px;
     height: 40px;
 }
 
-.login-panel{
+.login-panel {
     width: 50%;
     margin: auto;
 }
 
-#signIn{
+#signIn {
     float: right;
 }
 
-#menu{
+#menu {
     background-color: #1f1f2e;
     border-radius: 0;
 }
 
-#index-href{
+#index-href {
     border: none;
     padding: 0;
+}
+
+table {
+    margin: auto;
+    width: 100%;
+}
+
+.jumbotron {
+    text-align: center;
+    width: 80%;
+    margin: auto;
 }

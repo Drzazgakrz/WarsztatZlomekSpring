@@ -74,34 +74,34 @@ public class VisitsController {
         return new AccessTokenModel(visitModel.getAccessToken());
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/{id}")
-    public VisitResponse getVisitData(@PathVariable long id, @RequestHeader("accessToken") String accessToken){
-        Client client = this.clientRepository.findByToken(accessToken);
+    @RequestMapping(method = RequestMethod.POST, path = "/{id}")
+    public VisitResponse getVisitData(@PathVariable long id, @RequestBody AccessTokenModel accessToken){
+        Client client = this.clientRepository.findByToken(accessToken.getAccessToken());
         Visit visit = client.getVisits().stream().filter((currentVisit)-> currentVisit.getId() == id).findFirst().get();
         return new VisitResponse(visit, client);
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public VisitsList getPreviousVisits(@RequestHeader("accessToken") String accessToken){
-        Client client = this.clientRepository.findByToken(accessToken);
+    @RequestMapping(method = RequestMethod.POST, path = "/previous")
+    public VisitsList getPreviousVisits(@RequestBody AccessTokenModel accessToken){
+        Client client = this.clientRepository.findByToken(accessToken.getAccessToken());
         List<VisitResponse> visits = new ArrayList<>();
         List<Visit> previousVisits = client.getVisits().stream().filter((visit ->
                 visit.getVisitDate().isBefore(LocalDateTime.now()))).collect(Collectors.toList());
         previousVisits.forEach(visit->visits.add(new VisitResponse(visit,client)));
-        return new VisitsList(accessToken, visits);
+        return new VisitsList(accessToken.getAccessToken(), visits);
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "futureVisits")
-    public VisitsList getFutureVisits(@RequestHeader("accessToken") String accessToken){
-        Client client = this.clientRepository.findByToken(accessToken);
+    @RequestMapping(method = RequestMethod.POST, path = "/futureVisits")
+    public VisitsList getFutureVisits(@RequestBody AccessTokenModel accessToken){
+        Client client = this.clientRepository.findByToken(accessToken.getAccessToken());
         List<VisitResponse> visits = new ArrayList<>();
         List<Visit> futureVisits = client.getVisits().stream().filter(visit ->
                 visit.getVisitDate().isAfter(LocalDateTime.now())).collect(Collectors.toList());
         futureVisits.forEach(visit->visits.add(new VisitResponse(visit,client)));
-        return new VisitsList(accessToken, visits);
+        return new VisitsList(accessToken.getAccessToken(), visits);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, path = "acceptVisit")
+    @RequestMapping(method = RequestMethod.PUT, path = "/acceptedVisit")
     public AccessTokenModel acceptVisit(@RequestBody AcceptVisitModel acceptVisitModel){
         Employee employee = this.employeeRepository.findByToken(acceptVisitModel.getAccessToken());
         Visit visit = this.visitRepository.getVisitById(acceptVisitModel.getVisitId(), VisitStatus.NEW);
@@ -112,7 +112,7 @@ public class VisitsController {
         return new AccessTokenModel(acceptVisitModel.getAccessToken());
     }
 
-    @RequestMapping(method = RequestMethod.PUT)
+    @RequestMapping(method = RequestMethod.POST, path = "/edit")
     public AccessTokenModel editVisit(@RequestBody EditVisitRequest editVisitRequest){
         this.employeeRepository.findByToken(editVisitRequest.getAccessToken());
         VisitStatus status = this.visitService.getStatus(editVisitRequest.getStatus());
@@ -130,12 +130,12 @@ public class VisitsController {
         return new AccessTokenModel(editVisitRequest.getAccessToken());
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/employee")
-    public VisitsList getVisitsByStatus(@RequestHeader String accessToken, @RequestParam(name = "status") String status){
-        employeeRepository.findByToken(accessToken);
+    @RequestMapping(method = RequestMethod.POST, path = "/employee/{status}")
+    public VisitsList getVisitsByStatus(@RequestBody AccessTokenModel accessToken, @PathVariable(name = "status") String status){
+        employeeRepository.findByToken(accessToken.getAccessToken());
         List<Visit> visits = visitRepository.getVisitByStatus(visitService.getStatus(status));
         ArrayList<VisitResponse> visitResponses = new ArrayList<>();
         visits.forEach(visit -> visitResponses.add(new VisitResponse(visit)));
-        return new VisitsList(accessToken, visitResponses);
+        return new VisitsList(accessToken.getAccessToken(), visitResponses);
     }
 }
