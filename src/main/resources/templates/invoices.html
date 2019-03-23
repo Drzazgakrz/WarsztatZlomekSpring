@@ -36,7 +36,10 @@
                 <td th:text="${invoice.getGrossValue()}"></td>
                 <td th:text="${invoice.getNetValue()}"></td>
                 <td>
-                    <a th:href="@{/invoices(invoiceId=${invoice.id})}">Szczegóły</a>
+                    <a th:if="${invoice instanceof T(pl.warsztat.zlomek.model.db.Invoice)}"
+                       th:href="@{'/invoices/'+${invoice.id}}">Szczegóły</a>
+                    <a th:if="${invoice instanceof T(pl.warsztat.zlomek.model.db.InvoiceBuffer)}"
+                       th:href="@{'/invoicesBuffer/'+${invoice.id}}">Szczegóły</a>
                 </td>
             </tr>
         </th:block>
