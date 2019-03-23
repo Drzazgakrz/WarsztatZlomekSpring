@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments::header">
+</head>
+<body>
+<nav th:replace="fragments::menu"></nav>
+<div class="container jumbotron">
+    <div class="row">
+        <div class="col-md-4">
+            <h4 class="display-4">Dane firmy</h4>
+        </div>
+        <div class="col-md-4">
+            <h4 class="display-4">Dane warsztatu</h4>
+        </div>
+        <div class="col-md-4">
+            <h4 class="display-4">Dane faktury</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <hr class="my-4">
+            <table>
+                <tr>
+                    <td>
+                        Nazwa firmy
+                    </td>
+                    <td th:text="${invoice.getCompanyData().getCompanyName()}">
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Adres firmy
+                    </td>
+                    <td>
+                        <span th:text="${invoice.getCompanyData().getStreetName()}"></span>,
+                        <span th:text="${invoice.getCompanyData().getBuildingNum()}"></span>
+                        <span th:text="${invoice.getCompanyData().getAptNum().equals('')}?
+                    '':'/'+${invoice.getCompanyData().getAptNum()}">
+                    </span>
+                        <span th:text="${invoice.getCompanyData().getZipCode()}"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        NIP
+                    </td>
+                    <td th:text="${invoice.getCompanyData().getNip()}"></td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-4">
+            <hr class="my-4">
+            <table>
+                <tr>
+                    <td>
+                        Nazwa warsztatu
+                    </td>
+                    <td th:text="${invoice.getCarServiceData().getCompanyName()}">
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Adres firmy
+                    </td>
+                    <td>
+                        <span th:text="${invoice.getCarServiceData().getStreetName()}"></span>,
+                        <span th:text="${invoice.getCarServiceData().getBuildingNum()}"></span>
+                        <span th:text="${invoice.getCarServiceData().getAptNum().equals('')}?
+                    '':'/'+${invoice.getCarServiceData().getAptNum()}">
+                    </span>
+                        <span th:text="${invoice.getCarServiceData().getZipCode()}"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        NIP
+                    </td>
+                    <td th:text="${invoice.getCarServiceData().getNip()}"></td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-4">
+            <hr class="my-4">
+            <table>
+                <tr>
+                    <td>
+                        Numer faktury
+                    </td>
+                    <td th:text="${invoice.getInvoiceNumber()}">
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Cena brutto
+                    </td>
+                    <td th:text="${invoice.getGrossValue()}">
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Cena netto
+                    </td>
+                    <td th:text="${invoice.getNetValue()}">
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Sposób zapłaty
+                    </td>
+                    <td th:text="${invoice.getMethodOfPayment()}"></td>
+                </tr>
+                <tr>
+                    <td>
+                        Data wystawienia
+                    </td>
+                    <td th:text="${invoice.getDayOfIssue()}"></td>
+                </tr>
+                <tr>
+                    <td>
+                        Zniżka
+                    </td>
+                    <td th:text="${invoice.getDiscount()}"></td>
+                </tr>
+                <tr>
+                    <td>
+                        Data zapłaty
+                    </td>
+                    <td th:text="${invoice.getPaymentDate()}"></td>
+                </tr>
+                <tr>
+                    <td>
+                        Data zakończenia usługi
+                    </td>
+                    <td th:text="${invoice.getVisitFinished()}"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <button class="btn btn-primary" onclick="setVisibility()">Rozwiń listę pozycji faktury</button>
+        <table style="display: none" id="invoicePositions" class="table table-stripped table-hover">
+            <thead>
+                <tr>
+                    <th>Nazwa</th>
+                    <th>Ilość</th>
+                    <th>Cena netto</th>
+                    <th>Cena brutto</th>
+                    <th>Wartość podatku Vat</th>
+                    <th>Stawka podatku</th>
+                </tr>
+            </thead>
+            <tbody>
+                <th:block th:each="position : ${invoice.getInvoicePositions()}">
+                    <tr>
+                        <td th:text="${position.getItemName()}"></td>
+                        <td th:text="${position.getCount()}"></td>
+                        <td th:text="${position.getNetPrice()}"></td>
+                        <td th:text="${position.getGrossPrice()}"></td>
+                        <td th:text="${position.getValueOfVat()}"></td>
+                        <td th:text="${position.getVat()}"></td>
+                    </tr>
+                </th:block>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
