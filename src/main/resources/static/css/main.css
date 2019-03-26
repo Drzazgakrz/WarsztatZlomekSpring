@@ -32,3 +32,6 @@ table {
     width: 80%;
     margin: auto;
 }
+.btn{
+    background-color: transparent;
+}
