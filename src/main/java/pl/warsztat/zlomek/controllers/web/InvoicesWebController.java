@@ -6,19 +6,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import pl.warsztat.zlomek.data.InvoiceBufferRepository;
 import pl.warsztat.zlomek.data.InvoicesRepository;
 
 @Controller
 @RequestMapping(path = "/invoices")
-public class Invoices {
+public class InvoicesWebController {
 
     private InvoicesRepository invoicesRepository;
     private InvoiceBufferRepository invoiceBufferRepository;
 
     @Autowired
-    public Invoices(InvoicesRepository invoicesRepository, InvoiceBufferRepository invoiceBufferRepository) {
+    public InvoicesWebController(InvoicesRepository invoicesRepository, InvoiceBufferRepository invoiceBufferRepository) {
         this.invoicesRepository = invoicesRepository;
         this.invoiceBufferRepository = invoiceBufferRepository;
     }

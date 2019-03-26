@@ -6,7 +6,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.warsztat.zlomek.data.VisitRepository;
 import pl.warsztat.zlomek.model.db.Visit;
 import pl.warsztat.zlomek.model.db.VisitStatus;
@@ -17,12 +16,12 @@ import java.util.List;
 
 @Controller
 @RequestMapping(path = "/visits")
-public class Visits {
+public class VisitsWebController {
     private VisitRepository visitRepository;
     private AuthorizationService authorizationService;
     private VisitService visitService;
     @Autowired
-    public Visits(VisitRepository visitRepository, AuthorizationService authorizationService, VisitService visitService){
+    public VisitsWebController(VisitRepository visitRepository, AuthorizationService authorizationService, VisitService visitService){
         this.visitRepository = visitRepository;
         this.authorizationService = authorizationService;
         this.visitService = visitService;

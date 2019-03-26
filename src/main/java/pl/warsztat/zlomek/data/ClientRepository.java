@@ -8,6 +8,7 @@ import pl.warsztat.zlomek.model.db.*;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -83,5 +84,11 @@ public class ClientRepository extends AccountRepository<Client>{
         }catch (Exception e){
             throw new ResourcesNotFoundException("Taki klient nie istnieje");
         }
+    }
+
+    public List<Client> getClientsByStatus(ClientStatus status){
+        TypedQuery<Client> query = em.createQuery("SELECT client FROM Client client WHERE status = :status", Client.class);
+        query.setParameter("status", status);
+        return query.getResultList();
     }
 }

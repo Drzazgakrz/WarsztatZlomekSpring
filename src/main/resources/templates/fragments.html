@@ -11,7 +11,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
-    <script th:src="@{/js/Invoices.js}"></script>
 </head>
 <body>
 
@@ -40,14 +39,7 @@
             </div>
         </li>
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
-                Klienci
-            </a>
-            <div class="dropdown-menu">
-                <a class="dropdown-item" th:href="@{/accounts/banUser}">Zablokuj</a>
-                <a class="dropdown-item" th:href="@{/accounts/addToCompany}">Dodaj do firmy</a>
-                <a class="dropdown-item" th:href="@{/accounts/removeFromCompany}">Usuń z firmy</a>
-            </div>
+            <a class="nav-link" th:href="@{/users}">Klienci</a>
         </li>
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
