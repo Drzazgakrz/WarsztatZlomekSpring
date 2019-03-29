@@ -5,7 +5,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.warsztat.zlomek.data.ClientRepository;
+import pl.warsztat.zlomek.model.db.Client;
 import pl.warsztat.zlomek.model.db.ClientStatus;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(path = "/users")
@@ -20,9 +24,16 @@ public class UsersController {
 
     @RequestMapping
     public String getUsersList(Model model){
-        model.addAttribute("activeAccounts", clientRepository.getClientsByStatus(ClientStatus.ACTIVE));
-        model.addAttribute("bannedAccounts", clientRepository.getClientsByStatus(ClientStatus.BANNED));
-        model.addAttribute("removedAccounts", clientRepository.getClientsByStatus(ClientStatus.REMOVED));
+        List<Client> clients = clientRepository.getAllClients();
+        List<Client> active = clients.stream().filter((client -> client.getStatus().equals(ClientStatus.ACTIVE))).
+                collect(Collectors.toList());
+        model.addAttribute("activeAccounts", active);
+        List<Client> banned = clients.stream().filter((client -> client.getStatus().equals(ClientStatus.BANNED))).
+                collect(Collectors.toList());
+        model.addAttribute("bannedAccounts", banned);
+        List<Client> removed = clients.stream().filter((client -> client.getStatus().equals(ClientStatus.REMOVED))).
+                collect(Collectors.toList());
+        model.addAttribute("removedAccounts", removed);
         return "users";
     }
 

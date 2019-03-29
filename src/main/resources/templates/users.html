@@ -24,6 +24,9 @@
                     <thead>
                         <tr>
                             <th>
+                                E-mail
+                            </th>
+                            <th>
                                 Imię i nazwisko
                             </th>
                             <th>
@@ -42,6 +45,7 @@
                     </thead>
                     <tbody>
                     <tr th:each="account : ${activeAccounts}">
+                        <td th:text="${account.getEmail()}"></td>
                         <td th:text="${account.getFirstName()}+' '+${account.getLastName()}"></td>
                         <td th:text="${account.getCityName()}"></td>
                         <td>
@@ -62,6 +66,9 @@
                     <thead>
                     <tr>
                         <th>
+                            E-mail
+                        </th>
+                        <th>
                             Imię i nazwisko
                         </th>
                         <th>
@@ -80,6 +87,7 @@
                     </thead>
                     <tbody>
                     <tr th:each="account : ${bannedAccounts}">
+                        <td th:text="${account.getEmail()}"></td>
                         <td th:text="${account.getFirstName()}+' '+${account.getLastName()}"></td>
                         <td th:text="${account.getCityName()}"></td>
                         <td>
@@ -100,6 +108,9 @@
                     <thead>
                     <tr>
                         <th>
+                            E-mail
+                        </th>
+                        <th>
                             Imię i nazwisko
                         </th>
                         <th>
@@ -118,6 +129,7 @@
                     </thead>
                     <tbody>
                     <tr th:each="account : ${removedAccounts}">
+                        <td th:text="${account.getEmail()}"></td>
                         <td th:text="${account.getFirstName()}+' '+${account.getLastName()}"></td>
                         <td th:text="${account.getCityName()}"></td>
                         <td>

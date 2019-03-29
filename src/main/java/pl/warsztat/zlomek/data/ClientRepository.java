@@ -91,4 +91,9 @@ public class ClientRepository extends AccountRepository<Client>{
         query.setParameter("status", status);
         return query.getResultList();
     }
+
+    public List<Client> getAllClients(){
+        TypedQuery<Client> query = em.createQuery("SELECT client FROM Client client", Client.class);
+        return query.getResultList();
+    }
 }
