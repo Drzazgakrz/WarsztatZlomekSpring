@@ -41,6 +41,7 @@
                             <th>
                                 Data utworzenia
                             </th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -55,6 +56,9 @@
                         </td>
                         <td th:text="${account.getZipCode()}"></td>
                         <td th:text="${account.getCreatedAt()}"></td>
+                        <td>
+                            <a th:href="@{users/clientDetails(clientId=${account.getClientId()})}">Szczegóły klienta</a>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
@@ -83,6 +87,7 @@
                         <th>
                             Data utworzenia
                         </th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -97,6 +102,9 @@
                         </td>
                         <td th:text="${account.getZipCode()}"></td>
                         <td th:text="${account.getCreatedAt()}"></td>
+                        <td>
+                            <a th:href="@{users/clientDetails(clientId=${account.getClientId()})}">Szczegóły klienta</a>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
@@ -125,6 +133,7 @@
                         <th>
                             Data utworzenia
                         </th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -139,6 +148,9 @@
                         </td>
                         <td th:text="${account.getZipCode()}"></td>
                         <td th:text="${account.getCreatedAt()}"></td>
+                        <td>
+                            <a th:href="@{users/clientDetails(clientId=${account.getClientId()})}">Szczegóły klienta</a>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
