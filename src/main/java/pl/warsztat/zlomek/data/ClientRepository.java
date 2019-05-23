@@ -82,6 +82,7 @@ public class ClientRepository extends AccountRepository<Client>{
             query.setParameter("id", id);
             return query.getSingleResult();
         }catch (Exception e){
+            e.printStackTrace();
             throw new ResourcesNotFoundException("Taki klient nie istnieje");
         }
     }

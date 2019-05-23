@@ -11,6 +11,7 @@
     <div class="container">
 
         <form th:object="${account}" method="post" th:action="@{/users/update}">
+            <input type="number" th:value="*{clientId}" name="clientId" style="display: none"/>
             <div class="row">
                 <div class="col-md-6">
                     <label for="firstName">Imię</label>
@@ -55,6 +56,16 @@
                     <label for="zipCode">Kod pocztowy</label>
                     <input type="text" class="form-control" name="zipCode" id="zipCode"
                            th:value="*{zipCode}">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="password">Hasło</label>
+                    <input type="password" class="form-control" name="password" id="password">
+                </div>
+                <div class="col-md-6">
+                    <label for="phoneNumber">Numer telefonu</label>
+                    <input class="form-control" name="phoneNumber" id="phoneNumber" th:value="*{phoneNumber}">
                 </div>
             </div>
             <div class="row" style="margin-top: 2%;">
