@@ -3,6 +3,7 @@ package pl.warsztat.zlomek.model.db;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import pl.warsztat.zlomek.model.request.ClientForm;
 
 import javax.persistence.*;
@@ -133,5 +134,21 @@ public class Client extends Account implements Serializable {
 
     public void addCompany(CompaniesHasEmployees che){
         this.companies.add(che);
+    }
+
+    public void cloneClient(Client newProperties){
+        this.firstName = newProperties.getFirstName();
+        this.lastName = newProperties.getLastName();
+        this.email = newProperties.getEmail();
+        this.phoneNumber = newProperties.getPhoneNumber();
+        this.cityName = newProperties.getCityName();
+        this.streetName = newProperties.getStreetName();
+        this.buildNum = newProperties.getBuildNum();
+        this.aptNum = newProperties.getAptNum();
+        this.zipCode = newProperties.getZipCode();
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String newPassword = newProperties.getPassword();
+        if(!(encoder.matches(newProperties.getPassword(), this.password))&& !newPassword.equals(""))
+            password = encoder.encode(newPassword);
     }
 }

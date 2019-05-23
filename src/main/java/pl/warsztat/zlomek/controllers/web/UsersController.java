@@ -3,10 +3,7 @@ package pl.warsztat.zlomek.controllers.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import pl.warsztat.zlomek.data.ClientRepository;
 import pl.warsztat.zlomek.model.db.Client;
 import pl.warsztat.zlomek.model.db.ClientStatus;
@@ -26,7 +23,7 @@ public class UsersController {
 
     private ClientRepository clientRepository;
 
-    @RequestMapping
+    @GetMapping
     public String getUsersList(Model model){
         List<Client> clients = clientRepository.getAllClients();
         List<Client> active = clients.stream().filter((client -> client.getStatus().equals(ClientStatus.ACTIVE))).
@@ -41,14 +38,24 @@ public class UsersController {
         return "users";
     }
 
-    @RequestMapping(path = "clientDetails", method = RequestMethod.GET)
+    @GetMapping("clientDetails")
     public String getClientDetails(Model model, @RequestParam long clientId){
         model.addAttribute("account", clientRepository.getClientById(clientId));
         return "clientDetails";
     }
 
-    @RequestMapping(path = "update", method = RequestMethod.POST)
-    public String updateClientData(@Valid Client client){
-        return "users";
+    @PostMapping(path = "update")
+    public String updateClientData(Client client, Model model){
+        System.out.println(client.getClientId());
+        try {
+            Client current = this.clientRepository.getClientById(client.getClientId());
+            current.cloneClient(client);
+            this.clientRepository.update(current);
+            return "redirect:/users";
+        }catch (Exception e){
+            e.printStackTrace();
+            model.addAttribute("account", client);
+            return "redirect:/users/clientDetails?clientId="+client.getClientId();
+        }
     }
 }
