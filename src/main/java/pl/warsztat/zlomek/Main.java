@@ -7,12 +7,16 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.format.FormatterRegistry;
+import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.sql.DataSource;
+import java.time.format.DateTimeFormatter;
 
 @SpringBootApplication
-public class Main extends SpringBootServletInitializer {
+public class Main extends SpringBootServletInitializer implements WebMvcConfigurer {
     public static void main(String[] args) throws Exception {
         SpringApplication.run(Main.class, args);
     }
@@ -35,5 +39,12 @@ public class Main extends SpringBootServletInitializer {
         ds.setUsername("root");
         ds.setPassword("");
         return ds;
+    }
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        DateTimeFormatterRegistrar registrar = new DateTimeFormatterRegistrar();
+        registrar.setDateFormatter(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        registrar.registerFormatters(registry);
     }
 }

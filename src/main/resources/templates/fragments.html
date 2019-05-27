@@ -42,13 +42,7 @@
             <a class="nav-link" th:href="@{/users}">Klienci</a>
         </li>
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
-                Pracownicy
-            </a>
-            <div class="dropdown-menu">
-                <a class="dropdown-item" th:href="@{/employee/add}">Dodaj pracownika</a>
-                <a class="dropdown-item" th:href="@{/employee/remove}">Usuń pracownika</a>
-            </div>
+            <a class="nav-link" th:href="@{/employee}">Pracownicy</a>
         </li>
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
@@ -85,6 +79,74 @@
             <a th:href="@{/logout}" class="nav-link">Wyloguj</a>
         </li>
     </ul>
+
 </nav>
+
+<thead th:fragment="userHeader">
+<tr>
+    <th>
+        E-mail
+    </th>
+    <th>
+        Imię i nazwisko
+    </th>
+    <th>
+        Data utworzenia
+    </th>
+    <th></th>
+</tr>
+</thead>
+<tr th:fragment="accountRow(account)">
+    <td th:text="${__(account)__.getEmail()}"></td>
+    <td th:text="${__(account)__.getFirstName()}+' '+${__(account)__.getLastName()}"></td>
+    <td th:text="${__(account)__.getCreatedAt()}"></td>
+    <td>
+        <a th:href="@{users/clientDetails(clientId=${__(account)__.getClientId()})}">Szczegóły</a>
+    </td>
+</tr>
+<tr th:fragment="employeeRow(employee)">
+    <td th:text="${__(employee)__.getEmail()}"></td>
+    <td th:text="${__(employee)__.getFirstName()}+' '+${__(employee)__.getLastName()}"></td>
+    <td th:text="${__(employee)__.getCreatedAt()}"></td>
+    <td>
+        <a th:href="@{employee/details(employeeId=${__(employee)__.getId()})}">Szczegóły</a>
+    </td>
+</tr>
+
+<div th:fragment="employee(employee)">
+    <div class="row">
+        <div class="col-md-6">
+            <label for="firstName">Imię</label>
+            <input type="text" class="form-control" name="firstName" id="firstName" th:value="${__(employee)__.getFirstName()}"/>
+        </div>
+        <div class="col-md-6">
+            <label for="lastName">Nazwisko</label>
+            <input type="text" class="form-control" name="lastName" id="lastName" th:value="${__(employee)__.getLastName()}"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label for="email">E-mail</label>
+            <input type="email" class="form-control" name="email" id="email" th:value="${__(employee)__.getEmail()}"/>
+        </div>
+        <div class="col-md-6">
+            <label for="password">Hasło</label>
+            <input type="password" class="form-control" name="password" id="password" value="hasło"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label for="hireDate">Data zatrudnienia</label>
+            <input type="date" class="form-control" name="hireDate" id="hireDate" th:value="${__(employee)__.getHireDate()}">
+        </div>
+        <div class="col-md-6">
+            <label for="role">Rola</label>
+            <select id="role" name="role" class="form-control">
+                <!--Zrobiłbym to lepiej ale coś nie śmiga-->
+                <option th:each="role : ${accountTypes}" th:value="${role}" th:text="${role}"></option>
+            </select>
+        </div>
+    </div>
+</div>
 </body>
 </html>

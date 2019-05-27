@@ -21,44 +21,11 @@
         <div class="row" id="activeAccountsDiv">
             <div class="col-md-12">
                 <table class="table table-stripped table-hover">
-                    <thead>
-                        <tr>
-                            <th>
-                                E-mail
-                            </th>
-                            <th>
-                                Imię i nazwisko
-                            </th>
-                            <th>
-                                Miasto
-                            </th>
-                            <th>
-                                Adres
-                            </th>
-                            <th>
-                                Kod pocztowy
-                            </th>
-                            <th>
-                                Data utworzenia
-                            </th>
-                            <th></th>
-                        </tr>
+                    <thead th:replace="fragments :: userHeader">
                     </thead>
                     <tbody>
-                    <tr th:each="account : ${activeAccounts}">
-                        <td th:text="${account.getEmail()}"></td>
-                        <td th:text="${account.getFirstName()}+' '+${account.getLastName()}"></td>
-                        <td th:text="${account.getCityName()}"></td>
-                        <td>
-                            <span th:text="${account.getStreetName()}"></span>,
-                            <span th:text="${account.getBuildNum()}"></span>
-                            <span th:text="${account.getAptNum().equals('')}?'':'/'+${account.getAptNum()}"></span>
-                        </td>
-                        <td th:text="${account.getZipCode()}"></td>
-                        <td th:text="${account.getCreatedAt()}"></td>
-                        <td>
-                            <a th:href="@{users/clientDetails(clientId=${account.getClientId()})}">Szczegóły klienta</a>
-                        </td>
+                    <tr th:each="account : ${activeAccounts}" th:include="fragments :: accountRow(${account})">
+
                     </tr>
                     </tbody>
                 </table>
@@ -67,44 +34,11 @@
         <div class="row" id="removedAccountsDiv" style="display: none;">
             <div class="col-md-12">
                 <table class="table table-stripped table-hover">
-                    <thead>
-                    <tr>
-                        <th>
-                            E-mail
-                        </th>
-                        <th>
-                            Imię i nazwisko
-                        </th>
-                        <th>
-                            Miasto
-                        </th>
-                        <th>
-                            Adres
-                        </th>
-                        <th>
-                            Kod pocztowy
-                        </th>
-                        <th>
-                            Data utworzenia
-                        </th>
-                        <th></th>
-                    </tr>
+                    <thead th:replace="fragments :: userHeader">
                     </thead>
                     <tbody>
-                    <tr th:each="account : ${bannedAccounts}">
-                        <td th:text="${account.getEmail()}"></td>
-                        <td th:text="${account.getFirstName()}+' '+${account.getLastName()}"></td>
-                        <td th:text="${account.getCityName()}"></td>
-                        <td>
-                            <span th:text="${account.getStreetName()}"></span>,
-                            <span th:text="${account.getBuildNum()}"></span>
-                            <span th:text="${account.getAptNum().equals('')}?'':'/'+${account.getAptNum()}"></span>
-                        </td>
-                        <td th:text="${account.getZipCode()}"></td>
-                        <td th:text="${account.getCreatedAt()}"></td>
-                        <td>
-                            <a th:href="@{users/clientDetails(clientId=${account.getClientId()})}">Szczegóły klienta</a>
-                        </td>
+                    <tr th:each="account : ${removedAccounts}" th:include="fragments :: accountRow(${account})">
+
                     </tr>
                     </tbody>
                 </table>
@@ -113,44 +47,11 @@
         <div class="row" id="bannedAccountsDiv" style="display: none;">
             <div class="col-md-12">
                 <table class="table table-stripped table-hover">
-                    <thead>
-                    <tr>
-                        <th>
-                            E-mail
-                        </th>
-                        <th>
-                            Imię i nazwisko
-                        </th>
-                        <th>
-                            Miasto
-                        </th>
-                        <th>
-                            Adres
-                        </th>
-                        <th>
-                            Kod pocztowy
-                        </th>
-                        <th>
-                            Data utworzenia
-                        </th>
-                        <th></th>
-                    </tr>
+                    <thead th:replace="fragments :: userHeader">
                     </thead>
                     <tbody>
-                    <tr th:each="account : ${removedAccounts}">
-                        <td th:text="${account.getEmail()}"></td>
-                        <td th:text="${account.getFirstName()}+' '+${account.getLastName()}"></td>
-                        <td th:text="${account.getCityName()}"></td>
-                        <td>
-                            <span th:text="${account.getStreetName()}"></span>,
-                            <span th:text="${account.getBuildNum()}"></span>
-                            <span th:text="${account.getAptNum().equals('')}?'':'/'+${account.getAptNum()}"></span>
-                        </td>
-                        <td th:text="${account.getZipCode()}"></td>
-                        <td th:text="${account.getCreatedAt()}"></td>
-                        <td>
-                            <a th:href="@{users/clientDetails(clientId=${account.getClientId()})}">Szczegóły klienta</a>
-                        </td>
+                    <tr th:each="account : ${bannedAccounts}" th:include="fragments :: accountRow(${account})">
+
                     </tr>
                     </tbody>
                 </table>

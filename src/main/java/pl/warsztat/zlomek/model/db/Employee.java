@@ -3,14 +3,16 @@ package pl.warsztat.zlomek.model.db;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
-@NoArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -40,5 +42,25 @@ public class Employee extends Account implements Serializable {
 
     public void addVisit(Visit visit){
         this.visits.add(visit);
+    }
+
+    public Employee() {
+        this.status = EmployeeStatus.CURRENT_EMPLOYER;
+        this.accessToken = new HashSet<>();
+        this.visits = new HashSet<>();
+    }
+
+    public void copy(Employee employee){
+        this.hireDate = employee.getHireDate();
+        this.quitDate = employee.getQuitDate();
+        if(this.quitDate != null)
+            this.status = EmployeeStatus.FORMER_EMPLOYER;
+        this.firstName = employee.getFirstName();
+        this.lastName = employee.getLastName();
+        this.email = employee.getEmail();
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String newPassword = employee.getPassword();
+        if(!(encoder.matches(employee.getPassword(), this.password))&& !newPassword.equals(""))
+            password = encoder.encode(newPassword);
     }
 }
