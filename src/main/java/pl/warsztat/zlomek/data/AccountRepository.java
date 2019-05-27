@@ -34,6 +34,7 @@ public  abstract class AccountRepository <Type extends Account>{
         try {
             em.persist(account);
         }catch (Exception e){
+            e.printStackTrace();
             throw new ResourcesExistException("Konto o podanym emailu już istnieje");
         }
     }

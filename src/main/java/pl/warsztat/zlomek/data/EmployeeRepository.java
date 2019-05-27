@@ -12,6 +12,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -19,13 +20,6 @@ public class EmployeeRepository extends AccountRepository<Employee>{
 
     @PersistenceContext
     private EntityManager em;
-
-    private Logger log;
-
-    @Autowired
-    public EmployeeRepository(Logger log){
-        this.log = log;
-    }
 
     @Override
     public String generateToken(Employee account) {
@@ -66,5 +60,16 @@ public class EmployeeRepository extends AccountRepository<Employee>{
             e.printStackTrace();
         }
         throw new ResourcesNotFoundException("Brak pracownika o podanych danych");
+    }
+
+    public List<Employee> getAll(){
+        return em.createQuery("SELECT employee FROM Employee employee ", Employee.class).getResultList();
+    }
+
+    public Employee findById(long id){
+        TypedQuery<Employee> query = em.createQuery("SELECT employee FROM Employee employee "+
+                "WHERE employee.id = :id",Employee.class);
+        query.setParameter("id", id);
+        return query.getSingleResult();
     }
 }
