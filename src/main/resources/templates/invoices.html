@@ -24,7 +24,7 @@
         <th:block th:each="invoice:${invoices}">
             <tr>
                 <td th:text="${invoice.getInvoiceNumber()}"></td>
-                <td th:text="${invoice.getMethodOfPayment().toString()}"></td>
+                <td th:text="${invoice.getMethodOfPayment().getLabel()}"></td>
                 <td th:text="${invoice.getCompanyData().getCompanyName()}"></td>
                 <td>
                     <span th:text="${invoice.getCompanyData().getStreetName()}"></span>,

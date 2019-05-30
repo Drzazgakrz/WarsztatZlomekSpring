@@ -62,4 +62,15 @@ public class Company extends CompanyModel implements Serializable {
         return  "nip=" + nip + ' ' +
                 "nazwa=" + companyName;
     }
+
+    public void copy(Company company){
+        this.email = company.getEmail();
+        this.aptNum = company.getAptNum();
+        this.companyName = company.getCompanyName();
+        this.nip = company.getNip();
+        this.buildingNum = company.getBuildingNum();
+        this.cityName = company.getCityName();
+        this.streetName = company.getStreetName();
+        this.zipCode = company.getZipCode();
+    }
 }
