@@ -4,11 +4,12 @@
 
 </head>
 <body>
-<script th:src="@{/js/Invoices.js}"></script>
 <nav th:replace="fragments::menu"></nav>
 <div class="jumbotron">
     <h2 class="display-4">Faktury</h2>
     <hr class="my-4">
+    <a th:if="${#request.getRequestURL().toString().contains('vat')}"
+       th:href="@{/invoices/add}">Dodaj</a>
     <table class="table table-stripped table-hover">
         <thead>
             <tr>

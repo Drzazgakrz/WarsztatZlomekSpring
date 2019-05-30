@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -19,7 +20,7 @@ public class CompaniesRepository {
     public void createCompany(Company company) {
         try {
             em.persist(company);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ResourcesExistException("Firma o podanej nazwie lub numerze nip istnieje");
         }
     }
@@ -31,17 +32,19 @@ public class CompaniesRepository {
             query.setParameter("nip", nip);
             return query.getSingleResult();
 
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
         throw new ResourcesNotFoundException("Firma o podanym numerze nip nie istnieje");
     }
 
-    public Company getCompanyId(long id){
+    public Company getCompanyId(long id) {
         try {
             TypedQuery<Company> query = em.createQuery("SELECT company FROM Company company WHERE company.id = :id",
                     Company.class);
             query.setParameter("id", id);
             return query.getSingleResult();
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
         return null;
     }
 
@@ -55,7 +58,12 @@ public class CompaniesRepository {
         return null;
     }
 
-    public void updateCompany(Company company){
+    public void updateCompany(Company company) {
         em.merge(company);
+    }
+
+    public List<Company> getCompanies() {
+        TypedQuery<Company> query = em.createQuery("SELECT company FROM Company company ", Company.class);
+        return query.getResultList();
     }
 }

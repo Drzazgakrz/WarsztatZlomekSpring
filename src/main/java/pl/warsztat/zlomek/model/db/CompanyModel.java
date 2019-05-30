@@ -59,10 +59,10 @@ public abstract class CompanyModel {
     }
 
     public boolean compareCompanies(CompanyModel model){
-        boolean result = model.getNip().equals(this.nip)&&model.getCompanyName().equals(this.companyName);
-        result = result && model.getBuildingNum().equals(this.buildingNum) && model.getCityName().equals(this.cityName);
+        boolean result = this.nip.equals(model.getNip())&&this.companyName.equals(model.getCompanyName());
+        result = result && this.buildingNum.equals(model.getBuildingNum()) && this.cityName.equals(model.getCityName());
         if(this.aptNum != null)
             result = result && this.aptNum.equals(model.getAptNum());
-        return result && model.getStreetName().equals(this.streetName) && model.getZipCode().equals(this.zipCode);
+        return result && this.streetName.equals(model.getStreetName()) && this.zipCode.equals(model.getZipCode());
     }
 }

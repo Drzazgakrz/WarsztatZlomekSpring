@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments::header">
+
+</head>
+<body>
+<script th:src="@{/js/Invoices.js}"></script>
+<script th:inline="javascript">$(document).ready(function () {
+    /*<![CDATA[*/
+    storeData(/*[[${visits}]]*/ null, /*[[${companies}]]*/ null);
+    /*]]>*/
+
+});</script>
+<nav th:replace="fragments::menu"></nav>
+<div class="jumbotron">
+    <h2 class="display-4">Dodaj fakturę</h2>
+    <hr class="my-4">
+    <form method="post" th:action="@{/invoices/save}">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="methodOfPayment">Metoda płatności</label>
+                    <select class="form-control" name="methodOfPayment" id="methodOfPayment">
+                        <option th:each="method : ${methods}" th:value="${method}"
+                                th:text="${method.getLabel()}"></option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="discount">Zniżka</label>
+                    <input type="number" class="form-control" name="discount" id="discount" value="0">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="visitId">Wybierz wizytę</label>
+                    <select class="form-control" id="visitId" name="visitId">
+                        <option th:each="visit : ${visits}" th:value="${visit.getId()}"
+                                th:text="${visit.toString()}"></option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="companyName">Wybierz firmę</label>
+                    <select class="form-control" id="companyName" name="companyName">
+                        <option th:each="company : ${companies}" th:value="${company.getCompanyName()}"
+                                th:text="${company.toString()}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <input type="submit" value="Utwórz">
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>
