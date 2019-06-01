@@ -9,13 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Error {
     private String reason;
-
-    private String[] reasons;
     public Error(String reason) {
         this.reason = reason;
-    }
-
-    public Error(String[] reasons){
-        this.reasons = reasons;
     }
 }

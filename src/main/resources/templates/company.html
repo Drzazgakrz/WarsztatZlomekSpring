@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments::header">
+</head>
+<body>
+<nav th:replace="fragments::menu"></nav>
+
+<div class="jumbotron">
+    <h2 class="display-4">Szczegóły</h2>
+    <hr class="my-4">
+    <div class="container">
+        <form th:action="@{/companies/edit}" method="post">
+            <input type="hidden" th:value="${company.getId()}" name="id"/>
+            <div th:include="fragments :: company_form(${company})"></div>
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <input type="submit" value="Zapisz" class="btn btn-primary"/>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments::header">
+</head>
+<body>
+<nav th:replace="fragments::menu"></nav>
+
+<div class="jumbotron">
+    <h2 class="display-4">Dane podstawowe</h2>
+    <hr class="my-4">
+    <div class="container">
+
+        <form th:object="${account}" method="post" th:action="@{/users/update}">
+            <input type="number" th:value="*{clientId}" name="clientId" style="display: none"/>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="firstName">Imię</label>
+                    <input type="text" class="form-control" name="firstName" id="firstName"
+                           th:value="*{firstName}">
+                </div>
+                <div class="col-md-6">
+                    <label for="lastName">Nazwisko</label>
+                    <input type="text" class="form-control" name="lastName" id="lastName"
+                           th:value="*{lastName}">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="email">E-mail</label>
+                    <input type="email" class="form-control" name="email" id="email" th:value="*{email}">
+                </div>
+                <div class="col-md-6">
+                    <label for="cityName">Miasto</label>
+                    <input type="text" class="form-control" name="cityName" id="cityName"
+                           th:value="*{cityName}">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="streetName">Ulica</label>
+                    <input type="text" class="form-control" name="streetName" id="streetName"
+                           th:value="*{streetName}">
+                </div>
+                <div class="col-md-6">
+                    <label for="buildNum">Numer budynku</label>
+                    <input type="text" class="form-control" name="buildNum" id="buildNum"
+                           th:value="*{buildNum}">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="aptNum">Numer mieszkania</label>
+                    <input type="text" class="form-control" name="aptNum" id="aptNum" th:value="*{aptNum}">
+                </div>
+                <div class="col-md-6">
+                    <label for="zipCode">Kod pocztowy</label>
+                    <input type="text" class="form-control" name="zipCode" id="zipCode"
+                           th:value="*{zipCode}">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="password">Hasło</label>
+                    <input type="password" class="form-control" name="password" id="password">
+                </div>
+                <div class="col-md-6">
+                    <label for="phoneNumber">Numer telefonu</label>
+                    <input class="form-control" name="phoneNumber" id="phoneNumber" th:value="*{phoneNumber}">
+                </div>
+            </div>
+            <div class="row" style="margin-top: 2%;">
+                <div class="col-md-12">
+                    <input type="submit" value="Zapisz" class="btn btn-success">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

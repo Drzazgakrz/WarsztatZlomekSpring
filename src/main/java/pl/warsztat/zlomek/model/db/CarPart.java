@@ -14,23 +14,16 @@ import java.util.Set;
 @lombok.ToString
 @Entity
 @Table(name = "car_parts")
-public class CarPart implements Serializable {
+public class CarPart extends VisitElement implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @NotNull
-    @Size(max = 255, min = 6)
-    private String name;
 
     @OneToMany(mappedBy = "part")
     private Set<VisitsParts> visits;
 
     @NotNull
-    protected int tax;
-
-    @NotNull
-    @Pattern(regexp = "[A-ZŹĄĘÓŁŻ]{1}+[a-z,ąęółńćźż]{2,}")
+    @Pattern(regexp = "[A-ZŹĄĘÓŁŻŚ]{1}+[a-z,śąęółńćźż]{2,}")
     private String producer;
 
     public CarPart(String name, int tax, String producer){

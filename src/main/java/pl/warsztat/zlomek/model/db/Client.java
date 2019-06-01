@@ -3,6 +3,8 @@ package pl.warsztat.zlomek.model.db;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import pl.warsztat.zlomek.model.request.ClientForm;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -63,7 +65,7 @@ public class Client extends Account implements Serializable {
     private Set<CompaniesHasEmployees> companies;
 
     @OneToMany(
-            fetch = FetchType.LAZY,
+            fetch = FetchType.EAGER,
             mappedBy = "owner"
     )
     private Set<CarsHasOwners> cars;
@@ -99,6 +101,21 @@ public class Client extends Account implements Serializable {
                 clientCar.getStatus()!= OwnershipStatus.FORMER_OWNER)).toArray();
     }
 
+    public Client(ClientForm form){
+        super(form.getEmail(), form.getFirstName(), form.getLastName(), form.getPassword(), LocalDateTime.now(),
+                LocalDateTime.now());
+        this.aptNum = form.getAptNum();
+        this.buildNum = form.getBuildNum();
+        this.cityName = form.getCityName();
+        this.phoneNumber = form.getPhoneNumber();
+        this. streetName = form.getStreetName();
+        this.zipCode = form.getZipCode();
+        this.cars = new HashSet<>();
+        this.companies = new HashSet<>();
+        this.accessToken = new HashSet<>();
+        this.status = ClientStatus.ACTIVE;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -113,5 +130,25 @@ public class Client extends Account implements Serializable {
                 Objects.equals(zipCode, client.zipCode) &&
                 Objects.equals(companies, client.companies) &&
                 Objects.equals(cars, client.cars);
+    }
+
+    public void addCompany(CompaniesHasEmployees che){
+        this.companies.add(che);
+    }
+
+    public void cloneClient(Client newProperties){
+        this.firstName = newProperties.getFirstName();
+        this.lastName = newProperties.getLastName();
+        this.email = newProperties.getEmail();
+        this.phoneNumber = newProperties.getPhoneNumber();
+        this.cityName = newProperties.getCityName();
+        this.streetName = newProperties.getStreetName();
+        this.buildNum = newProperties.getBuildNum();
+        this.aptNum = newProperties.getAptNum();
+        this.zipCode = newProperties.getZipCode();
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String newPassword = newProperties.getPassword();
+        if(!(encoder.matches(newProperties.getPassword(), this.password))&& !newPassword.equals(""))
+            password = encoder.encode(newPassword);
     }
 }

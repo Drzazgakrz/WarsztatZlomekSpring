@@ -12,25 +12,25 @@ public abstract class CompanyModel {
 
     @NotNull
     @Size(min = 13,max=13)
-    @Column(name = "NIP")
+    @Column(name = "NIP", unique = true)
     @Pattern(regexp = "[0-9]{3}+-+[0-9]{3}+-+[0-9]{2}+-+[0-9]{2}")
     protected String nip;
 
     @NotNull
     @Size(min = 2, max = 40)
-    @Column(name = "company_name", unique = true)
+    @Column(name = "company_name")
     protected String companyName;
 
     @NotNull
     @Size(max = 20, min = 2)
     @Column(name = "city_name")
-    @Pattern(regexp = "[A-ZŹĄĘÓŁŻ]{1}+[a-z,ąęółńćźż]{2,}")
+    @Pattern(regexp = "[A-ZŹĄĘÓŁŻ]{1}+[a-z,ąęółńćźśż]{2,}")
     protected String cityName;
 
     @NotNull
     @Size(max = 40, min = 3)
     @Column(name = "street_name")
-    @Pattern(regexp = "[A-ZŹĄĘÓŁŻ]{1}+[a-z,ąęółńćźż]{2,}")
+    @Pattern(regexp = "[A-ZŹĄĘÓŁŻ]{1}+[a-z,ąęółńćśźż]{2,}")
     protected String streetName;
 
     @NotNull
@@ -59,10 +59,10 @@ public abstract class CompanyModel {
     }
 
     public boolean compareCompanies(CompanyModel model){
-        boolean result = model.getNip().equals(this.nip)&&model.getCompanyName().equals(this.companyName);
-        result = result && model.getBuildingNum().equals(this.buildingNum) && model.getCityName().equals(this.cityName);
+        boolean result = this.nip.equals(model.getNip())&&this.companyName.equals(model.getCompanyName());
+        result = result && this.buildingNum.equals(model.getBuildingNum()) && this.cityName.equals(model.getCityName());
         if(this.aptNum != null)
             result = result && this.aptNum.equals(model.getAptNum());
-        return result && model.getStreetName().equals(this.streetName) && model.getZipCode().equals(this.zipCode);
+        return result && this.streetName.equals(model.getStreetName()) && this.zipCode.equals(model.getZipCode());
     }
 }

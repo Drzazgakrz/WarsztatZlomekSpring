@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: header">
+</head>
+<body>
+<nav th:replace="fragments :: menu"></nav>
+
+<div class="jumbotron">
+    <h3 th:text="${title}"></h3>
+    <table class="table table-stripped table-hover">
+        <thead>
+        <tr>
+            <th>
+                Marka
+            </th>
+            <th>
+                Model
+            </th>
+            <th>
+                Data wizyty
+            </th>
+            <th>
+                Pracownik
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="visit : ${visits}">
+            <tr>
+                <td th:text="${visit.getCar().getBrand().getBrandName()}"></td>
+                <td th:text="${visit.getCar().getModel()}"></td>
+                <td th:text="${visit.getVisitDate().getDayOfMonth()}+'.'+${visit.getVisitDate().getMonthValue()}+'.'+
+                ${visit.getVisitDate().getYear()}+' '+${visit.getVisitDate().getHour()}+':'+
+                ${visit.getVisitDate().getMinute()}"></td>
+                <td th:if="${visit.getStatus() != T(pl.warsztat.zlomek.model.db.VisitStatus).NEW}"
+                    th:text="${visit.getEmployee().getFirstName()}+' '+${visit.getEmployee().getLastName()}"></td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

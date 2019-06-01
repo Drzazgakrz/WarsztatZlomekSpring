@@ -22,4 +22,9 @@ public class InvoiceBufferPosition extends InvoicePositionModel implements Seria
     @ManyToOne
     @JoinColumn(name = "invoice_buffer_id")
     private InvoiceBuffer invoiceBuffer;
+
+    public InvoiceBufferPosition(VisitPosition position, String unitOfMeasure, String itemName, int tax, @NotNull InvoiceBuffer invoiceBuffer) {
+        super(position, unitOfMeasure, itemName, tax);
+        this.invoiceBuffer = invoiceBuffer;
+    }
 }

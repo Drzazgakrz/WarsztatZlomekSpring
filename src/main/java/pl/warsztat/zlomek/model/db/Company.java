@@ -11,7 +11,6 @@ import java.util.Set;
 @lombok.Getter
 @lombok.Setter
 @lombok.AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "companies")
 public class Company extends CompanyModel implements Serializable {
@@ -43,14 +42,35 @@ public class Company extends CompanyModel implements Serializable {
     public CompaniesHasCars addCar(Car car){
         CompaniesHasCars companiesHasCars = new CompaniesHasCars(car, this);
         this.cars.add(companiesHasCars);
-        car.getCompaniesCars().add(companiesHasCars);
+        car.addCompany(companiesHasCars);
         return companiesHasCars;
     }
 
     public CompaniesHasEmployees addClientToCompany(Client client){
         CompaniesHasEmployees companiesHasEmployees = new CompaniesHasEmployees(client, this);
-        client.getCompanies().add(companiesHasEmployees);
         this.getEmployees().add(companiesHasEmployees);
         return companiesHasEmployees;
+    }
+
+    public Company(){
+        this.cars = new HashSet<>();
+        this.employees = new HashSet<>();
+    }
+
+    @Override
+    public String toString() {
+        return  "nip=" + nip + ' ' +
+                "nazwa=" + companyName;
+    }
+
+    public void copy(Company company){
+        this.email = company.getEmail();
+        this.aptNum = company.getAptNum();
+        this.companyName = company.getCompanyName();
+        this.nip = company.getNip();
+        this.buildingNum = company.getBuildingNum();
+        this.cityName = company.getCityName();
+        this.streetName = company.getStreetName();
+        this.zipCode = company.getZipCode();
     }
 }

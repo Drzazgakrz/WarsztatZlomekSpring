@@ -13,24 +13,22 @@ import javax.validation.constraints.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "services")
-public class Service implements Serializable {
+public class Service extends VisitElement implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @Column(name = "service_name")
-    @NotNull
-    private String name;
 
     @OneToMany(mappedBy = "service")
     @NotNull
     private Set<VisitsHasServices> visits;
 
-    private int tax;
-
     public Service(String name, int tax) {
         this.name = name;
         visits = new HashSet<>();
         this.tax = tax;
+    }
+
+    public void addVisit(VisitsHasServices vhs){
+        this.visits.add(vhs);
     }
 }

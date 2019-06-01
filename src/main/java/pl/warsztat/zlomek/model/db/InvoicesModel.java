@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-public abstract class InvoicesModel {
+public class InvoicesModel {
 
     protected int discount;
 
@@ -19,7 +19,7 @@ public abstract class InvoicesModel {
     protected MethodOfPayment methodOfPayment;
 
 
-    //@NotNull
+    @NotNull
     @Column(name = "invoice_number")
     protected String invoiceNumber;
 
@@ -42,12 +42,20 @@ public abstract class InvoicesModel {
     @Column(precision = 20, scale = 2, name = "gross_value")
     protected BigDecimal grossValue;
 
+    @ManyToOne
+    @JoinColumn(name = "company_data_id")
+    protected CompanyData companyData;
+
     public InvoicesModel(int discount, MethodOfPayment methodOfPayment, CarServiceData carServiceData,
-                         LocalDate dayOfIssue, LocalDate paymentDate) {
+                         LocalDate dayOfIssue, LocalDate paymentDate, CompanyData companyData, String invoiceNumber) {
         this.discount = discount;
         this.methodOfPayment = methodOfPayment;
         this.carServiceData = carServiceData;
         this.dayOfIssue = dayOfIssue;
         this.paymentDate = paymentDate;
+        this.companyData = companyData;
+        this.invoiceNumber = invoiceNumber;
+        this.netValue = new BigDecimal(0);
+        this.grossValue = new BigDecimal(0);
     }
 }

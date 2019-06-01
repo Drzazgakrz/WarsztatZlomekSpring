@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments::header">
+</head>
+<body>
+<script th:src="@{/js/users.js}"></script>
+<nav th:replace="fragments::menu"></nav>
+<div class="jumbotron">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <button class="btn btn-primary" id='activeButton' onclick="setView('activeButton')">Aktywni</button>
+            </div>
+            <div class="col-md-4">
+                <button class="btn" id='bannedButton' onclick="setView('bannedButton')">Zablokowani</button>
+            </div>
+            <div class="col-md-4">
+                <button class="btn" id='removedButton' onclick="setView('removedButton')">Konta nieaktywne</button>
+            </div>
+        </div>
+        <div class="row" id="activeAccountsDiv">
+            <div class="col-md-12">
+                <table class="table table-stripped table-hover">
+                    <thead th:replace="fragments :: userHeader">
+                    </thead>
+                    <tbody>
+                    <tr th:each="account : ${activeAccounts}" th:include="fragments :: accountRow(${account})">
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row" id="removedAccountsDiv" style="display: none;">
+            <div class="col-md-12">
+                <table class="table table-stripped table-hover">
+                    <thead th:replace="fragments :: userHeader">
+                    </thead>
+                    <tbody>
+                    <tr th:each="account : ${removedAccounts}" th:include="fragments :: accountRow(${account})">
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row" id="bannedAccountsDiv" style="display: none;">
+            <div class="col-md-12">
+                <table class="table table-stripped table-hover">
+                    <thead th:replace="fragments :: userHeader">
+                    </thead>
+                    <tbody>
+                    <tr th:each="account : ${bannedAccounts}" th:include="fragments :: accountRow(${account})">
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

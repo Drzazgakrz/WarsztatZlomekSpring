@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments::header">
+
+</head>
+<body>
+<nav th:replace="fragments::menu"></nav>
+<div class="jumbotron">
+    <h2 class="display-4">Faktury</h2>
+    <hr class="my-4">
+    <a th:if="${#request.getRequestURL().toString().contains('vat')}"
+       th:href="@{/invoices/add}">Dodaj</a>
+    <table class="table table-stripped table-hover">
+        <thead>
+            <tr>
+                <th>Numer faktury</th>
+                <th>Metoda płatności</th>
+                <th>Nazwa firmy</th>
+                <th>Adres firmy</th>
+                <th>Cena brutto</th>
+                <th>Cena netto</th>
+            </tr>
+        </thead>
+        <th:block th:each="invoice:${invoices}">
+            <tr>
+                <td th:text="${invoice.getInvoiceNumber()}"></td>
+                <td th:text="${invoice.getMethodOfPayment().getLabel()}"></td>
+                <td th:text="${invoice.getCompanyData().getCompanyName()}"></td>
+                <td>
+                    <span th:text="${invoice.getCompanyData().getStreetName()}"></span>,
+                    <span th:text="${invoice.getCompanyData().getBuildingNum()}"></span>
+                    <span th:text="${invoice.getCompanyData().getAptNum().equals('')}?
+                    '':'/'+${invoice.getCompanyData().getAptNum()}">
+                    </span>
+                </td>
+                <td th:text="${invoice.getGrossValue()}"></td>
+                <td th:text="${invoice.getNetValue()}"></td>
+                <td>
+                    <a th:if="${invoice instanceof T(pl.warsztat.zlomek.model.db.Invoice)}"
+                       th:href="@{'/invoices/'+${invoice.id}}">Szczegóły</a>
+                    <a th:if="${invoice instanceof T(pl.warsztat.zlomek.model.db.InvoiceBuffer)}"
+                       th:href="@{'/invoicesBuffer/'+${invoice.id}}">Szczegóły</a>
+                </td>
+            </tr>
+        </th:block>
+    </table>
+</div>
+</body>
+</html>

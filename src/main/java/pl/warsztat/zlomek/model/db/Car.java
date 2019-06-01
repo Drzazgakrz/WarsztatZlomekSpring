@@ -3,6 +3,7 @@ package pl.warsztat.zlomek.model.db;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -77,5 +78,12 @@ public class Car implements Serializable {
         Car car = (Car) o;
         return Objects.equals(vin, car.vin);
 
+    }
+    public void addVisit(Visit visit){
+        this.visits.add(visit);
+    }
+
+    public void addCompany(CompaniesHasCars chc){
+        this.companiesCars.add(chc);
     }
 }

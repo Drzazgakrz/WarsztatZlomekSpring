@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="header">
+    <meta charset="UTF-8">
+    <title>Warsztat Złomek - panel administracyjny</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}" type="text/css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"
+          type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" th:fragment="menu" id="menu">
+        <a id="index-href" type="submit" th:href="@{/index}">
+            <img th:src="@{/img/logo_dark1.jpg}" id="logo" alt="logo"/>
+        </a>
+    <ul class="navbar-nav" style="width: 100%;">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                Wizyty
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" th:href="@{/visits(visitStatus=in_progress)}">Wizyty w toku</a>
+                <a class="dropdown-item" th:href="@{/visits(visitStatus=new)}">Nowe wizyty</a>
+                <a class="dropdown-item" th:href="@{/visits/all}">Wszystkie wizyty</a>
+            </div>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                Faktury
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" th:href="@{/invoices/vat}">Lista faktur VAT</a>
+                <a class="dropdown-item" th:href="@{/invoices/pro_forma}">Lista faktur pro-forma</a>
+            </div>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link" th:href="@{/users}">Klienci</a>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link" th:href="@{/employee}">Pracownicy</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/companies}">
+                Firmy
+            </a>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                Usługi
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" th:href="@{/service/add}">Dodaj</a>
+                <a class="dropdown-item" th:href="@{/service/edit}">Edytuj usługi i części</a>
+            </div>
+        </li>
+    </ul>
+
+    <ul class="navbar-nav">
+        <li class="nav-item active" style="width: 120px">
+            <a th:href="@{/logout}" class="nav-link">Wyloguj</a>
+        </li>
+    </ul>
+
+</nav>
+
+<thead th:fragment="userHeader">
+<tr>
+    <th>
+        E-mail
+    </th>
+    <th>
+        Imię i nazwisko
+    </th>
+    <th>
+        Data utworzenia
+    </th>
+    <th></th>
+</tr>
+</thead>
+<tr th:fragment="accountRow(account)">
+    <td th:text="${__(account)__.getEmail()}"></td>
+    <td th:text="${__(account)__.getFirstName()}+' '+${__(account)__.getLastName()}"></td>
+    <td th:text="${__(account)__.getCreatedAt()}"></td>
+    <td>
+        <a th:href="@{users/clientDetails(clientId=${__(account)__.getClientId()})}">Szczegóły</a>
+    </td>
+</tr>
+<tr th:fragment="employeeRow(employee)">
+    <td th:text="${__(employee)__.getEmail()}"></td>
+    <td th:text="${__(employee)__.getFirstName()}+' '+${__(employee)__.getLastName()}"></td>
+    <td th:text="${__(employee)__.getCreatedAt()}"></td>
+    <td>
+        <a th:href="@{employee/details(employeeId=${__(employee)__.getId()})}">Szczegóły</a>
+    </td>
+</tr>
+
+<div th:fragment="employee(employee)">
+    <div class="row">
+        <div class="col-md-6">
+            <label for="firstName">Imię</label>
+            <input type="text" class="form-control" name="firstName" id="firstName" th:value="${__(employee)__.getFirstName()}"/>
+        </div>
+        <div class="col-md-6">
+            <label for="lastName">Nazwisko</label>
+            <input type="text" class="form-control" name="lastName" id="lastName" th:value="${__(employee)__.getLastName()}"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label for="email">E-mail</label>
+            <input type="email" class="form-control" name="email" id="email" th:value="${__(employee)__.getEmail()}"/>
+        </div>
+        <div class="col-md-6">
+            <label for="password">Hasło</label>
+            <input type="password" class="form-control" name="password" id="password" value="hasło"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label for="hireDate">Data zatrudnienia</label>
+            <input type="date" class="form-control" name="hireDate" id="hireDate" th:value="${__(employee)__.getHireDate()}">
+        </div>
+        <div class="col-md-6">
+            <label for="role">Rola</label>
+            <select id="role" name="role" class="form-control">
+                <!--Zrobiłbym to lepiej ale coś nie śmiga-->
+                <option th:each="role : ${accountTypes}" th:value="${role}" th:text="${role}"></option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="company_form(company)">
+    <div class="row">
+        <div class="col-md-6">
+            <label for="companyName">Nazwa firmy</label>
+            <input type="text" id="companyName" name="companyName" th:value="${__(company)__.getCompanyName()}" class="form-control">
+        </div>
+        <div class="col-md-6">
+            <label for="nip">NIP</label>
+            <input type="text" id="nip" name="nip" th:value="${__(company)__.getNip()}" class="form-control">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label for="cityName">Miasto</label>
+            <input type="text" id="cityName" name="cityName" th:value="${__(company)__.getCityName()}" class="form-control">
+        </div>
+        <div class="col-md-6">
+            <label for="streetName">Ulica</label>
+            <input type="text" id="streetName" name="streetName" th:value="${__(company)__.getStreetName()}" class="form-control">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label for="buildingNum">Numer budynku</label>
+            <input type="text" id="buildingNum" name="buildingNum" th:value="${__(company)__.getBuildingNum()}" class="form-control">
+        </div>
+        <div class="col-md-6">
+            <label for="aptNum">Numer pomieszczenia</label>
+            <input type="text" id="aptNum" name="aptNum" th:value="${__(company)__.getAptNum()}" class="form-control">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label for="zipCode">Kod pocztowy</label>
+            <input type="text" id="zipCode" name="zipCode" th:value="${__(company)__.getZipCode()}" class="form-control">
+        </div>
+        <div class="col-md-6">
+            <label for="email">Mail kontaktowy</label>
+            <input type="text" id="email" name="email" th:value="${__(company)__.getEmail()}" class="form-control">
+        </div>
+    </div>
+</div>
+</body>
+</html>

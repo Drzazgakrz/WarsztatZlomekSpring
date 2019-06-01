@@ -7,6 +7,12 @@ import lombok.Setter;
 @Setter
 public class FieldsNotCorrect extends RuntimeException{
     private String[] fields;
+    private String accessToken;
+
+    public FieldsNotCorrect(String[] fields, String accessToken) {
+        this.fields = fields;
+        this.accessToken = accessToken;
+    }
 
     public FieldsNotCorrect(String[] fieldName) {
         this.fields = fieldName;
