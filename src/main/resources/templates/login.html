@@ -10,7 +10,6 @@
             <input type="email" id="username" name="username" class="form-control"/>
             <label for="password">Hasło</label>
             <input type="password" id="password" name="password" class="form-control"/>
-            <input th:name="${_csrf.parameterName}" type="hidden" th:value="${_csrf.token}">
             <input type="submit" class="btn btn-success" id="signIn">
         </form>
     </div>
