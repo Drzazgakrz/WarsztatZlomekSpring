@@ -8,10 +8,7 @@ import pl.warsztat.zlomek.data.CompaniesRepository;
 import pl.warsztat.zlomek.data.EmployeeRepository;
 import pl.warsztat.zlomek.exceptions.ResourcesNotFoundException;
 import pl.warsztat.zlomek.model.AccessTokenModel;
-import pl.warsztat.zlomek.model.db.Client;
-import pl.warsztat.zlomek.model.db.CompaniesHasEmployees;
-import pl.warsztat.zlomek.model.db.Company;
-import pl.warsztat.zlomek.model.db.EmployeeStatus;
+import pl.warsztat.zlomek.model.db.*;
 import pl.warsztat.zlomek.model.request.AddClientToCompanyRequest;
 import pl.warsztat.zlomek.model.request.ClientForm;
 import pl.warsztat.zlomek.model.request.RemoveClientFromCompanyRequest;
@@ -90,4 +87,12 @@ public class ClientsController {
         companiesHasEmployeesRepository.update(companiesHasEmployees);
         return new AccessTokenModel(request.getAccessToken());
     }
+
+    @PostMapping(path = "remove")
+    public void removeClient(@RequestBody AccessTokenModel accessTokenModel){
+        Client client = this.clientRepository.findByToken(accessTokenModel.getAccessToken());
+        client.setStatus(ClientStatus.REMOVED);
+        this.clientRepository.update(client);
+    }
+
 }
