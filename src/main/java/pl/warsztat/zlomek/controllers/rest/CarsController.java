@@ -78,12 +78,12 @@ public class CarsController {
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/getClientsCars")
-    public ClientCarsResponse getClientsCars(@RequestHeader String accessToken){
-        Client client = clientRepository.findByToken(accessToken);
+    public ClientCarsResponse getClientsCars(@RequestBody AccessTokenModel accessToken){
+        Client client = clientRepository.findByToken(accessToken.getAccessToken());
         List<pl.warsztat.zlomek.model.request.Car> cars = new ArrayList<>();
         client.getCars().forEach(carsHasOwners ->
                 cars.add(new pl.warsztat.zlomek.model.request.Car(carsHasOwners.getCar(), client)));
-        return new ClientCarsResponse(cars, accessToken);
+        return new ClientCarsResponse(cars, accessToken.getAccessToken());
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/{id}")

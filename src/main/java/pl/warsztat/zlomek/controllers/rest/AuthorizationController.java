@@ -50,4 +50,9 @@ public class AuthorizationController {
     public void checkToken(@RequestBody AccessTokenModel model){
         this.employeeRepository.findByToken(model.getAccessToken());
     }
+
+    @PostMapping(path = "logout")
+    public void logout(@RequestBody AccessTokenModel model){
+        this.clientRepository.signOut(model.getAccessToken());
+    }
 }
