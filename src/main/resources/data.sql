@@ -49,7 +49,7 @@ TRUNCATE TABLE cars_has_owners;
 
 insert into cars_has_owners (car_pk, owner_pk, begin_ownership_date, end_ownership_date, registration_number, status,
                              car_id, owner_id)
-values (1,1, NOW(), null, 'LU-123', 0, 1,1), (2,1, '2018-02-02', NOW(), 'LU-123', 0, 1,2);
+values (1,1, NOW(), null, 'LU-123', 0, 1,1), (2,1, '2018-02-02', NOW(), 'LU-123', 0, 2, 1);
 
 delete
 from client_token;
