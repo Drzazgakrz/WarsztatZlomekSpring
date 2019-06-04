@@ -44,33 +44,10 @@
         <li class="nav-item dropdown">
             <a class="nav-link" th:href="@{/employee}">Pracownicy</a>
         </li>
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
-                Samochody
-            </a>
-            <div class="dropdown-menu">
-                <a class="dropdown-item" th:href="@{/carBrand/add}">Dodaj markę</a>
-                <a class="dropdown-item" th:href="@{/carPart/add}">Dodaj część</a>
-            </div>
-        </li>
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/companies}">
                 Firmy
             </a>
-            <div class="dropdown-menu">
-                <a class="dropdown-item" th:href="@{/companies/add}">Dodaj firmę</a>
-                <a class="dropdown-item" th:href="@{/companies/all}">Lista firm</a>
-                <a class="dropdown-item" th:href="@{/companies/carService}">Dodaj dane serwisu</a>
-            </div>
-        </li>
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
-                Usługi
-            </a>
-            <div class="dropdown-menu">
-                <a class="dropdown-item" th:href="@{/service/add}">Dodaj</a>
-                <a class="dropdown-item" th:href="@{/service/edit}">Edytuj usługi i części</a>
-            </div>
         </li>
     </ul>
 
@@ -145,6 +122,49 @@
                 <!--Zrobiłbym to lepiej ale coś nie śmiga-->
                 <option th:each="role : ${accountTypes}" th:value="${role}" th:text="${role}"></option>
             </select>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="company_form(company)">
+    <div class="row">
+        <div class="col-md-6">
+            <label for="companyName">Nazwa firmy</label>
+            <input type="text" id="companyName" name="companyName" th:value="${__(company)__.getCompanyName()}" class="form-control">
+        </div>
+        <div class="col-md-6">
+            <label for="nip">NIP</label>
+            <input type="text" id="nip" name="nip" th:value="${__(company)__.getNip()}" class="form-control">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label for="cityName">Miasto</label>
+            <input type="text" id="cityName" name="cityName" th:value="${__(company)__.getCityName()}" class="form-control">
+        </div>
+        <div class="col-md-6">
+            <label for="streetName">Ulica</label>
+            <input type="text" id="streetName" name="streetName" th:value="${__(company)__.getStreetName()}" class="form-control">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label for="buildingNum">Numer budynku</label>
+            <input type="text" id="buildingNum" name="buildingNum" th:value="${__(company)__.getBuildingNum()}" class="form-control">
+        </div>
+        <div class="col-md-6">
+            <label for="aptNum">Numer pomieszczenia</label>
+            <input type="text" id="aptNum" name="aptNum" th:value="${__(company)__.getAptNum()}" class="form-control">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label for="zipCode">Kod pocztowy</label>
+            <input type="text" id="zipCode" name="zipCode" th:value="${__(company)__.getZipCode()}" class="form-control">
+        </div>
+        <div class="col-md-6">
+            <label for="email">Mail kontaktowy</label>
+            <input type="text" id="email" name="email" th:value="${__(company)__.getEmail()}" class="form-control">
         </div>
     </div>
 </div>

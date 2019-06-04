@@ -56,4 +56,21 @@ public class Company extends CompanyModel implements Serializable {
         this.cars = new HashSet<>();
         this.employees = new HashSet<>();
     }
+
+    @Override
+    public String toString() {
+        return  "nip=" + nip + ' ' +
+                "nazwa=" + companyName;
+    }
+
+    public void copy(Company company){
+        this.email = company.getEmail();
+        this.aptNum = company.getAptNum();
+        this.companyName = company.getCompanyName();
+        this.nip = company.getNip();
+        this.buildingNum = company.getBuildingNum();
+        this.cityName = company.getCityName();
+        this.streetName = company.getStreetName();
+        this.zipCode = company.getZipCode();
+    }
 }

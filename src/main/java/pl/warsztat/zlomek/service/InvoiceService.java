@@ -63,17 +63,14 @@ public class InvoiceService {
         invoice.setMethodOfPayment(methodOfPayment);
         invoice.setInvoiceNumber(this.invoicesRepository.generateInvoiceNumber());
         invoice.setPaymentDate(LocalDate.now().plusDays(30));
+        invoice.setDiscount(invoice.getDiscount());
     }
 
     private CompanyData getCompanyData(String companyName){
         Company company = companiesRepository.getCompanyName(companyName);
         List<CompanyData> companies = this.companyDataRepository.getAllCompanies();
-        CompanyData companyData = companies.stream().filter(data->
-                data.compareCompanies(company)).findAny().orElse(null);
-        if(companyData == null){
-            companyData = new CompanyData(company);
-        }
-        return companyData;
+        return companies.stream().filter(data->
+                data.compareCompanies(company)).findAny().orElse(new CompanyData(company));
     }
 
     public Invoice createVatInvoice(AddInvoiceRequest request){

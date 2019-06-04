@@ -5,3 +5,11 @@ function setVisibility() {
         $("#invoicePositions").css("display","none");
     }
 }
+
+var visitsArray;
+var companiesArray;
+
+function storeData(visits, companies) {
+    visitsArray = visits;
+    companiesArray = companies;
+}

@@ -1,5 +1,7 @@
 package pl.warsztat.zlomek.model.db;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,22 +32,27 @@ public class Visit {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id")
+    @JsonIgnore
     private Employee employee;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "overview_id")
+    @JsonIgnore
     private Overview overview;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "car_id")
+    @JsonIgnore
     private Car car;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "visit")
     @NotNull
+    @JsonIgnore
     private Set<VisitsHasServices> services;
 
     @OneToMany(mappedBy = "visit", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<VisitsParts> parts;
 
     @Column(name = "created_at")
@@ -56,6 +63,7 @@ public class Visit {
 
     @ManyToOne
     @JoinColumn(name = "client_id")
+    @JsonIgnore
     private Client client;
 
     @Column(name = "visit_finished")
@@ -79,5 +87,12 @@ public class Visit {
 
     public void addCarPart(VisitsParts vp){
         this.parts.add(vp);
+    }
+
+    @Override
+    public String toString() {
+        return  "Pracownik=" + employee.getFirstName() + " "+employee.getLastName() +
+                ", samochód=" + car.getBrand().getBrandName() + " " + car.getModel() +
+                ", zakończona=" + visitFinished;
     }
 }

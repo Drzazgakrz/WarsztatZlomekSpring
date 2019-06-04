@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments::header">
+</head>
+<body>
+<nav th:replace="fragments::menu"></nav>
+
+<div class="jumbotron">
+    <h2 class="display-4">Firmy</h2>
+    <hr class="my-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8"></div>
+            <div class="col-md-4">
+                <div class="col-md-4">
+                    <a th:href="@{/companies/add}" class="btn btn-success">
+                        Dodaj firmę
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <table class="table table-stripped table-hover">
+                <thead>
+                <tr>
+                    <th>Nazwa firmy</th>
+                    <th>NIP</th>
+                    <th>Miasto</th>
+                    <th>Adres firmy</th>
+                    <th>Kod pocztowy</th>
+                </tr>
+                </thead>
+                <th:block th:each="company:${companies}">
+                    <tr>
+                        <td th:text="${company.getCompanyName()}"></td>
+                        <td th:text="${company.getNip()}"></td>
+                        <td th:text="${company.getCityName()}"></td>
+                        <td>
+                            <span th:text="${company.getStreetName()}"></span>,
+                            <span th:text="${company.getBuildingNum()}"></span>
+                            <span th:text="${company.getAptNum().equals('')}?
+                    '':'/'+${company.getAptNum()}">
+                    </span>
+                        </td>
+                        <td th:text="${company.getZipCode()}"></td>
+                        <td>
+                            <a th:href="@{/companies/details(companyId=${company.getId()})}">Szczegóły</a>
+                        </td>
+                    </tr>
+                </th:block>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
