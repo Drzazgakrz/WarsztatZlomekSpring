@@ -121,10 +121,8 @@ public class CarsController {
         cho.setStatus(OwnershipStatus.COOWNER);
         this.carsHasOwnersRepository.updateOwnership(cho);
         Arrays.stream(request.getNewCoowners()).forEach(username->{
-            try {
                 Client coowner = this.clientRepository.findClientByUsername(username);
                 this.carService.addOwnership(cho.getCar(), coowner, OwnershipStatus.COOWNER, cho.getRegistrationNumber());
-            }catch (Exception e){}
         });
         this.carRepository.updateCar(cho.getCar());
         return new AccessTokenModel(request.getAccessToken());

@@ -20,7 +20,7 @@ public class CarsHasOwnersRepository {
         try {
             em.persist(carsHasOwners);
         }catch (EntityExistsException e){
-            throw new ResourcesExistException("Podany samochód jest już powiązany do tego klienta");
+            throw new ResourcesExistException("Podany samoch\u00D3d jest ju\u017C powi\u0105zany do tego klienta");
         }
 
     }
