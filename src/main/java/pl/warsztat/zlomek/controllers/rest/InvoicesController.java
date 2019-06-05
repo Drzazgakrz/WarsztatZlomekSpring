@@ -10,9 +10,11 @@ import pl.warsztat.zlomek.data.EmployeeRepository;
 import pl.warsztat.zlomek.data.InvoicesRepository;
 import pl.warsztat.zlomek.model.AccessTokenModel;
 import pl.warsztat.zlomek.model.db.Invoice;
+import pl.warsztat.zlomek.model.db.InvoiceBuffer;
 import pl.warsztat.zlomek.model.request.AddInvoiceRequest;
 import pl.warsztat.zlomek.model.request.EditInvoiceRequest;
 import pl.warsztat.zlomek.model.response.InvoiceResponse;
+import pl.warsztat.zlomek.model.response.ProFormaInvoiceResponse;
 import pl.warsztat.zlomek.service.InvoiceService;
 
 @RestController
@@ -38,6 +40,13 @@ public class InvoicesController {
         this.employeeRepository.findByToken(request.getAccessToken());
         Invoice invoice = this.invoiceService.createVatInvoice(request);
         return new InvoiceResponse(request.getAccessToken(), invoice);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path = "addProForma")
+    public ProFormaInvoiceResponse addProFormaInvoice(@RequestBody AddInvoiceRequest request){
+        this.employeeRepository.findByToken(request.getAccessToken());
+        InvoiceBuffer invoice = this.invoiceService.createProFormaInvoice(request);
+        return new ProFormaInvoiceResponse(request.getAccessToken(), invoice);
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "edit")

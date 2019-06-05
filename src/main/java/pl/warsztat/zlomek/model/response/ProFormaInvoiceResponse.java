@@ -6,11 +6,12 @@ import pl.warsztat.zlomek.model.db.Invoice;
 import pl.warsztat.zlomek.model.db.InvoiceBuffer;
 
 @Getter
-public class InvoiceResponse extends AccessTokenModel {
-    private InvoiceDetails invoice;
+public class ProFormaInvoiceResponse extends AccessTokenModel {
+    private ProFormaInvoiceDetails invoice;
 
-    public InvoiceResponse(String accessToken, Invoice invoice) {
+    public ProFormaInvoiceResponse(String accessToken, InvoiceBuffer invoice) {
         super(accessToken);
-        this.invoice = new InvoiceDetails(invoice);
+        this.invoice = new ProFormaInvoiceDetails(invoice);
     }
 }
+
