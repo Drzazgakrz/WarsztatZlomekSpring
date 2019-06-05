@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service
 public class InvoiceService {
@@ -131,7 +134,7 @@ public class InvoiceService {
         invoice.setNetValue(invoice.getNetValue().add(position.getNetPrice()));
     }
 
-    private InvoiceBuffer createProFormaInvoice(AddInvoiceRequest request){
+    public InvoiceBuffer createProFormaInvoice(AddInvoiceRequest request){
         InvoiceBuffer invoice = new InvoiceBuffer();
         createInvoice(request, invoice);
         Visit visit = visitRepository.getVisitById(request.getVisitId());

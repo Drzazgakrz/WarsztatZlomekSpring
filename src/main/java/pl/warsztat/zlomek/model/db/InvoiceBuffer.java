@@ -3,11 +3,11 @@ package pl.warsztat.zlomek.model.db;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-@lombok.NoArgsConstructor
 @lombok.Getter
 @lombok.Setter
 @Entity
@@ -38,6 +38,12 @@ public class InvoiceBuffer extends InvoicesModel implements Serializable {
         this.carServiceData = carServiceData;
         this.visit = visit;
         this.companyData = companyData;
+    }
+
+    public InvoiceBuffer() {
+        this.dayOfIssue = LocalDate.now();
+        this.grossValue = new BigDecimal(0);
+        this.netValue = new BigDecimal(0);
     }
 
     public void add(InvoiceBufferPosition invoiceBufferPosition){
