@@ -23,11 +23,6 @@ public class InvoiceBuffer extends InvoicesModel implements Serializable {
     @OneToMany(mappedBy = "invoiceBuffer")
     private Set<InvoiceBufferPosition> invoiceBufferPositions;
 
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "car_service_data_id")
-    private CarServiceData carServiceData;
-
     @OneToOne
     private Visit visit;
 
@@ -44,6 +39,7 @@ public class InvoiceBuffer extends InvoicesModel implements Serializable {
         this.dayOfIssue = LocalDate.now();
         this.grossValue = new BigDecimal(0);
         this.netValue = new BigDecimal(0);
+        this.invoiceBufferPositions = new HashSet<>();
     }
 
     public void add(InvoiceBufferPosition invoiceBufferPosition){
