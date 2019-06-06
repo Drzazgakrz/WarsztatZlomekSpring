@@ -38,4 +38,9 @@ public class EmployeeController {
         employee.getVisits().forEach(visit -> visits.add(new VisitResponse(visit)));
         return new VisitsList(accessToken.getAccessToken(), visits);
     }
+
+    @PostMapping("signOut")
+    public void signOut(AccessTokenModel accessToken){
+        this.employeeRepository.signOut(accessToken.getAccessToken());
+    }
 }

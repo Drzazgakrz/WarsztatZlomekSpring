@@ -72,4 +72,16 @@ public class EmployeeRepository extends AccountRepository<Employee>{
         query.setParameter("id", id);
         return query.getSingleResult();
     }
+
+    public void signOut(String accessToken){
+        try {
+            TypedQuery<EmployeeToken> query = em.createQuery("SELECT employeeToken " +
+                    "FROM EmployeeToken employeeToken " +
+                    "WHERE employeeToken.accessToken = :accessToken", EmployeeToken.class);
+            query.setParameter("accessToken", accessToken);
+            EmployeeToken token = query.getSingleResult();
+            token.setExpiration(LocalDateTime.now());
+            em.merge(token);
+        }catch (Exception e){}
+    }
 }
