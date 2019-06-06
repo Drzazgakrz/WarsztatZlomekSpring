@@ -69,4 +69,8 @@ public class VisitRepository {
             return new ArrayList<>();
         }
     }
+
+    public void remove(Visit visit){
+        this.em.remove(visit);
+    }
 }

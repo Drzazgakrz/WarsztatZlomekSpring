@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import pl.warsztat.zlomek.data.*;
 import pl.warsztat.zlomek.exceptions.FieldsNotCorrect;
+import pl.warsztat.zlomek.exceptions.ResourcesNotFoundException;
 import pl.warsztat.zlomek.model.db.*;
 import pl.warsztat.zlomek.model.request.AcceptVisitModel;
 import pl.warsztat.zlomek.model.request.AddElementToVisitModel;
@@ -137,5 +138,17 @@ public class VisitsController {
         ArrayList<VisitResponse> visitResponses = new ArrayList<>();
         visits.forEach(visit -> visitResponses.add(new VisitResponse(visit)));
         return new VisitsList(accessToken.getAccessToken(), visitResponses);
+    }
+
+    @PostMapping(path = "remove/{id}")
+    public AccessTokenModel removeVisit(@RequestBody AccessTokenModel accessToken, @PathVariable long id){
+        Client client = clientRepository.findByToken(accessToken.getAccessToken());
+        Visit visit = client.getVisits().stream().filter(current -> current.getId() == id).findFirst().or(() -> {
+            throw new ResourcesNotFoundException("Klient nie ma takiej wizyty");
+        }).get();
+        if(!visit.getStatus().equals(VisitStatus.NEW))
+            throw new ResourcesNotFoundException("Wizyta została zaakceptowana");
+        this.visitRepository.remove(visit);
+        return accessToken;
     }
 }

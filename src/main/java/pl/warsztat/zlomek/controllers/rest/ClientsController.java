@@ -38,6 +38,12 @@ public class ClientsController {
         return new ClientDataResponse(clientRepository.findByToken(accessToken.getAccessToken()), accessToken.getAccessToken());
     }
 
+    @PostMapping(path = "/{id}")
+    public ClientDataResponse getClientData(@RequestBody AccessTokenModel accessToken, @PathVariable long id){
+        this.employeeRepository.findByToken(accessToken.getAccessToken());
+        return new ClientDataResponse(clientRepository.getClientById(id), accessToken.getAccessToken());
+    }
+
     @RequestMapping(method = RequestMethod.PUT)
     public AccessTokenModel updateClientData(@RequestBody ClientForm clientForm){
         Client client = clientRepository.findClientByUsername(clientForm.getEmail());
