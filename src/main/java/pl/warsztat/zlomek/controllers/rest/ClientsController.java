@@ -10,6 +10,7 @@ import pl.warsztat.zlomek.exceptions.ResourcesNotFoundException;
 import pl.warsztat.zlomek.model.AccessTokenModel;
 import pl.warsztat.zlomek.model.db.*;
 import pl.warsztat.zlomek.model.request.AddClientToCompanyRequest;
+import pl.warsztat.zlomek.model.request.BanClientModel;
 import pl.warsztat.zlomek.model.request.ClientForm;
 import pl.warsztat.zlomek.model.request.RemoveClientFromCompanyRequest;
 import pl.warsztat.zlomek.model.response.ClientDataResponse;
@@ -99,6 +100,15 @@ public class ClientsController {
         Client client = this.clientRepository.findByToken(accessTokenModel.getAccessToken());
         client.setStatus(ClientStatus.REMOVED);
         this.clientRepository.update(client);
+    }
+
+    @PostMapping(path = "ban")
+    public AccessTokenModel banClient(@RequestBody BanClientModel model){
+        this.employeeRepository.findByToken(model.getAccessToken());
+        Client client = this.clientRepository.findClientByUsername(model.getUsername());
+        client.setStatus(ClientStatus.BANNED);
+        this.clientRepository.update(client);
+        return new AccessTokenModel(model.getAccessToken());
     }
 
 }

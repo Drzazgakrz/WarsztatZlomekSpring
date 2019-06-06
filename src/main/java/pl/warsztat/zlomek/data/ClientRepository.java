@@ -19,7 +19,8 @@ public class ClientRepository extends AccountRepository<Client>{
                     "WHERE client.email = :username",Client.class);
             getClient.setParameter("username", username);
             Client client = getClient.getSingleResult();
-            if(new BCryptPasswordEncoder().matches(password, client.getPassword()))
+            if(new BCryptPasswordEncoder().matches(password, client.getPassword())
+                    && client.getStatus().equals(ClientStatus.ACTIVE))
                 return client;
         }catch (Exception e){
             e.printStackTrace();
@@ -88,7 +89,7 @@ public class ClientRepository extends AccountRepository<Client>{
     }
 
     public List<Client> getClientsByStatus(ClientStatus status){
-        TypedQuery<Client> query = em.createQuery("SELECT client FROM Client client WHERE status = :status", Client.class);
+        TypedQuery<Client> query = em.createQuery("SELECT client FROM Client client WHERE client.status = :status", Client.class);
         query.setParameter("status", status);
         return query.getResultList();
     }
