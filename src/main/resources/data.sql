@@ -41,6 +41,8 @@ TRUNCATE TABLE clients;
 insert into clients (created_at, email, first_name, last_logged_in, last_name, password, apartment_number, build_number,
                      city_name, phone_number, status, street_name, zip_code)
 values (NOW(), 'mail@mail.pl', 'Jan', NOW(), 'Kowalski', '$2a$10$vfgXB9jlN9AB74LaLW96ju6AfO0F0CUiAyOvmu7wZsyeLvU2n58l.',
+        '', '12', 'Miasto', '123456789', 0, 'Ulica', '12-123'),
+       (NOW(), 'mail@mail1.pl', 'Jan', NOW(), 'Kowalski', '$2a$10$vfgXB9jlN9AB74LaLW96ju6AfO0F0CUiAyOvmu7wZsyeLvU2n58l.',
         '', '12', 'Miasto', '123456789', 0, 'Ulica', '12-123');
 
 delete

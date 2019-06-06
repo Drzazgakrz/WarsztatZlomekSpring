@@ -15,6 +15,7 @@ import pl.warsztat.zlomek.model.response.CarResponse;
 import pl.warsztat.zlomek.model.response.ClientCarsResponse;
 import pl.warsztat.zlomek.service.CompanyService;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -125,6 +126,34 @@ public class CarsController {
                 this.carService.addOwnership(cho.getCar(), coowner, OwnershipStatus.COOWNER, cho.getRegistrationNumber());
         });
         this.carRepository.updateCar(cho.getCar());
+        return new AccessTokenModel(request.getAccessToken());
+    }
+
+    @PostMapping(path = "removeCoowner")
+    public AccessTokenModel removeCoowner(@RequestBody AddCoownerRequest request){
+        Client client = this.clientRepository.findByToken(request.getAccessToken());
+        CarsHasOwners cho = carService.getClientCar(client, request.getCarId());
+        if(cho == null)
+            throw new ResourcesNotFoundException("Samochód nie należy do tego klienta");
+
+        List<String> coownerEmail = Arrays.asList(request.getNewCoowners());
+        cho.getCar().getOwners().forEach(currentCho->{
+            Client current = currentCho.getOwner();
+            if(coownerEmail.contains(current.getEmail())){
+                currentCho.setStatus(OwnershipStatus.FORMER_OWNER);
+                currentCho.setEndOwnershipDate(LocalDate.now());
+                this.carsHasOwnersRepository.updateOwnership(currentCho);
+            }
+        });
+
+        Car car = cho.getCar();
+        List<CarsHasOwners> choList = car.getOwners().stream()
+                .filter(current-> current.getStatus().equals(OwnershipStatus.COOWNER)).collect(Collectors.toList());
+        if(choList.size() == 1){
+            cho.setStatus(OwnershipStatus.CURRENT_OWNER);
+            this.carsHasOwnersRepository.updateOwnership(cho);
+        }
+        this.carRepository.updateCar(car);
         return new AccessTokenModel(request.getAccessToken());
     }
 }
