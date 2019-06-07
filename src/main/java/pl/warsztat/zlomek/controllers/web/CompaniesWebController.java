@@ -29,7 +29,11 @@ public class CompaniesWebController {
 
     @GetMapping("details")
     public String getCompanyDetails(@RequestParam long companyId, Model model){
-        model.addAttribute("company",this.companiesRepository.getCompanyId(companyId));
+        Company company = null;
+        try{
+            company = this.companiesRepository.getCompanyId(companyId);
+        }catch (Exception e){}
+        model.addAttribute("company",company);
         return "company";
     }
 

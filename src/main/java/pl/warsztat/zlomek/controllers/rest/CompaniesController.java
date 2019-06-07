@@ -11,6 +11,8 @@ import pl.warsztat.zlomek.model.db.Company;
 import pl.warsztat.zlomek.model.db.Employee;
 import pl.warsztat.zlomek.model.db.EmployeeToken;
 import pl.warsztat.zlomek.model.request.AddCompanyRequest;
+import pl.warsztat.zlomek.model.response.CompanyDetailsResponse;
+import pl.warsztat.zlomek.model.response.CompanyResponse;
 
 @RestController
 @RequestMapping(path = "/rest/companies")
@@ -38,5 +40,11 @@ public class CompaniesController {
             companiesRepository.createCompany(company);
         }
         return new AccessTokenModel(companyRequest.getAccessToken());
+    }
+
+    @PostMapping(path = "{id}")
+    public CompanyResponse getCompanyById(@PathVariable long id, @RequestBody AccessTokenModel accessToken){
+        this.employeeRepository.findByToken(accessToken.getAccessToken());
+        return new CompanyDetailsResponse(this.companiesRepository.getCompanyId(id), accessToken.getAccessToken());
     }
 }

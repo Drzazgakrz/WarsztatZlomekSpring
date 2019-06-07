@@ -44,8 +44,8 @@ public class CompaniesRepository {
             query.setParameter("id", id);
             return query.getSingleResult();
         } catch (Exception e) {
+            throw new ResourcesNotFoundException("Brak firmy o podanym id");
         }
-        return null;
     }
 
     public Company getCompanyName(String name){
