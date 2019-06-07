@@ -44,6 +44,7 @@ public class EmployeeRepository extends AccountRepository<Employee>{
                 return token.getEmployee();
             }
         }catch (Exception e){
+            e.printStackTrace();
         }
         throw new ResourcesNotFoundException("Pracownik o podanym tokenie nie istnieje bądź token wygasł");
     }
