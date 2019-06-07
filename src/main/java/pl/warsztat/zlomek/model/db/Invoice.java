@@ -45,6 +45,14 @@ public class Invoice extends InvoicesModel implements Serializable {
         this.invoicePositions = new HashSet<>();
         this.visitFinished = buffer.getVisit().getVisitFinished();
     }
+
+    public Invoice(InvoiceBuffer invoiceBuffer) {
+        super(invoiceBuffer);
+        Visit visit = invoiceBuffer.getVisit();
+        this.visitFinished = visit.getVisitFinished();
+        this.invoicePositions = new HashSet<>();
+    }
+
     public void add(InvoicePosition position){
         this.invoicePositions.add(position);
     }

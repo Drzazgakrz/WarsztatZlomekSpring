@@ -23,7 +23,7 @@ public class InvoiceDetails {
     private BigDecimal grossValue;
     private CompanyResponse companyData;
 
-    public InvoiceDetails(Invoice invoice){
+    public InvoiceDetails(Invoice invoice) {
         this.methodOfPayment = invoice.getMethodOfPayment().toString();
         this.invoiceNumber = invoice.getInvoiceNumber();
         this.carServiceData = new CompanyResponse(invoice.getCarServiceData());
@@ -34,15 +34,16 @@ public class InvoiceDetails {
         this.netValue = invoice.getNetValue();
         this.grossValue = invoice.getGrossValue();
         this.companyData = new CompanyResponse(invoice.getCompanyData());
-        if(invoice.getCorectionInvoice() != null){
+        if (invoice.getCorectionInvoice() != null) {
             this.corectionInvoice = new InvoiceDetails(invoice.getCorectionInvoice());
         }
-        this.visitFinished = Date.from(invoice.getVisitFinished().atStartOfDay()
-                .atZone(ZoneId.systemDefault()).toInstant());
+        if (invoice.getVisitFinished() != null)
+            this.visitFinished = Date.from(invoice.getVisitFinished().atStartOfDay()
+                    .atZone(ZoneId.systemDefault()).toInstant());
         int i = 0;
         Set<InvoicePosition> positions = invoice.getInvoicePositions();
         this.invoicePositions = new InvoicePositionResponse[positions.size()];
-        for (InvoicePositionModel position: positions){
+        for (InvoicePositionModel position : positions) {
             this.invoicePositions[i] = new InvoicePositionResponse(position);
             i++;
         }
