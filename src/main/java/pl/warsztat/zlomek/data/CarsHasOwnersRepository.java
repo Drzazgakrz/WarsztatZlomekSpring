@@ -26,4 +26,8 @@ public class CarsHasOwnersRepository {
     }
 
     public void updateOwnership(CarsHasOwners carsHasOwners){em.merge(carsHasOwners);}
+
+    public void deleteOwnership(CarsHasOwners cho){
+        em.remove(cho);
+    }
 }

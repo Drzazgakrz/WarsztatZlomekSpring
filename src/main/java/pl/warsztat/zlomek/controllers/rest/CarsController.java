@@ -4,13 +4,12 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.warsztat.zlomek.data.*;
-import pl.warsztat.zlomek.model.request.AddCarToCompanyModel;
-import pl.warsztat.zlomek.model.request.AddCoownerRequest;
+import pl.warsztat.zlomek.model.db.Car;
+import pl.warsztat.zlomek.model.request.*;
 import pl.warsztat.zlomek.service.CarService;
 import pl.warsztat.zlomek.exceptions.ResourcesNotFoundException;
 import pl.warsztat.zlomek.model.AccessTokenModel;
 import pl.warsztat.zlomek.model.db.*;
-import pl.warsztat.zlomek.model.request.CarData;
 import pl.warsztat.zlomek.model.response.CarResponse;
 import pl.warsztat.zlomek.model.response.ClientCarsResponse;
 import pl.warsztat.zlomek.service.CompanyService;
@@ -34,13 +33,14 @@ public class CarsController {
     private CompaniesRepository companiesRepository;
     private CompaniesHasCarsRepository companiesHasCarsRepository;
     private CompanyService companyService;
+    private EmployeeRepository employeeRepository;
     private Logger log;
 
     @Autowired
     public CarsController(CarBrandRepository carBrandRepository, CarRepository carRepository, CarService carService,
                           CarsHasOwnersRepository carsHasOwnersRepository, ClientRepository clientRepository,
                           CompaniesRepository companiesRepository, CompaniesHasCarsRepository companiesHasCarsRepository,
-                          CompanyService companyService, Logger log){
+                          CompanyService companyService, Logger log, EmployeeRepository employeeRepository){
         this.carRepository = carRepository;
         this.carBrandRepository = carBrandRepository;
         this.carsHasOwnersRepository = carsHasOwnersRepository;
@@ -49,6 +49,7 @@ public class CarsController {
         this.companiesRepository = companiesRepository;
         this.companiesHasCarsRepository = companiesHasCarsRepository;
         this.companyService = companyService;
+        this.employeeRepository = employeeRepository;
         this.log = log;
     }
 
@@ -121,7 +122,7 @@ public class CarsController {
             throw new ResourcesNotFoundException("Samochód nie należy do tego klienta");
         cho.setStatus(OwnershipStatus.COOWNER);
         this.carsHasOwnersRepository.updateOwnership(cho);
-        Arrays.stream(request.getNewCoowners()).forEach(username->{
+        request.getNewCoowners().forEach(username->{
                 Client coowner = this.clientRepository.findClientByUsername(username);
                 this.carService.addOwnership(cho.getCar(), coowner, OwnershipStatus.COOWNER, cho.getRegistrationNumber());
         });
@@ -132,19 +133,9 @@ public class CarsController {
     @PostMapping(path = "removeCoowner")
     public AccessTokenModel removeCoowner(@RequestBody AddCoownerRequest request){
         Client client = this.clientRepository.findByToken(request.getAccessToken());
-        CarsHasOwners cho = carService.getClientCar(client, request.getCarId());
-        if(cho == null)
-            throw new ResourcesNotFoundException("Samochód nie należy do tego klienta");
+        CarsHasOwners cho = this.carService.getClientCar(client, request.getCarId());
 
-        List<String> coownerEmail = Arrays.asList(request.getNewCoowners());
-        cho.getCar().getOwners().forEach(currentCho->{
-            Client current = currentCho.getOwner();
-            if(coownerEmail.contains(current.getEmail())){
-                currentCho.setStatus(OwnershipStatus.FORMER_OWNER);
-                currentCho.setEndOwnershipDate(LocalDate.now());
-                this.carsHasOwnersRepository.updateOwnership(currentCho);
-            }
-        });
+        this.carService.setCoownersStatus(request.getNewCoowners(), cho);
 
         Car car = cho.getCar();
         List<CarsHasOwners> choList = car.getOwners().stream()
@@ -154,6 +145,13 @@ public class CarsController {
             this.carsHasOwnersRepository.updateOwnership(cho);
         }
         this.carRepository.updateCar(car);
+        return new AccessTokenModel(request.getAccessToken());
+    }
+
+    @PostMapping(path = "verifyOwnership")
+    public AccessTokenModel verifOwnership(@RequestBody VerifyOwnershipRequest request){
+        this.employeeRepository.findByToken(request.getAccessToken());
+        this.carService.verifyOwnership(request);
         return new AccessTokenModel(request.getAccessToken());
     }
 }
