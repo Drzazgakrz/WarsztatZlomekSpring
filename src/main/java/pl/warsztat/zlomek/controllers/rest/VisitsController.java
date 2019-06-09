@@ -75,6 +75,31 @@ public class VisitsController {
         return new AccessTokenModel(visitModel.getAccessToken());
     }
 
+    @RequestMapping(method = RequestMethod.POST, path = "createEmpty")
+    @ResponseStatus(HttpStatus.CREATED)
+    public AccessTokenModel createEmptyVisit(@RequestBody AddVisitModel visitModel){
+        Employee employee = this.employeeRepository.findByToken(visitModel.getAccessToken());
+        Client client = this.clientRepository.getClientById(1);
+        Car car = this.carRepository.getCarById(1);
+        Overview overview = null;
+        if(visitModel.isOverview()) {
+            overview = new Overview(visitModel.getVisitDate(), car);
+            this.overviewRepository.saveOverview(overview);
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.WEEK_OF_YEAR, 3);
+        if(visitModel.getVisitDate().before(new Date()) || visitModel.getVisitDate().after(calendar.getTime()))
+            throw new FieldsNotCorrect(new String[]{"visitDate"}, visitModel.getAccessToken());
+        Visit visit = new Visit(visitModel.getVisitDate(), car, client, overview);
+        visit.setEmployee(employee);
+        visit.setStatus(VisitStatus.ACCEPTED);
+        employee.addVisit(visit);
+        this.visitRepository.saveVisit(visit);
+        car.addVisit(visit);
+        this.carRepository.updateCar(car);
+        return new AccessTokenModel(visitModel.getAccessToken());
+    }
+
     @RequestMapping(method = RequestMethod.POST, path = "/{id}")
     public VisitResponse getVisitData(@PathVariable long id, @RequestBody AccessTokenModel accessToken){
         Client client = this.clientRepository.findByToken(accessToken.getAccessToken());

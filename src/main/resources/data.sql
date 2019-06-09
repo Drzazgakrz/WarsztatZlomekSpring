@@ -4,7 +4,8 @@ TRUNCATE TABLE car_brand;
 
 --biedaków nie obsługujemy xD
 insert into car_brand(brand_name)
-values ('Bugatti'),
+values ('Default'),
+       ('Bugatti'),
        ('Ferrari'),
        ('Maserati'),
        ('Maybach');
@@ -31,8 +32,9 @@ from cars;
 TRUNCATE TABLE cars;
 
 insert into cars (model, prod_year, vin_number, brand_id) VALUES
-('Veyron', 2003, '12345678901112131',1),
-('FXX', 2006, '11345678901112131',2);
+('Default', 2000, '11345678901112132',1),
+('Veyron', 2003, '12345678901112131',2),
+('FXX', 2006, '11345678901112131',3);
 
 delete
 from clients;
@@ -40,11 +42,10 @@ TRUNCATE TABLE clients;
 
 insert into clients (created_at, email, first_name, last_logged_in, last_name, password, apartment_number, build_number,
                      city_name, phone_number, status, street_name, zip_code)
-values (NOW(), 'mail@mail.pl', 'Jan', NOW(), 'Kowalski', '$2a$10$vfgXB9jlN9AB74LaLW96ju6AfO0F0CUiAyOvmu7wZsyeLvU2n58l.',
-        '', '12', 'Miasto', '123456789', 0, 'Ulica', '12-123'),
-       (NOW(), 'mail@mail1.pl', 'Jan', NOW(), 'Kowalski', '$2a$10$vfgXB9jlN9AB74LaLW96ju6AfO0F0CUiAyOvmu7wZsyeLvU2n58l.',
+values (NOW(), 'car@warsztatZlomek.pl', 'Default', NOW(), 'Default', '$2a$10$vfgXB9jlN9AB74LaLW96ju6AfO0F0CUiAyOvmu7wZsyeLvU2n58l.',
+        '', '11', 'Default', '123456789', 0, 'Default', '11-111'),
+        (NOW(), 'mail@mail.pl', 'Jan', NOW(), 'Kowalski', '$2a$10$vfgXB9jlN9AB74LaLW96ju6AfO0F0CUiAyOvmu7wZsyeLvU2n58l.',
         '', '12', 'Miasto', '123456789', 0, 'Ulica', '12-123');
-
 delete
 from cars_has_owners;
 TRUNCATE TABLE cars_has_owners;
