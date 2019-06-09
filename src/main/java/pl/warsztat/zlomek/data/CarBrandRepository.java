@@ -29,18 +29,17 @@ public class CarBrandRepository {
     }
 
 
-    public List<CarBrand> getCarBrands(){
+    public List<CarBrand> getCarBrands() {
         try {
             TypedQuery<CarBrand> query = em.createQuery("SELECT carBrand FROM CarBrand carBrand",
                     CarBrand.class);
             return query.getResultList();
-        }catch (Exception e){
+        } catch (Exception e) {
             return new ArrayList<>();
         }
-  }
+    }
 
     public void save(CarBrand carBrand){
         em.merge(carBrand);
-
     }
 }
