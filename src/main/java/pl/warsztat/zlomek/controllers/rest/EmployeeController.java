@@ -28,6 +28,7 @@ public class EmployeeController {
 
     @RequestMapping(method = RequestMethod.POST)
     public AccessTokenModel signIn(@RequestBody SignInRequest signInRequest){
+        System.out.println(signInRequest.getEmail()+" "+signInRequest.getPassword());
         return new AccessTokenModel(authorizationService.signIn(signInRequest));
     }
 
@@ -37,5 +38,10 @@ public class EmployeeController {
         ArrayList<VisitResponse> visits = new ArrayList<>();
         employee.getVisits().forEach(visit -> visits.add(new VisitResponse(visit)));
         return new VisitsList(accessToken.getAccessToken(), visits);
+    }
+
+    @PostMapping("signOut")
+    public void signOut(AccessTokenModel accessToken){
+        this.employeeRepository.signOut(accessToken.getAccessToken());
     }
 }

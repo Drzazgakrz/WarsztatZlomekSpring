@@ -16,9 +16,9 @@ public class CarResponse extends CarData {
     public CarResponse(Car car, String accessToken, Client client){
         super(car, accessToken, client);
         this.carId = car.getId();
-        this.carBrandName = car.getBrand().getBrandName();
+        this.brandName = car.getBrand().getBrandName();
         this.model = car.getModel();
-        this.vinNumber = car.getVin();
+        this.vin = car.getVin();
         List<CarsHasOwners> carsHasOwners = car.getOwners().stream().filter((cho)->
                 cho.getStatus().equals(OwnershipStatus.CURRENT_OWNER)||cho.getStatus().equals(OwnershipStatus.COOWNER))
                 .collect(Collectors.toList());

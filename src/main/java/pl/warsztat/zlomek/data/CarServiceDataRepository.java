@@ -28,4 +28,8 @@ public class CarServiceDataRepository {
                 "GROUP BY data.id HAVING data.id=MAX(id)", CarServiceData.class);
         return query.getSingleResult();
     }
+
+    public void save(CarServiceData carServiceData){
+        this.em.merge(carServiceData);
+    }
 }

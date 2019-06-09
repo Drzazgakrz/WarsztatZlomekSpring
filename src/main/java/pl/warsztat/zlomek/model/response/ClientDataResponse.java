@@ -13,7 +13,7 @@ public class ClientDataResponse extends ClientForm {
     public ClientDataResponse(Client client, String accessToken){
         this.id = client.getClientId();
         this.aptNum = client.getAptNum();
-        this.buildNum = client.getAptNum();
+        this.buildNum = client.getBuildNum();
         this.cityName = client.getCityName();
         this.email = client.getEmail();
         this.firstName = client.getFirstName();

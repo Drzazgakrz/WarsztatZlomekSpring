@@ -10,10 +10,16 @@ import pl.warsztat.zlomek.exceptions.ResourcesNotFoundException;
 import pl.warsztat.zlomek.model.AccessTokenModel;
 import pl.warsztat.zlomek.model.db.*;
 import pl.warsztat.zlomek.model.request.AddClientToCompanyRequest;
+import pl.warsztat.zlomek.model.request.BanClientModel;
 import pl.warsztat.zlomek.model.request.ClientForm;
 import pl.warsztat.zlomek.model.request.RemoveClientFromCompanyRequest;
 import pl.warsztat.zlomek.model.response.ClientDataResponse;
 import pl.warsztat.zlomek.data.ClientRepository;
+import pl.warsztat.zlomek.model.response.CompanyListResponse;
+import pl.warsztat.zlomek.model.response.CompanyResponse;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/rest/client")
@@ -36,6 +42,12 @@ public class ClientsController {
     @RequestMapping(method = RequestMethod.POST)
     public ClientDataResponse getClientByToken(@RequestBody AccessTokenModel accessToken){
         return new ClientDataResponse(clientRepository.findByToken(accessToken.getAccessToken()), accessToken.getAccessToken());
+    }
+
+    @PostMapping(path = "/{username}")
+    public ClientDataResponse getClientData(@RequestBody AccessTokenModel accessToken, @PathVariable String username){
+        this.employeeRepository.findByToken(accessToken.getAccessToken());
+        return new ClientDataResponse(clientRepository.findClientByUsername(username), accessToken.getAccessToken());
     }
 
     @RequestMapping(method = RequestMethod.PUT)
@@ -93,6 +105,24 @@ public class ClientsController {
         Client client = this.clientRepository.findByToken(accessTokenModel.getAccessToken());
         client.setStatus(ClientStatus.REMOVED);
         this.clientRepository.update(client);
+    }
+
+    @PostMapping(path = "ban")
+    public AccessTokenModel banClient(@RequestBody BanClientModel model){
+        this.employeeRepository.findByToken(model.getAccessToken());
+        Client client = this.clientRepository.findClientByUsername(model.getUsername());
+        client.setStatus(ClientStatus.BANNED);
+        this.clientRepository.update(client);
+        return new AccessTokenModel(model.getAccessToken());
+    }
+
+    @PostMapping(path = "companies")
+    public CompanyListResponse getClientsCompanies(@RequestBody AccessTokenModel accessToken){
+        Client client = this.clientRepository.findByToken(accessToken.getAccessToken());
+        List<CompanyResponse> companiesList = new ArrayList<>();
+        client.getCompanies().stream().filter(company-> company.getStatus().equals(EmployeeStatus.CURRENT_EMPLOYER))
+                .forEach(company-> companiesList.add(new CompanyResponse(company.getCompany())));
+        return new CompanyListResponse(accessToken.getAccessToken(), companiesList);
     }
 
 }

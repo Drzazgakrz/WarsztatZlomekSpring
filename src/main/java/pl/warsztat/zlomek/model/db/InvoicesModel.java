@@ -58,4 +58,13 @@ public class InvoicesModel {
         this.netValue = new BigDecimal(0);
         this.grossValue = new BigDecimal(0);
     }
+
+    public InvoicesModel(InvoicesModel invoicesModel) {
+        this.discount = invoicesModel.getDiscount();
+        this.methodOfPayment = invoicesModel.getMethodOfPayment();
+        this.carServiceData = invoicesModel.getCarServiceData();
+        this.dayOfIssue = invoicesModel.getDayOfIssue();
+        this.paymentDate = invoicesModel.getPaymentDate();
+        this.companyData = invoicesModel.getCompanyData();
+    }
 }

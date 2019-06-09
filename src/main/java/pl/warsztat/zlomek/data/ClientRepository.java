@@ -2,6 +2,7 @@ package pl.warsztat.zlomek.data;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
+import pl.warsztat.zlomek.exceptions.CouldNotAuthorizeException;
 import pl.warsztat.zlomek.exceptions.ResourcesNotFoundException;
 import pl.warsztat.zlomek.model.db.*;
 
@@ -19,12 +20,13 @@ public class ClientRepository extends AccountRepository<Client>{
                     "WHERE client.email = :username",Client.class);
             getClient.setParameter("username", username);
             Client client = getClient.getSingleResult();
-            if(new BCryptPasswordEncoder().matches(password, client.getPassword()))
+            if(new BCryptPasswordEncoder().matches(password, client.getPassword())
+                    && client.getStatus().equals(ClientStatus.ACTIVE))
                 return client;
         }catch (Exception e){
             e.printStackTrace();
         }
-        throw new ResourcesNotFoundException("Brak klienta o podanych danych");
+        throw new CouldNotAuthorizeException("Brak klienta o podanych danych");
     }
 
     public Client findClientByUsername(String username){
@@ -53,7 +55,7 @@ public class ClientRepository extends AccountRepository<Client>{
             }
         }catch (Exception e){
         }
-        throw new ResourcesNotFoundException("Klient o podanym tokenie nie istnieje bądź token wygasł");
+        throw new CouldNotAuthorizeException("Klient o podanym tokenie nie istnieje bądź token wygasł");
     }
 
     @Override
@@ -88,7 +90,7 @@ public class ClientRepository extends AccountRepository<Client>{
     }
 
     public List<Client> getClientsByStatus(ClientStatus status){
-        TypedQuery<Client> query = em.createQuery("SELECT client FROM Client client WHERE status = :status", Client.class);
+        TypedQuery<Client> query = em.createQuery("SELECT client FROM Client client WHERE client.status = :status", Client.class);
         query.setParameter("status", status);
         return query.getResultList();
     }

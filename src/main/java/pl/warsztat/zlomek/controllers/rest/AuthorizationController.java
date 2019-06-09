@@ -21,8 +21,9 @@ public class AuthorizationController {
     private EmployeeRepository employeeRepository;
 
     private Logger log;
+
     @Autowired
-    public AuthorizationController(ClientRepository clientRepository, Logger log, EmployeeRepository employeeRepository){
+    public AuthorizationController(ClientRepository clientRepository, Logger log, EmployeeRepository employeeRepository) {
         this.clientRepository = clientRepository;
         this.log = log;
         this.employeeRepository = employeeRepository;
@@ -30,29 +31,33 @@ public class AuthorizationController {
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public Client registerClient(@RequestBody ClientForm model){
+    public Client registerClient(@RequestBody ClientForm model) {
+        try {
             clientRepository.findClientByUsername(model.getEmail());
-            if(!model.getConfirmPassword().equals(model.getPassword())){
+        } catch (Exception e) {
+            if (!model.getConfirmPassword().equals(model.getPassword())) {
                 throw new FieldsNotCorrect(new String[]{"Hasła się nie zgadzają"});
             }
             Client client = new Client(model);
             clientRepository.insert(client);
             return client;
+        }
+        throw new ResourcesNotFoundException("Klient o podanym adresie email istnieje");
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/signIn")
-    public AccessTokenModel signIn(@RequestBody SignInRequest request){
+    public AccessTokenModel signIn(@RequestBody SignInRequest request) {
         Client client = clientRepository.signIn(request.getEmail(), request.getPassword());
         return new AccessTokenModel(clientRepository.generateToken(client));
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "checkToken")
-    public void checkToken(@RequestBody AccessTokenModel model){
+    public void checkToken(@RequestBody AccessTokenModel model) {
         this.employeeRepository.findByToken(model.getAccessToken());
     }
 
     @PostMapping(path = "logout")
-    public void logout(@RequestBody AccessTokenModel model){
+    public void logout(@RequestBody AccessTokenModel model) {
         this.clientRepository.signOut(model.getAccessToken());
     }
 }

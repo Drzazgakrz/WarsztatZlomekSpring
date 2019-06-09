@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import pl.warsztat.zlomek.data.*;
 import pl.warsztat.zlomek.exceptions.FieldsNotCorrect;
+import pl.warsztat.zlomek.exceptions.ResourcesNotFoundException;
 import pl.warsztat.zlomek.model.db.*;
 import pl.warsztat.zlomek.model.request.AcceptVisitModel;
 import pl.warsztat.zlomek.model.request.AddElementToVisitModel;
@@ -105,6 +106,12 @@ public class VisitsController {
         Visit visit = client.getVisits().stream().filter((currentVisit)-> currentVisit.getId() == id).findFirst().get();
         return new VisitResponse(visit, client);
     }
+    @RequestMapping(method = RequestMethod.POST, path = "employeeVisit/{id}")
+    public VisitResponse getVisitDataEmployee(@PathVariable long id, @RequestBody AccessTokenModel accessToken){
+        Employee employee = this.employeeRepository.findByToken(accessToken.getAccessToken());
+        Visit visit = employee.getVisits().stream().filter((currentVisit)-> currentVisit.getId() == id).findFirst().get();
+        return new VisitResponse(visit);
+    }
 
     @RequestMapping(method = RequestMethod.POST, path = "/previous")
     public VisitsList getPreviousVisits(@RequestBody AccessTokenModel accessToken){
@@ -126,7 +133,7 @@ public class VisitsController {
         return new VisitsList(accessToken.getAccessToken(), visits);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, path = "/acceptedVisit")
+    @RequestMapping(method = RequestMethod.POST, path = "/acceptedVisit")
     public AccessTokenModel acceptVisit(@RequestBody AcceptVisitModel acceptVisitModel){
         Employee employee = this.employeeRepository.findByToken(acceptVisitModel.getAccessToken());
         Visit visit = this.visitRepository.getVisitById(acceptVisitModel.getVisitId(), VisitStatus.NEW);
@@ -162,5 +169,24 @@ public class VisitsController {
         ArrayList<VisitResponse> visitResponses = new ArrayList<>();
         visits.forEach(visit -> visitResponses.add(new VisitResponse(visit)));
         return new VisitsList(accessToken.getAccessToken(), visitResponses);
+    }
+
+    @PostMapping(path = "remove/{id}")
+    public AccessTokenModel removeVisit(@RequestBody AccessTokenModel accessToken, @PathVariable long id){
+        Client client = clientRepository.findByToken(accessToken.getAccessToken());
+        Visit visit = client.getVisits().stream().filter(current -> current.getId() == id).findFirst().or(() -> {
+            throw new ResourcesNotFoundException("Klient nie ma takiej wizyty");
+        }).get();
+        if(!visit.getStatus().equals(VisitStatus.NEW))
+            throw new ResourcesNotFoundException("Wizyta została zaakceptowana");
+        this.visitRepository.remove(visit);
+        return accessToken;
+    }
+
+    @PostMapping(path = "all")
+    public VisitsList getAllLists(@RequestBody AccessTokenModel accessToken){
+        Client client = this.clientRepository.findByToken(accessToken.getAccessToken());
+        List<VisitResponse> visits = this.visitService.getAllClientsVisits(client);
+        return new VisitsList(accessToken.getAccessToken(), visits);
     }
 }

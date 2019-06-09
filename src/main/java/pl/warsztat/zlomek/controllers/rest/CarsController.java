@@ -8,15 +8,18 @@ import pl.warsztat.zlomek.model.request.AddCarToCompanyModel;
 import pl.warsztat.zlomek.model.request.AddCoownerRequest;
 import pl.warsztat.zlomek.model.response.CarBrandResponse;
 import pl.warsztat.zlomek.model.response.CarBrandsList;
+import pl.warsztat.zlomek.model.db.Car;
+import pl.warsztat.zlomek.model.request.*;
 import pl.warsztat.zlomek.service.CarService;
 import pl.warsztat.zlomek.exceptions.ResourcesNotFoundException;
 import pl.warsztat.zlomek.model.AccessTokenModel;
 import pl.warsztat.zlomek.model.db.*;
-import pl.warsztat.zlomek.model.request.CarData;
 import pl.warsztat.zlomek.model.response.CarResponse;
 import pl.warsztat.zlomek.model.response.ClientCarsResponse;
 import pl.warsztat.zlomek.service.CompanyService;
 
+import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,13 +38,14 @@ public class CarsController {
     private CompaniesRepository companiesRepository;
     private CompaniesHasCarsRepository companiesHasCarsRepository;
     private CompanyService companyService;
+    private EmployeeRepository employeeRepository;
     private Logger log;
 
     @Autowired
     public CarsController(CarBrandRepository carBrandRepository, CarRepository carRepository, CarService carService,
                           CarsHasOwnersRepository carsHasOwnersRepository, ClientRepository clientRepository,
                           CompaniesRepository companiesRepository, CompaniesHasCarsRepository companiesHasCarsRepository,
-                          CompanyService companyService, Logger log){
+                          CompanyService companyService, Logger log, EmployeeRepository employeeRepository){
         this.carRepository = carRepository;
         this.carBrandRepository = carBrandRepository;
         this.carsHasOwnersRepository = carsHasOwnersRepository;
@@ -50,18 +54,19 @@ public class CarsController {
         this.companiesRepository = companiesRepository;
         this.companiesHasCarsRepository = companiesHasCarsRepository;
         this.companyService = companyService;
+        this.employeeRepository = employeeRepository;
         this.log = log;
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public CarResponse addCar(@RequestBody CarData carData){
-        CarBrand carBrand = carBrandRepository.getCarBrandByName(carData.getCarBrandName());
+        CarBrand carBrand = carBrandRepository.getCarBrandByName(carData.getBrandName());
         Car car;
         Client client = clientRepository.findByToken(carData.getAccessToken());
         try {
-            car = carRepository.getCarByVin(carData.getVinNumber());
+            car = carRepository.getCarByVin(carData.getVin());
         }catch (ResourcesNotFoundException e){
-            car = new Car(carData.getVinNumber(), carData.getModel(), carData.getProdYear(), carBrand);
+            car = new Car(carData.getVin(), carData.getModel(), carData.getProductionYear(), carBrand);
             carRepository.persistCar(car);
         }
         List<CarsHasOwners> currentOwners = car.getOwners().stream()
@@ -131,11 +136,42 @@ public class CarsController {
             throw new ResourcesNotFoundException("Samochód nie należy do tego klienta");
         cho.setStatus(OwnershipStatus.COOWNER);
         this.carsHasOwnersRepository.updateOwnership(cho);
-        Arrays.stream(request.getNewCoowners()).forEach(username->{
-                Client coowner = this.clientRepository.findClientByUsername(username);
+                Client coowner = this.clientRepository.findClientByUsername(request.getCoownerUsername());
                 this.carService.addOwnership(cho.getCar(), coowner, OwnershipStatus.COOWNER, cho.getRegistrationNumber());
-        });
         this.carRepository.updateCar(cho.getCar());
         return new AccessTokenModel(request.getAccessToken());
+    }
+
+    @PostMapping(path = "removeCoowner")
+    public AccessTokenModel removeCoowner(@RequestBody AddCoownerRequest request){
+        Client client = this.clientRepository.findByToken(request.getAccessToken());
+        CarsHasOwners cho = this.carService.getClientCar(client, request.getCarId());
+
+        this.carService.setCoownersStatus(request.getCoownerUsername(), request.getCarId());
+
+        Car car = cho.getCar();
+        List<CarsHasOwners> choList = car.getOwners().stream()
+                .filter(current-> current.getStatus().equals(OwnershipStatus.COOWNER)).collect(Collectors.toList());
+        if(choList.size() == 1){
+            cho.setStatus(OwnershipStatus.CURRENT_OWNER);
+            this.carsHasOwnersRepository.updateOwnership(cho);
+        }
+        this.carRepository.updateCar(car);
+        return new AccessTokenModel(request.getAccessToken());
+    }
+
+    @PostMapping(path = "verifyOwnership")
+    public AccessTokenModel verifyOwnership(@RequestBody VerifyOwnershipRequest request){
+        this.employeeRepository.findByToken(request.getAccessToken());
+        this.carService.verifyOwnership(request);
+        return new AccessTokenModel(request.getAccessToken());
+    }
+
+    @PostMapping(path = "carBrand")
+    public AccessTokenModel addCarBrand(@RequestBody AddCarBrandModel carBrandModel){
+        this.employeeRepository.findByToken(carBrandModel.getAccessToken());
+        CarBrand carBrand = new CarBrand(carBrandModel.getBrandName());
+        this.carBrandRepository.save(carBrand);
+        return new AccessTokenModel(carBrandModel.getAccessToken());
     }
 }
