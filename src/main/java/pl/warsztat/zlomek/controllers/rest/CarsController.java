@@ -123,8 +123,8 @@ public class CarsController {
         Company company = companyService.getClientCompany(client, addCarToCompanyModel.getCompanyId());
         CompaniesHasCars chc = company.addCar(car);
         car.addCompany(chc);
-        this.carRepository.updateCar(car);
         this.companiesHasCarsRepository.saveCompaniesCarsRelationship(chc);
+        this.carRepository.updateCar(car);
         return new AccessTokenModel(addCarToCompanyModel.getAccessToken());
     }
 
