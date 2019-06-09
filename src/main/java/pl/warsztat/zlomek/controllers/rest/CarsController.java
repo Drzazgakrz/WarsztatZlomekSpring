@@ -174,4 +174,15 @@ public class CarsController {
         this.carBrandRepository.save(carBrand);
         return new AccessTokenModel(carBrandModel.getAccessToken());
     }
+
+    @PutMapping(path = "removeCarFromCompany")
+    public AccessTokenModel removeCarFromCompany(@RequestBody AddCarToCompanyModel addCarToCompanyModel){
+        CompaniesHasCars chc = companiesHasCarsRepository.getCompanyCarRelationship(addCarToCompanyModel.getCompanyId(), addCarToCompanyModel.getCarId());
+        chc.setStatus(CompanyOwnershipStatus.FORMER_OWNER_COMPANY);
+        companiesHasCarsRepository.saveCompaniesCarsRelationship(chc);
+
+        return new AccessTokenModel(addCarToCompanyModel.getAccessToken());
+    }
+
+
 }
