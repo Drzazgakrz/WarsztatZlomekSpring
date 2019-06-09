@@ -87,7 +87,7 @@ public class InvoiceService {
         return invoice;
     }
 
-    private void addPositions(Invoice invoice, Visit visit){
+    public void addPositions(Invoice invoice, Visit visit){
         visit.getParts().forEach(part->{
             CarPart carPart = part.getPart();
             String partName = carPart.getName()+", "+carPart.getProducer();

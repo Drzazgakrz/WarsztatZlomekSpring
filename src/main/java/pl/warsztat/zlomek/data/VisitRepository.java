@@ -2,6 +2,7 @@ package pl.warsztat.zlomek.data;
 
 import org.springframework.stereotype.Repository;
 import pl.warsztat.zlomek.exceptions.ResourcesNotFoundException;
+import pl.warsztat.zlomek.model.db.Client;
 import pl.warsztat.zlomek.model.db.Visit;
 import pl.warsztat.zlomek.model.db.VisitStatus;
 
@@ -66,6 +67,21 @@ public class VisitRepository {
                     Visit.class);
             return query.getResultList();
         }catch (Exception e){
+            return new ArrayList<>();
+        }
+    }
+
+    public void remove(Visit visit){
+        this.em.remove(visit);
+    }
+
+    public List<Visit> getAllClientsVisits(Client client){
+        try {
+            TypedQuery<Visit> query = em.createQuery("SELECT visit FROM Visit visit WHERE visit.client = :client",
+                    Visit.class);
+            query.setParameter("client", client);
+            return query.getResultList();
+        }catch (NoResultException e){
             return new ArrayList<>();
         }
     }

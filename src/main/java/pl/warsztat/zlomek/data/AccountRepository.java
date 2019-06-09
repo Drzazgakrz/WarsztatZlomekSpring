@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Repository;
+import pl.warsztat.zlomek.exceptions.CouldNotAuthorizeException;
 import pl.warsztat.zlomek.exceptions.ResourcesExistException;
 import pl.warsztat.zlomek.exceptions.ResourcesNotFoundException;
 import pl.warsztat.zlomek.model.db.Account;
@@ -48,7 +49,7 @@ public  abstract class AccountRepository <Type extends Account>{
                         .withIssuer(user.getEmail() + (new Date()).getTime())
                         .sign(algorithm);
             }while (findByToken(token)!=null);
-        }catch (ResourcesNotFoundException e){}
+        }catch (CouldNotAuthorizeException e){}
         return token;
     }
 }

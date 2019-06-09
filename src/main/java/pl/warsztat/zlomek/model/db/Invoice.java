@@ -13,11 +13,11 @@ import java.util.Set;
 @Table(name = "invoices")
 public class Invoice extends InvoicesModel implements Serializable {
     @Id
-    @GeneratedValue(strategy =GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     //@NotNull
-    @OneToMany (mappedBy = "invoice")
+    @OneToMany(mappedBy = "invoice")
     private Set<InvoicePosition> invoicePositions;
 
     @OneToOne
@@ -27,8 +27,8 @@ public class Invoice extends InvoicesModel implements Serializable {
     private LocalDate visitFinished;
 
 
-    public Invoice(int discount, MethodOfPayment methodOfPayment,CompanyData companyData, CarServiceData carServiceData,
-                   LocalDate paymentDate, String invoiceNumber){
+    public Invoice(int discount, MethodOfPayment methodOfPayment, CompanyData companyData, CarServiceData carServiceData,
+                   LocalDate paymentDate, String invoiceNumber) {
         super(discount, methodOfPayment, carServiceData, LocalDate.now(), paymentDate, companyData, invoiceNumber);
         this.corectionInvoice = null;
         this.carServiceData = carServiceData;
@@ -37,7 +37,7 @@ public class Invoice extends InvoicesModel implements Serializable {
         this.invoiceNumber = invoiceNumber;
     }
 
-    public Invoice(InvoiceBuffer buffer, CarServiceData data){
+    public Invoice(InvoiceBuffer buffer, CarServiceData data) {
         super(buffer.getDiscount(), buffer.getMethodOfPayment(), data, LocalDate.now(), buffer.getPaymentDate(),
                 buffer.getCompanyData(), buffer.invoiceNumber);
         this.netValue = buffer.getNetValue();
@@ -45,7 +45,15 @@ public class Invoice extends InvoicesModel implements Serializable {
         this.invoicePositions = new HashSet<>();
         this.visitFinished = buffer.getVisit().getVisitFinished();
     }
-    public void add(InvoicePosition position){
+
+    public Invoice(InvoiceBuffer invoiceBuffer) {
+        super(invoiceBuffer);
+        Visit visit = invoiceBuffer.getVisit();
+        this.visitFinished = visit.getVisitFinished();
+        this.invoicePositions = new HashSet<>();
+    }
+
+    public void add(InvoicePosition position) {
         this.invoicePositions.add(position);
     }
 
