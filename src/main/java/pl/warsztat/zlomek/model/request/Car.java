@@ -14,27 +14,30 @@ import java.util.stream.Collectors;
 @Setter
 @NoArgsConstructor
 public class Car {
-    protected String carBrandName;
+    protected long id;
+    protected String brandName;
     protected String model;
-    protected int prodYear;
-    protected String vinNumber;
+    protected int productionYear;
+    protected String vin;
     protected String registrationNumber;
 
     public Car(pl.warsztat.zlomek.model.db.Car car, Client client){
-        this.carBrandName = car.getBrand().getBrandName();
+        this.id = car.getId();
+        this.brandName = car.getBrand().getBrandName();
         this.model = car.getModel();
-        this.vinNumber = car.getVin();
+        this.vin = car.getVin();
         List<CarsHasOwners> carsHasOwners = car.getOwners().stream().filter((cho)->
                 cho.getOwner().equals(client)).collect(Collectors.toList());
         this.registrationNumber = carsHasOwners.get(0).getRegistrationNumber();
-        this.prodYear = car.getProdYear();
+        this.productionYear = car.getProdYear();
     }
 
     public Car(pl.warsztat.zlomek.model.db.Car car){
-        this.carBrandName = car.getBrand().getBrandName();
+        this.id = car.getId();
+        this.brandName = car.getBrand().getBrandName();
         this.model = car.getModel();
-        this.vinNumber = car.getVin();
+        this.vin = car.getVin();
         this.registrationNumber = null;
-        this.prodYear = car.getProdYear();
+        this.productionYear = car.getProdYear();
     }
 }

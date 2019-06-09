@@ -17,12 +17,16 @@ public class VisitResponse {
     private String visitStatus;
     private List<ClientDataResponse> verifiedOwners;
     private List<ClientDataResponse> notVerifiedOwners;
+    private List<CarPart> parts;
+    private List<Service> services;
 
     public VisitResponse(Visit visit, Client client){
         this.id = visit.getId();
         this.car = new pl.warsztat.zlomek.model.request.Car(visit.getCar(), client);
         this.visitDate = Date.from(visit.getVisitDate().atZone(ZoneId.systemDefault()).toInstant());
         this.visitStatus = visit.getStatus().toString();
+        visit.getParts().forEach(part->parts.add(part.getPart()));
+        visit.getServices().forEach(service->services.add(service.getService()));
     }
 
     private void addVerifiedOwners(Car car){

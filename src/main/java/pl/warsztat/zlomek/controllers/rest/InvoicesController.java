@@ -75,6 +75,17 @@ public class InvoicesController {
         return response;
     }
 
+    @PostMapping(path = "proForma/all")
+    public List<InvoiceDetails> getProFormaInvoices(@RequestBody AccessTokenModel accessTokenModel){
+        this.employeeRepository.findByToken(accessTokenModel.getAccessToken());
+        List<InvoiceDetails> response = new ArrayList<>();
+        this.invoiceBufferRepository.getInvoices().forEach(invoice -> {
+            InvoiceDetails invoiceResponse = new InvoiceDetails(invoice);
+            response.add(invoiceResponse);
+        });
+        return response;
+    }
+
     @PostMapping(path = "accept/{id}")
     public InvoiceResponse acceptProForma(@RequestBody AccessTokenModel accessToken, @PathVariable long id){
         this.employeeRepository.findByToken(accessToken.getAccessToken());

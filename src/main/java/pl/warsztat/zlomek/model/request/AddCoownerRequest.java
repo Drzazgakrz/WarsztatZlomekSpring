@@ -8,5 +8,5 @@ import java.util.List;
 @Getter
 public class AddCoownerRequest extends AccessTokenModel {
     private long carId;
-    private List<String> newCoowners;
+    private String coownerUsername;
 }
