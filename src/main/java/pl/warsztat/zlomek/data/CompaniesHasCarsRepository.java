@@ -29,7 +29,7 @@ public class CompaniesHasCarsRepository {
     public CompaniesHasCars getCompanyCarRelationship(long companyId, long carId){
         try{
             TypedQuery<CompaniesHasCars> query = em.createQuery("SELECT companyHasCar from CompaniesHasCars companyHasCar " +
-                    "WHERE companyHasCar.companyId=:companyId AND companyHasCar.carId=:carId", CompaniesHasCars.class);
+                    "WHERE companyHasCar.id.companyId=:companyId AND companyHasCar.id.carId=:carId", CompaniesHasCars.class);
             query.setParameter("companyId", companyId);
             query.setParameter("carId", carId);
             return query.getSingleResult();
