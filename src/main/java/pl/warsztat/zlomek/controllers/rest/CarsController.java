@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import pl.warsztat.zlomek.data.*;
 import pl.warsztat.zlomek.model.request.AddCarToCompanyModel;
 import pl.warsztat.zlomek.model.request.AddCoownerRequest;
+import pl.warsztat.zlomek.model.response.CarBrandResponse;
+import pl.warsztat.zlomek.model.response.CarBrandsList;
 import pl.warsztat.zlomek.service.CarService;
 import pl.warsztat.zlomek.exceptions.ResourcesNotFoundException;
 import pl.warsztat.zlomek.model.AccessTokenModel;
@@ -84,6 +86,15 @@ public class CarsController {
         client.getCars().forEach(carsHasOwners ->
                 cars.add(new pl.warsztat.zlomek.model.request.Car(carsHasOwners.getCar(), client)));
         return new ClientCarsResponse(cars, accessToken.getAccessToken());
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/getCarBrands")
+    public CarBrandsList getCarBrands(){
+        List<CarBrand> brands = carBrandRepository.getCarBrands();
+        ArrayList<CarBrandResponse> brandsResponse = new ArrayList<>();
+        brands.forEach(brand -> brandsResponse.add(new CarBrandResponse(brand)));
+
+        return new CarBrandsList(brandsResponse);
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/{id}")
