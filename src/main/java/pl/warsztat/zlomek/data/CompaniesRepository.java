@@ -3,6 +3,7 @@ package pl.warsztat.zlomek.data;
 import org.springframework.stereotype.Repository;
 import pl.warsztat.zlomek.exceptions.ResourcesExistException;
 import pl.warsztat.zlomek.exceptions.ResourcesNotFoundException;
+import pl.warsztat.zlomek.model.db.CompaniesHasEmployees;
 import pl.warsztat.zlomek.model.db.Company;
 
 import javax.persistence.EntityManager;
