@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
+import pl.warsztat.zlomek.exceptions.CouldNotAuthorizeException;
 import pl.warsztat.zlomek.exceptions.ResourcesNotFoundException;
 import pl.warsztat.zlomek.model.db.*;
 
@@ -44,9 +45,8 @@ public class EmployeeRepository extends AccountRepository<Employee>{
                 return token.getEmployee();
             }
         }catch (Exception e){
-            e.printStackTrace();
         }
-        throw new ResourcesNotFoundException("Pracownik o podanym tokenie nie istnieje bądź token wygasł");
+        throw new CouldNotAuthorizeException("Pracownik o podanym tokenie nie istnieje bądź token wygasł");
     }
 
     public Employee signIn(String username, String password){

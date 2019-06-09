@@ -15,6 +15,11 @@ import pl.warsztat.zlomek.model.request.ClientForm;
 import pl.warsztat.zlomek.model.request.RemoveClientFromCompanyRequest;
 import pl.warsztat.zlomek.model.response.ClientDataResponse;
 import pl.warsztat.zlomek.data.ClientRepository;
+import pl.warsztat.zlomek.model.response.CompanyListResponse;
+import pl.warsztat.zlomek.model.response.CompanyResponse;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/rest/client")
@@ -39,10 +44,10 @@ public class ClientsController {
         return new ClientDataResponse(clientRepository.findByToken(accessToken.getAccessToken()), accessToken.getAccessToken());
     }
 
-    @PostMapping(path = "/{id}")
-    public ClientDataResponse getClientData(@RequestBody AccessTokenModel accessToken, @PathVariable long id){
+    @PostMapping(path = "/{username}")
+    public ClientDataResponse getClientData(@RequestBody AccessTokenModel accessToken, @PathVariable String username){
         this.employeeRepository.findByToken(accessToken.getAccessToken());
-        return new ClientDataResponse(clientRepository.getClientById(id), accessToken.getAccessToken());
+        return new ClientDataResponse(clientRepository.findClientByUsername(username), accessToken.getAccessToken());
     }
 
     @RequestMapping(method = RequestMethod.PUT)
@@ -109,6 +114,15 @@ public class ClientsController {
         client.setStatus(ClientStatus.BANNED);
         this.clientRepository.update(client);
         return new AccessTokenModel(model.getAccessToken());
+    }
+
+    @PostMapping(path = "companies")
+    public CompanyListResponse getClientsCompanies(@RequestBody AccessTokenModel accessToken){
+        Client client = this.clientRepository.findByToken(accessToken.getAccessToken());
+        List<CompanyResponse> companiesList = new ArrayList<>();
+        client.getCompanies().stream().filter(company-> company.getStatus().equals(EmployeeStatus.CURRENT_EMPLOYER))
+                .forEach(company-> companiesList.add(new CompanyResponse(company.getCompany())));
+        return new CompanyListResponse(accessToken.getAccessToken(), companiesList);
     }
 
 }

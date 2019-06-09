@@ -28,6 +28,7 @@ public class EmployeeController {
 
     @RequestMapping(method = RequestMethod.POST)
     public AccessTokenModel signIn(@RequestBody SignInRequest signInRequest){
+        System.out.println(signInRequest.getEmail()+" "+signInRequest.getPassword());
         return new AccessTokenModel(authorizationService.signIn(signInRequest));
     }
 

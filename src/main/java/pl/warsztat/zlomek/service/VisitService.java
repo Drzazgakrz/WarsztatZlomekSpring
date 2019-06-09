@@ -7,9 +7,13 @@ import pl.warsztat.zlomek.exceptions.FieldsNotCorrect;
 import pl.warsztat.zlomek.exceptions.ResourcesNotFoundException;
 import pl.warsztat.zlomek.model.db.*;
 import pl.warsztat.zlomek.model.request.AddElementToVisitModel;
+import pl.warsztat.zlomek.model.response.VisitResponse;
+import pl.warsztat.zlomek.model.response.VisitsList;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 @Service
@@ -103,5 +107,15 @@ public class VisitService {
             default:
                 throw new FieldsNotCorrect(new String[]{"status"});
         }
+    }
+
+    public List<VisitResponse> getAllClientsVisits(Client client){
+        List<Visit> visits = this.visitRepository.getAllClientsVisits(client);
+        List<VisitResponse> response = new ArrayList<>();
+        visits.forEach(visit -> {
+            VisitResponse visitResponse = new VisitResponse(visit);
+            response.add(visitResponse);
+        });
+        return response;
     }
 }

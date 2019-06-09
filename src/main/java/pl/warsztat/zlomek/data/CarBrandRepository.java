@@ -25,4 +25,8 @@ public class CarBrandRepository {
         }catch (Exception e){}
         throw new ResourcesNotFoundException("Marka o tej nazwie nie istnieje");
     }
+
+    public void save(CarBrand carBrand){
+        em.merge(carBrand);
+    }
 }

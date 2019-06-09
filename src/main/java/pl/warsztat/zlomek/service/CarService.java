@@ -80,16 +80,10 @@ public class CarService {
         });
     }
 
-    public void setCoownersStatus(List<String> coowners, CarsHasOwners cho){
-        System.out.println(coowners.size());
-        cho.getCar().getOwners().forEach(currentCho->{
-            Client current = currentCho.getOwner();
-            System.out.println(current.getEmail());
-            if(coowners.contains(current.getEmail())){
-                currentCho.setStatus(OwnershipStatus.FORMER_OWNER);
-                currentCho.setEndOwnershipDate(LocalDate.now());
-                this.carsHasOwnersRepository.updateOwnership(currentCho);
-            }
-        });
+    public void setCoownersStatus(String coownerUsername, long carId){
+        Client coowner = this.clientRepository.findClientByUsername(coownerUsername);
+        CarsHasOwners cho = this.getClientCar(coowner, carId);
+        cho.setStatus(OwnershipStatus.FORMER_OWNER);
+        this.carsHasOwnersRepository.updateOwnership(cho);
     }
 }

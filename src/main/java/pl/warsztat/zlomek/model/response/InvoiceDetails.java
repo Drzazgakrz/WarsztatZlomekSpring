@@ -22,8 +22,10 @@ public class InvoiceDetails {
     private BigDecimal netValue;
     private BigDecimal grossValue;
     private CompanyResponse companyData;
+    private long id;
 
     public InvoiceDetails(Invoice invoice) {
+        this.id = invoice.getId();
         this.methodOfPayment = invoice.getMethodOfPayment().toString();
         this.invoiceNumber = invoice.getInvoiceNumber();
         this.carServiceData = new CompanyResponse(invoice.getCarServiceData());
@@ -42,6 +44,27 @@ public class InvoiceDetails {
                     .atZone(ZoneId.systemDefault()).toInstant());
         int i = 0;
         Set<InvoicePosition> positions = invoice.getInvoicePositions();
+        this.invoicePositions = new InvoicePositionResponse[positions.size()];
+        for (InvoicePositionModel position : positions) {
+            this.invoicePositions[i] = new InvoicePositionResponse(position);
+            i++;
+        }
+    }
+
+    public InvoiceDetails(InvoiceBuffer invoice) {
+        this.id = invoice.getId();
+        this.methodOfPayment = invoice.getMethodOfPayment().toString();
+        this.invoiceNumber = invoice.getInvoiceNumber();
+        this.carServiceData = new CompanyResponse(invoice.getCarServiceData());
+        this.dayOfIssue = Date.from(invoice.getDayOfIssue().atStartOfDay().atZone(ZoneId.systemDefault()).
+                toInstant());
+        this.paymentDate = Date.from(invoice.getPaymentDate().atStartOfDay().atZone(ZoneId.systemDefault()).
+                toInstant());
+        this.netValue = invoice.getNetValue();
+        this.grossValue = invoice.getGrossValue();
+        this.companyData = new CompanyResponse(invoice.getCompanyData());
+        int i = 0;
+        Set<InvoiceBufferPosition> positions = invoice.getInvoiceBufferPositions();
         this.invoicePositions = new InvoicePositionResponse[positions.size()];
         for (InvoicePositionModel position : positions) {
             this.invoicePositions[i] = new InvoicePositionResponse(position);
