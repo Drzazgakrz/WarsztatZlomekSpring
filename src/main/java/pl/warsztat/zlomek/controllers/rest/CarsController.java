@@ -174,4 +174,18 @@ public class CarsController {
         this.carBrandRepository.save(carBrand);
         return new AccessTokenModel(carBrandModel.getAccessToken());
     }
+
+    @PostMapping(path = "removeCarFromCompany")
+    public AccessTokenModel removeCarFromCompany(@RequestBody AddCarToCompanyModel addCarToCompanyModel){
+        Client client = clientRepository.findByToken(addCarToCompanyModel.getAccessToken());
+        Car car = carService.getClientCar(client, addCarToCompanyModel.getCarId()).getCar();
+        Company company = companyService.getClientCompany(client, addCarToCompanyModel.getCompanyId());
+        CompaniesHasCars chc = companiesHasCarsRepository.getCompanyCarRelationship(company.getId(), car.getId());
+        chc.setStatus(CompanyOwnershipStatus.FORMER_OWNER_COMPANY);
+        companiesHasCarsRepository.saveCompaniesCarsRelationship(chc);
+
+        return new AccessTokenModel(addCarToCompanyModel.getAccessToken());
+    }
+
+
 }
