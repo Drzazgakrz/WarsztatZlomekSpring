@@ -13,8 +13,12 @@ import pl.warsztat.zlomek.model.db.Company;
 import pl.warsztat.zlomek.model.db.Employee;
 import pl.warsztat.zlomek.model.db.EmployeeToken;
 import pl.warsztat.zlomek.model.request.AddCompanyRequest;
+import pl.warsztat.zlomek.model.response.CompaniesList;
 import pl.warsztat.zlomek.model.response.CompanyDetailsResponse;
 import pl.warsztat.zlomek.model.response.CompanyResponse;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/rest/companies")
@@ -63,4 +67,15 @@ public class CompaniesController {
         carServiceDataRepository.save(carServiceData);
         return new AccessTokenModel(companyRequest.getAccessToken());
     }
+
+    @RequestMapping(method = RequestMethod.GET, path = "getCompanies")
+    @ResponseStatus(HttpStatus.CREATED)
+    public CompaniesList getCompaniesList(){
+        List<Company> companies = companiesRepository.getCompanies();
+        ArrayList<CompanyResponse> companiesList = new ArrayList<>();
+        companies.forEach(company -> companiesList.add(new CompanyResponse(company)));
+
+        return new CompaniesList(companiesList);
+    }
+
 }
