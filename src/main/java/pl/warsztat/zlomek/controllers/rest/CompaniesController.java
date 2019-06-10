@@ -51,6 +51,22 @@ public class CompaniesController {
         return new AccessTokenModel(companyRequest.getAccessToken());
     }
 
+    @PutMapping(path = "editCompany")
+    public AccessTokenModel editCompany(@RequestBody AddCompanyRequest companyRequest) {
+        Company company = companiesRepository.getCompanyByNip(companyRequest.getNip());
+        company.setNip(companyRequest.getNip());
+        company.setEmail(companyRequest.getEmail());
+        company.setCompanyName(companyRequest.getName());
+        company.setCityName(companyRequest.getCityName());
+        company.setStreetName(companyRequest.getStreetName());
+        company.setBuildingNum(companyRequest.getBuildingNum());
+        company.setAptNum(companyRequest.getAptNum());
+        company.setZipCode(companyRequest.getZipCode());
+        this.companiesRepository.updateCompany(company);
+
+        return new AccessTokenModel(companyRequest.getAccessToken());
+    }
+
     @PostMapping(path = "{id}")
     public CompanyResponse getCompanyById(@PathVariable long id, @RequestBody AccessTokenModel accessToken) {
         this.employeeRepository.findByToken(accessToken.getAccessToken());
