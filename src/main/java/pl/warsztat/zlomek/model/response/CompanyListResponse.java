@@ -1,8 +1,11 @@
 package pl.warsztat.zlomek.model.response;
 
 import lombok.Getter;
+import pl.warsztat.zlomek.model.db.EmployeeToken;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 public class CompanyListResponse {

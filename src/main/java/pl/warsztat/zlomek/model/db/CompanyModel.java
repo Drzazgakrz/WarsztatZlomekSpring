@@ -9,6 +9,9 @@ import javax.validation.constraints.*;
 @Setter
 @NoArgsConstructor
 public abstract class CompanyModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected long id;
 
     @NotNull
     @Size(min = 13,max=13)
@@ -47,6 +50,10 @@ public abstract class CompanyModel {
     @Column(name = "zip_code")
     @Pattern(regexp = "[0-9]{2}+-+[0-9]{3}")
     protected String zipCode;
+
+    @Column(unique = true)
+    @Pattern(regexp = "[A-Za-z0-9._-]{1,}+@+[a-z]{1,6}+.+[a-z]{2,3}")
+    protected String email;
 
     public CompanyModel(String nip, String companyName, String cityName, String streetName, String buildingNum, String aptNum, String zipCode) {
         this.nip = nip;
