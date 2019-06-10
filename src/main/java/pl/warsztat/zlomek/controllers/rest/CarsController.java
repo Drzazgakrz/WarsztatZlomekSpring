@@ -4,6 +4,10 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.warsztat.zlomek.data.*;
+import pl.warsztat.zlomek.model.request.AddCarToCompanyModel;
+import pl.warsztat.zlomek.model.request.AddCoownerRequest;
+import pl.warsztat.zlomek.model.response.CarBrandResponse;
+import pl.warsztat.zlomek.model.response.CarBrandsList;
 import pl.warsztat.zlomek.model.db.Car;
 import pl.warsztat.zlomek.model.request.*;
 import pl.warsztat.zlomek.service.CarService;
@@ -89,6 +93,15 @@ public class CarsController {
         return new ClientCarsResponse(cars, accessToken.getAccessToken());
     }
 
+    @RequestMapping(method = RequestMethod.GET, path = "/getCarBrands")
+    public CarBrandsList getCarBrands(){
+        List<CarBrand> brands = carBrandRepository.getCarBrands();
+        ArrayList<CarBrandResponse> brandsResponse = new ArrayList<>();
+        brands.forEach(brand -> brandsResponse.add(new CarBrandResponse(brand)));
+
+        return new CarBrandsList(brandsResponse);
+    }
+
     @RequestMapping(method = RequestMethod.PUT, path = "/{id}")
     public AccessTokenModel removeCar(@PathVariable long id, @RequestBody AccessTokenModel accessToken){
         Client client = clientRepository.findByToken(accessToken.getAccessToken());
@@ -161,4 +174,15 @@ public class CarsController {
         this.carBrandRepository.save(carBrand);
         return new AccessTokenModel(carBrandModel.getAccessToken());
     }
+
+    @PutMapping(path = "removeCarFromCompany")
+    public AccessTokenModel removeCarFromCompany(@RequestBody AddCarToCompanyModel addCarToCompanyModel){
+        CompaniesHasCars chc = companiesHasCarsRepository.getCompanyCarRelationship(addCarToCompanyModel.getCompanyId(), addCarToCompanyModel.getCarId());
+        chc.setStatus(CompanyOwnershipStatus.FORMER_OWNER_COMPANY);
+        companiesHasCarsRepository.saveCompaniesCarsRelationship(chc);
+
+        return new AccessTokenModel(addCarToCompanyModel.getAccessToken());
+    }
+
+
 }

@@ -13,8 +13,12 @@ import pl.warsztat.zlomek.model.db.Company;
 import pl.warsztat.zlomek.model.db.Employee;
 import pl.warsztat.zlomek.model.db.EmployeeToken;
 import pl.warsztat.zlomek.model.request.AddCompanyRequest;
+import pl.warsztat.zlomek.model.response.CompaniesList;
 import pl.warsztat.zlomek.model.response.CompanyDetailsResponse;
 import pl.warsztat.zlomek.model.response.CompanyResponse;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/rest/companies")
@@ -47,6 +51,22 @@ public class CompaniesController {
         return new AccessTokenModel(companyRequest.getAccessToken());
     }
 
+    @PutMapping(path = "editCompany")
+    public AccessTokenModel editCompany(@RequestBody AddCompanyRequest companyRequest) {
+        Company company = companiesRepository.getCompanyByNip(companyRequest.getNip());
+        company.setNip(companyRequest.getNip());
+        company.setEmail(companyRequest.getEmail());
+        company.setCompanyName(companyRequest.getName());
+        company.setCityName(companyRequest.getCityName());
+        company.setStreetName(companyRequest.getStreetName());
+        company.setBuildingNum(companyRequest.getBuildingNum());
+        company.setAptNum(companyRequest.getAptNum());
+        company.setZipCode(companyRequest.getZipCode());
+        this.companiesRepository.updateCompany(company);
+
+        return new AccessTokenModel(companyRequest.getAccessToken());
+    }
+
     @PostMapping(path = "{id}")
     public CompanyResponse getCompanyById(@PathVariable long id, @RequestBody AccessTokenModel accessToken) {
         this.employeeRepository.findByToken(accessToken.getAccessToken());
@@ -63,4 +83,15 @@ public class CompaniesController {
         carServiceDataRepository.save(carServiceData);
         return new AccessTokenModel(companyRequest.getAccessToken());
     }
+
+    @RequestMapping(method = RequestMethod.GET, path = "getCompanies")
+    @ResponseStatus(HttpStatus.CREATED)
+    public CompaniesList getCompaniesList(){
+        List<Company> companies = companiesRepository.getCompanies();
+        ArrayList<CompanyResponse> companiesList = new ArrayList<>();
+        companies.forEach(company -> companiesList.add(new CompanyResponse(company)));
+
+        return new CompaniesList(companiesList);
+    }
+
 }
