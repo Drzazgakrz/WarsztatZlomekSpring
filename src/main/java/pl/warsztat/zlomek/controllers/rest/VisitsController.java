@@ -164,4 +164,15 @@ public class VisitsController {
         List<VisitResponse> visits = this.visitService.getAllClientsVisits(client);
         return new VisitsList(accessToken.getAccessToken(), visits);
     }
+
+    @PostMapping("notFinished")
+    public VisitsList getNotFinished(@RequestBody AccessTokenModel accessToken){
+        this.employeeRepository.findByToken(accessToken.getAccessToken());
+        List<Visit> visits = this.visitRepository.getVisitByStatus(VisitStatus.ACCEPTED);
+        visits.addAll(this.visitRepository.getVisitByStatus(VisitStatus.IN_PROGRESS));
+        visits.addAll(this.visitRepository.getVisitByStatus(VisitStatus.FOR_PICKUP));
+        List<VisitResponse> visitsResponse = new ArrayList<>();
+        visits.forEach(visit->visitsResponse.add(new VisitResponse(visit)));
+        return new VisitsList(accessToken.getAccessToken(), visitsResponse);
+    }
 }
