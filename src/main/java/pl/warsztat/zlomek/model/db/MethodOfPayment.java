@@ -1,7 +1,7 @@
 package pl.warsztat.zlomek.model.db;
 
 public enum MethodOfPayment {
-    CASH("Gotówka"),
+    CASH("Got\u00F3wka"),
     CARD("Karta"),
     TRANSFER("Przelew");
 

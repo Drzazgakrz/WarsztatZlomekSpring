@@ -1,5 +1,6 @@
 package pl.warsztat.zlomek.model.db;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -29,6 +30,7 @@ public class Company extends CompanyModel implements Serializable {
     private Set<CompaniesHasEmployees> employees;
 
     @OneToMany(mappedBy = "company")
+    @JsonIgnore
     private Set<CompaniesHasCars> cars;
 
     public Company(String nip, String email, String companyName, String cityName, String streetName, String buildingNum, String aptNum, String zipCode){

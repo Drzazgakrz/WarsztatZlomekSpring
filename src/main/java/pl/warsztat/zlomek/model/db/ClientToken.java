@@ -3,6 +3,7 @@ package pl.warsztat.zlomek.model.db;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "client_token")
-public class ClientToken extends AccessToken {
+public class ClientToken extends AccessToken implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

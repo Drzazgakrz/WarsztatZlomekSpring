@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -15,7 +16,7 @@ import java.math.RoundingMode;
 @Setter
 @MappedSuperclass
 @NoArgsConstructor
-public class InvoicePositionModel {
+public class InvoicePositionModel implements Serializable {
     @NotNull
     @Size(min = 2,max = 45)
     @Column(name = "position_name")

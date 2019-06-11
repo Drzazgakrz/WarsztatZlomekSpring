@@ -12,7 +12,7 @@ import java.io.Serializable;
 @lombok.Getter
 @lombok.Setter
 @NoArgsConstructor
-public class CompaniesHasCars {
+public class CompaniesHasCars implements Serializable{
     @EmbeddedId
     private CompaniesHasCarsId id;
 

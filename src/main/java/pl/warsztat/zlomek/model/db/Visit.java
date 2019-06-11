@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.time.*;
 import java.util.Date;
 import java.util.HashSet;
@@ -18,7 +19,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Visit {
+public class Visit implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

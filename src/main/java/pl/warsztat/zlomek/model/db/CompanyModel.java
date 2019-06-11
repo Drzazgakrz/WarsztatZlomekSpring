@@ -4,11 +4,13 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.io.Serializable;
+
 @MappedSuperclass
 @Getter
 @Setter
 @NoArgsConstructor
-public abstract class CompanyModel {
+public abstract class CompanyModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected long id;

@@ -10,7 +10,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Getter
 @Setter
-public class CompaniesHasEmployees {
+public class CompaniesHasEmployees implements Serializable {
 
     @EmbeddedId
     private CompaniesHasEmployeesId id;
