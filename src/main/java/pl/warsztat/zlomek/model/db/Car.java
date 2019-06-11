@@ -1,5 +1,7 @@
 package pl.warsztat.zlomek.model.db;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,9 +16,9 @@ import javax.validation.constraints.*;
 
 @Entity
 @Table(name = "cars")
-@Getter
 @Setter
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Car implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,13 +39,13 @@ public class Car implements Serializable {
     @Column(name = "vin_number", unique = true)
     private String vin;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "brand_id")
     @NotNull
-    CarBrand brand;
+    private CarBrand brand;
 
     @OneToMany(fetch = FetchType.LAZY ,mappedBy = "car")
-    Set<CarsHasOwners> owners;
+    private Set<CarsHasOwners> owners;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "car")
     private Set<CompaniesHasCars> companiesCars;
@@ -85,5 +87,42 @@ public class Car implements Serializable {
 
     public void addCompany(CompaniesHasCars chc){
         this.companiesCars.add(chc);
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public int getProdYear() {
+        return prodYear;
+    }
+
+    public String getVin() {
+        return vin;
+    }
+
+    public CarBrand getBrand() {
+        return brand;
+    }
+
+    public Set<CarsHasOwners> getOwners() {
+        return owners;
+    }
+
+    @JsonIgnore
+    public Set<CompaniesHasCars> getCompaniesCars() {
+        return companiesCars;
+    }
+
+    public Set<Visit> getVisits() {
+        return visits;
+    }
+
+    public Set<Overview> getOverviews() {
+        return overviews;
     }
 }

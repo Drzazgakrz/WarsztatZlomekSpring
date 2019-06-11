@@ -6,13 +6,14 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
 @NoArgsConstructor
 @Getter
 @Setter
-public abstract class AccessToken {
+public abstract class AccessToken implements Serializable {
     @Column(name = "access_token")
     protected String accessToken;
 
