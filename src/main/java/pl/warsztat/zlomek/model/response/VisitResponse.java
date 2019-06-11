@@ -25,6 +25,8 @@ public class VisitResponse {
         this.car = new pl.warsztat.zlomek.model.request.Car(visit.getCar(), client);
         this.visitDate = Date.from(visit.getVisitDate().atZone(ZoneId.systemDefault()).toInstant());
         this.visitStatus = visit.getStatus().toString();
+        this.parts = new ArrayList<>();
+        this.services = new ArrayList<>();
         visit.getParts().forEach(part->parts.add(part.getPart()));
         visit.getServices().forEach(service->services.add(service.getService()));
     }
@@ -52,5 +54,9 @@ public class VisitResponse {
         this.car = new pl.warsztat.zlomek.model.request.Car(visit.getCar());
         this.addNotVerifiedOwners(visit.getCar());
         this.addVerifiedOwners(visit.getCar());
+        this.parts = new ArrayList<>();
+        this.services = new ArrayList<>();
+        visit.getParts().forEach(part->parts.add(part.getPart()));
+        visit.getServices().forEach(service->services.add(service.getService()));
     }
 }
