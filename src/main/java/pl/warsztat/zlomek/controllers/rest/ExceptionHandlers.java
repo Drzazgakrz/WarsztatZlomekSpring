@@ -39,6 +39,7 @@ public class ExceptionHandlers {
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     @ResponseBody
     public Error fieldsNotCorrectHandler(Exception e){
+        e.printStackTrace();
         return new Error("Błędne dane");
     }
 }

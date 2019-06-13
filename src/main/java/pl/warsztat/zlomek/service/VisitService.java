@@ -28,14 +28,15 @@ public class VisitService {
     @Autowired
     public VisitService(ServicesRepository servicesRepository, CarPartsRepository carPartsRepository,
                         VisitRepository visitRepository, VisitsHasServicesRepository visitsHasServicesRepository,
-                        VisitsHasPartsRepository visitsHasPartsRepository){
+                        VisitsHasPartsRepository visitsHasPartsRepository) {
         this.carPartsRepository = carPartsRepository;
         this.servicesRepository = servicesRepository;
         this.visitRepository = visitRepository;
         this.visitsHasServicesRepository = visitsHasServicesRepository;
         this.visitsHasPartsRepository = visitsHasPartsRepository;
     }
-    public VisitStatus getStatus(String status){
+
+    public VisitStatus getStatus(String status) {
         switch (status) {
             case ("new"):
                 return VisitStatus.NEW;
@@ -52,47 +53,47 @@ public class VisitService {
         }
     }
 
-    public void addServicesToVisit(Visit visit, AddElementToVisitModel[] model){
+    public void addServicesToVisit(Visit visit, AddElementToVisitModel[] model) {
         Stream<AddElementToVisitModel> services = Arrays.stream(model);
-        services.forEach(serviceModel->{
-            pl.warsztat.zlomek.model.db.Service service = this.servicesRepository.getServiceById(serviceModel.getElementId());
+        services.forEach(serviceModel -> {
+            pl.warsztat.zlomek.model.db.Service service = this.servicesRepository.getServiceById(serviceModel.getId());
             VisitsHasServices vhs = new VisitsHasServices(service, visit, serviceModel.getCount(),
                     new BigDecimal(serviceModel.getPrice()));
             visit.addService(vhs);
             service.addVisit(vhs);
-            this.visitRepository.updateVisit(visit);
-            try{
+            try {
                 this.visitsHasServicesRepository.save(vhs);
-            }catch(Exception e){
-                VisitsHasServices visitsHasServices = visit.getServices().stream().filter(part->
+            } catch (Exception e) {
+                VisitsHasServices visitsHasServices = visit.getServices().stream().filter(part ->
                         part.getService().equals(vhs.getService())).findAny().get();
                 visitsHasServices.setCount(vhs.getCount());
                 this.visitsHasServicesRepository.update(visitsHasServices);
             }
+            this.visitRepository.updateVisit(visit);
         });
     }
 
-    public void addCarPartsToVisit(Visit visit, AddElementToVisitModel[] model){
+    public void addCarPartsToVisit(Visit visit, AddElementToVisitModel[] model) {
         Stream<AddElementToVisitModel> carParts = Arrays.stream(model);
-        carParts.forEach(carPartModel->{
-            CarPart carPart = this.carPartsRepository.getCarPartById(carPartModel.getElementId());
+        carParts.forEach(carPartModel -> {
+            CarPart carPart = this.carPartsRepository.getCarPartById(carPartModel.getId());
             VisitsParts vp = new VisitsParts(visit, carPart, carPartModel.getCount(),
                     new BigDecimal(carPartModel.getPrice()));
             visit.addCarPart(vp);
             carPart.addVisit(vp);
-            this.visitRepository.updateVisit(visit);
-            try{
+            try {
                 this.visitsHasPartsRepository.persist(vp);
-            }catch(Exception e){
-                VisitsParts visitsParts = visit.getParts().stream().filter(part->
+            } catch (Exception e) {
+                VisitsParts visitsParts = visit.getParts().stream().filter(part ->
                         part.getPart().equals(vp.getPart())).findAny().get();
                 visitsParts.setCount(carPartModel.getCount());
                 this.visitsHasPartsRepository.update(visitsParts);
             }
+            this.visitRepository.updateVisit(visit);
         });
     }
 
-    public String getTitleByStatus(VisitStatus status){
+    public String getTitleByStatus(VisitStatus status) {
         switch (status) {
             case NEW:
                 return "Nowe wizyty";
@@ -109,7 +110,7 @@ public class VisitService {
         }
     }
 
-    public List<VisitResponse> getAllClientsVisits(Client client){
+    public List<VisitResponse> getAllClientsVisits(Client client) {
         List<Visit> visits = this.visitRepository.getAllClientsVisits(client);
         List<VisitResponse> response = new ArrayList<>();
         visits.forEach(visit -> {

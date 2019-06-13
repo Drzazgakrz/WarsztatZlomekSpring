@@ -154,7 +154,7 @@ public class VisitsController {
         if(services != null && services.length > 0)
             this.visitService.addServicesToVisit(visit, editVisitRequest.getServices());
         if(editVisitRequest.getCarParts() != null)
-            this.visitService.addCarPartsToVisit(visit, editVisitRequest.getServices());
+            this.visitService.addCarPartsToVisit(visit, editVisitRequest.getCarParts());
         this.visitRepository.updateVisit(visit);
         Overview overview = visit.getOverview();
         visit.setVisitFinished(LocalDate.now());

@@ -184,5 +184,14 @@ public class CarsController {
         return new AccessTokenModel(addCarToCompanyModel.getAccessToken());
     }
 
-
+    @PostMapping(path = "editCar")
+    public AccessTokenModel editCar(@RequestBody CarData carData){
+        System.out.println(carData.getCarId());
+        Client client = this.clientRepository.findByToken(carData.getAccessToken());
+        Car car = this.carService.getClientCar(client, carData.getCarId()).getCar();
+        CarBrand carBrand = this.carBrandRepository.getCarBrandByName(carData.getBrandName());
+        car.edit(carData, carBrand);
+        this.carRepository.updateCar(car);
+        return new AccessTokenModel(carData.getAccessToken());
+    }
 }

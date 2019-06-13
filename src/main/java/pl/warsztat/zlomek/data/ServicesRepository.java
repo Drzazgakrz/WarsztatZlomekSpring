@@ -26,6 +26,7 @@ public class ServicesRepository {
     }
 
     public Service getServiceById(long id){
+        System.out.println(id);
         TypedQuery<Service> query = em.createQuery("SELECT service FROM Service service WHERE service.id=:id",
                 Service.class);
         query.setParameter("id", id);

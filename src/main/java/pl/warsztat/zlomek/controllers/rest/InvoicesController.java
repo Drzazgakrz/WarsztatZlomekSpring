@@ -98,4 +98,11 @@ public class InvoicesController {
         this.invoicesRepository.update(invoice);
         return new InvoiceResponse(accessToken.getAccessToken(), invoice);
     }
+
+    @PostMapping(path = "details/{id}")
+    public InvoiceResponse getDetails(@RequestBody AccessTokenModel accessToken, @PathVariable long id){
+        this.employeeRepository.findByToken(accessToken.getAccessToken());
+        Invoice invoice = this.invoicesRepository.getInvoiceById(id);
+        return new InvoiceResponse(accessToken.getAccessToken(), invoice);
+    }
 }

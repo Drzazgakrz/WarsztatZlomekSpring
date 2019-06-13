@@ -1,5 +1,6 @@
 package pl.warsztat.zlomek.model.db;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,6 +21,7 @@ public class CarPart extends VisitElement implements Serializable {
     private long id;
 
     @OneToMany(mappedBy = "part")
+    @JsonIgnore
     private Set<VisitsParts> visits;
 
     @NotNull

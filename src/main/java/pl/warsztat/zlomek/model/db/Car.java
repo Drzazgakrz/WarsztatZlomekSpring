@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.Hibernate;
+import pl.warsztat.zlomek.model.request.CarData;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -124,5 +125,15 @@ public class Car implements Serializable {
 
     public Set<Overview> getOverviews() {
         return overviews;
+    }
+
+    public void edit(CarData carData, CarBrand carBrand){
+        if(!carData.getModel().equals(""))
+            this.model = carData.getModel();
+        if(carData.getProductionYear()>1930)
+            this.prodYear = carData.getProductionYear();
+        if(carBrand!=null)
+            this.brand = carBrand;
+
     }
 }
