@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Setter
 @NoArgsConstructor
 public class Car {
-    protected long id;
+    protected long carId;
     protected String brandName;
     protected String model;
     protected int productionYear;
@@ -22,7 +22,7 @@ public class Car {
     protected String registrationNumber;
 
     public Car(pl.warsztat.zlomek.model.db.Car car, Client client){
-        this.id = car.getId();
+        this.carId = car.getId();
         this.brandName = car.getBrand().getBrandName();
         this.model = car.getModel();
         this.vin = car.getVin();
@@ -33,7 +33,7 @@ public class Car {
     }
 
     public Car(pl.warsztat.zlomek.model.db.Car car){
-        this.id = car.getId();
+        this.carId = car.getId();
         this.brandName = car.getBrand().getBrandName();
         this.model = car.getModel();
         this.vin = car.getVin();

@@ -1,5 +1,6 @@
 package pl.warsztat.zlomek.model.db;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -20,6 +21,7 @@ public class Service extends VisitElement implements Serializable {
 
     @OneToMany(mappedBy = "service")
     @NotNull
+    @JsonIgnore
     private Set<VisitsHasServices> visits;
 
     public Service(String name, int tax) {

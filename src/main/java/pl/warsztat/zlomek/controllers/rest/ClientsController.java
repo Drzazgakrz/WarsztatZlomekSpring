@@ -69,8 +69,8 @@ public class ClientsController {
     @ResponseStatus(HttpStatus.CREATED)
     public AccessTokenModel addClientToCompany(@RequestBody AddClientToCompanyRequest request){
         this.employeeRepository.findByToken(request.getAccessToken());
-        Client client = this.clientRepository.findClientByUsername(request.getClientUsername());
-        Company company = this.companiesRepository.getCompanyId(request.getCompanyId());
+        Client client = this.clientRepository.findClientByUsername(request.getUsername());
+        Company company = this.companiesRepository.getCompanyName(request.getCompanyName());
         CompaniesHasEmployees companiesHasEmployees = company.getEmployees().stream().filter(che->
                 che.getClient().equals(client)).findFirst().orElse(null);
         if(companiesHasEmployees != null){
