@@ -14,10 +14,9 @@ delete
 from car_parts;
 TRUNCATE TABLE car_parts;
 insert into car_parts(name, tax, producer)
-values ('Silnik', 18,'Ursus'),
-       ('Chłodnica - taka lodówka przenośna do samochodu', 10, 'Amica'),
-       ('Tarcze hamulcowe, ew. broń rzucana w razie napadu', 11, 'Boschki producent'),
-       ('Skonczyły mi się pomysły', 12, 'Producent');
+values ('Chłodnica', 10, 'Bugatti'),
+       ('Klocki hamulcowe', 11, 'Bosch'),
+       ('Opony', 12, 'Miechelin');
 
 delete
 from car_service_data;
@@ -52,7 +51,7 @@ TRUNCATE TABLE cars_has_owners;
 
 insert into cars_has_owners (car_pk, owner_pk, begin_ownership_date, end_ownership_date, registration_number, status,
                              car_id, owner_id)
-values (1,2, NOW(), null, 'LU-1231', 0, 1,2), (2,2, '2018-02-02', NOW(), 'LU-1232', 0, 2, 2);
+values (3,2, NOW(), null, 'LU-1231', 0, 3,2), (2,2, '2018-02-02', NOW(), 'LU-1232', 0, 2, 2);
 
 delete
 from client_token;
@@ -84,8 +83,8 @@ delete
 from services;
 TRUNCATE TABLE services;
 
-insert into services (name, tax) VALUES ('Schłodzenie browarka w chłodnicy', 11),
-                                        ('Rzut tarczą na piastę', 12);
+insert into services (name, tax) VALUES ('Wymiana klocków hamulcowych', 11),
+                                        ('Wymiana opon', 12);
 delete
 from visits;
 TRUNCATE TABLE visits;
