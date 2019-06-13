@@ -1,5 +1,6 @@
 package pl.warsztat.zlomek.model.db;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,10 +19,12 @@ public class VisitsHasServices extends VisitPosition implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "service_id")
+    @JsonIgnore
     private Service service;
 
     @ManyToOne
     @JoinColumn(name = "visit_id")
+    @JsonIgnore
     private Visit visit;
 
     @Embeddable

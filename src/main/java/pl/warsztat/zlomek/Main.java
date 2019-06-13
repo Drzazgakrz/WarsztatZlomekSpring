@@ -38,8 +38,8 @@ public class Main extends SpringBootServletInitializer implements WebMvcConfigur
     @Bean
     public DataSource dataSource(){
         DriverManagerDataSource ds = new DriverManagerDataSource();
-        ds.setDriverClassName("com.mysql.jdbc.Driver");
-        ds.setUrl("jdbc:mysql://localhost:3306/warsztat_zlomek?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
+        ds.setDriverClassName("org.mariadb.jdbc.Driver");
+        ds.setUrl("jdbc:mariadb://localhost:3306/warsztat_zlomek?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
         ds.setUsername("root");
         ds.setPassword("");
         return ds;

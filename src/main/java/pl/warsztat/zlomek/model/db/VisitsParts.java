@@ -1,5 +1,6 @@
 package pl.warsztat.zlomek.model.db;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,10 +20,12 @@ public class VisitsParts extends VisitPosition implements Serializable {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "visit_id")
+    @JsonIgnore
     private Visit visit;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "part_id")
+    @JsonIgnore
     private CarPart part;
 
     @Embeddable
