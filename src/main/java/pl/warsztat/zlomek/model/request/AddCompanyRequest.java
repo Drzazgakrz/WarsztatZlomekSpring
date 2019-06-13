@@ -5,7 +5,7 @@ import pl.warsztat.zlomek.model.AccessTokenModel;
 
 @Getter
 public class AddCompanyRequest extends AccessTokenModel {
-    protected String name;
+    protected String companyName;
     protected String nip;
     protected String email;
     protected String cityName;

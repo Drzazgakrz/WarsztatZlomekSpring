@@ -42,7 +42,7 @@ public class CompaniesController {
             employeeRepository.findByToken(companyRequest.getAccessToken());
             companiesRepository.getCompanyByNip(companyRequest.getNip());
         } catch (ResourcesNotFoundException e) {
-            Company company = new Company(companyRequest.getNip(), companyRequest.getEmail(), companyRequest.getName(),
+            Company company = new Company(companyRequest.getNip(), companyRequest.getEmail(), companyRequest.getCompanyName(),
                     companyRequest.getCityName(), companyRequest.getStreetName(), companyRequest.getBuildingNum(),
                     companyRequest.getAptNum(), companyRequest.getZipCode());
             companiesRepository.createCompany(company);
@@ -55,7 +55,7 @@ public class CompaniesController {
         Company company = companiesRepository.getCompanyByNip(companyRequest.getNip());
         company.setNip(companyRequest.getNip());
         company.setEmail(companyRequest.getEmail());
-        company.setCompanyName(companyRequest.getName());
+        company.setCompanyName(companyRequest.getCompanyName());
         company.setCityName(companyRequest.getCityName());
         company.setStreetName(companyRequest.getStreetName());
         company.setBuildingNum(companyRequest.getBuildingNum());
@@ -76,7 +76,7 @@ public class CompaniesController {
     @ResponseStatus(HttpStatus.CREATED)
     public AccessTokenModel addCarServiceData(@RequestBody AddCompanyRequest companyRequest) {
         employeeRepository.findByToken(companyRequest.getAccessToken());
-        CarServiceData carServiceData = new CarServiceData(companyRequest.getNip(), companyRequest.getEmail(), companyRequest.getName(),
+        CarServiceData carServiceData = new CarServiceData(companyRequest.getNip(), companyRequest.getEmail(), companyRequest.getCompanyName(),
                 companyRequest.getCityName(), companyRequest.getStreetName(), companyRequest.getBuildingNum(),
                 companyRequest.getAptNum(), companyRequest.getZipCode());
         carServiceDataRepository.save(carServiceData);
