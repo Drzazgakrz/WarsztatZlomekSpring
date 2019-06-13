@@ -72,6 +72,7 @@ public class InvoiceService {
     private CompanyData getCompanyData(String companyName){
         Company company = companiesRepository.getCompanyName(companyName);
         List<CompanyData> companies = this.companyDataRepository.getAllCompanies();
+        System.out.println(companyName);
         return companies.stream().filter(data->
                 data.compareCompanies(company)).findAny().orElse(new CompanyData(company));
     }
@@ -138,6 +139,7 @@ public class InvoiceService {
         InvoiceBuffer invoice = new InvoiceBuffer();
         createInvoice(request, invoice);
         Visit visit = visitRepository.getVisitById(request.getVisitId());
+        invoice.setVisit(visit);
         this.invoiceBufferRepository.persist(invoice);
         this.addPositions(invoice, visit);
         this.invoiceBufferRepository.update(invoice);
