@@ -101,3 +101,7 @@ TRUNCATE TABLE visit_has_services;
 delete
 from visits_has_parts;
 TRUNCATE TABLE visits_has_parts;
+delete from employees;
+truncate table employees;
+insert into employees (created_at, email, first_name, last_logged_in, last_name, password, hire_date, quit_date, role, status) VALUES
+(NOW(), 'employee@mail.pl', 'Jan', NOW(), 'Kowalski', '$2a$10$vfgXB9jlN9AB74LaLW96ju6AfO0F0CUiAyOvmu7wZsyeLvU2n58l.', NOW(), NULL, 1, 0)
