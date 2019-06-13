@@ -51,7 +51,7 @@ TRUNCATE TABLE cars_has_owners;
 
 insert into cars_has_owners (car_pk, owner_pk, begin_ownership_date, end_ownership_date, registration_number, status,
                              car_id, owner_id)
-values (2,2, '2018-02-02', NOW(), 'LU-1232', 0, 2, 2);
+values (3,2, NOW(), null, 'LU-1231', 0, 3,2), (2,2, '2018-02-02', NOW(), 'LU-1232', 0, 2, 2);
 
 delete
 from client_token;
@@ -62,7 +62,7 @@ from companies;
 TRUNCATE TABLE companies;
 
 insert into companies (apartment_number, building_number, city_name, company_name, NIP, street_name, zip_code, email)
-VALUES ('', '123', 'Miasto', 'Nazwa firmy', '123-123-12-14', 'Ulica', '12-321', 'jakis@mail.pl');
+VALUES ('', '123', 'Miasto', 'Firma', '123-123-12-14', 'Ulica', '12-321', 'jakis@mail.pl');
 
 delete
 from companies_has_employees;
