@@ -19,7 +19,8 @@ public class CarBrand implements Serializable{
     private long id;
 
     @Column(name = "brand_name")
-    @Pattern(regexp = "[A-Z]{1}+[a-z]{1,}")
+    //@Pattern(regexp = "[A-Z]{1}+[a-z]{1,}")
+    @NotNull
     private String brandName;
 
     public CarBrand(String name){
