@@ -3,6 +3,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -15,11 +16,10 @@ import pl.warsztat.zlomek.data.ClientRepository;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-
-
-
+@ContextConfiguration(classes = {pl.warsztat.zlomek.Main.class})
 @NoArgsConstructor
 public class AuthorizationControllerTest {
     @Autowired
@@ -30,10 +30,10 @@ public class AuthorizationControllerTest {
     @Autowired
     private UsersController usersController;
 
-    /*@Test
+    @Test
     public void positiveRegistrationTest() throws Exception{
         MockMvc mockMvc = standaloneSetup(authorizationController).build();
-        mockMvc.perform(post("/authorization").contentType(MediaType.APPLICATION_JSON).content(
+        mockMvc.perform(post("/rest/authorization").contentType(MediaType.APPLICATION_JSON).content(
                 "{\n" +
                         "\t\"firstName\":\"Krzysztof\",\n" +
                         "    \"lastName\":\"Drzazga\",\n" +
@@ -48,7 +48,7 @@ public class AuthorizationControllerTest {
                         "    \"confirmPassword\":\"abc123\"\n" +
                         "}"
         )).andExpect(status().is2xxSuccessful());
-    }*/
+    }
 
     MockMvc mockMvc;
     @Before
@@ -57,7 +57,7 @@ public class AuthorizationControllerTest {
         viewResolver.setPrefix("/META-INF/templates/");
         viewResolver.setSuffix(".html");
 
-        mockMvc = MockMvcBuilders.standaloneSetup(this.usersController)
+        mockMvc = standaloneSetup(this.usersController)
                 .setViewResolvers(viewResolver)
                 .build();
     }
